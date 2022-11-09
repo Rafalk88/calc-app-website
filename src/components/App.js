@@ -44,10 +44,11 @@ export class App extends React.Component {
   };
 
   render() {
+    const { isLoading } = this.state;
     return (
       <>
         <h1>Hello world</h1>
-        <FullPageLoader />
+        {isLoading ? <FullPageLoader /> : null}
       </>
     );
   }
