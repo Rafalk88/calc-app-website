@@ -1,5 +1,7 @@
 import React from "react";
 
+import FullPageLoader from "./FullPageLoader";
+
 export class App extends React.Component {
   state = {
     // global state
@@ -42,7 +44,12 @@ export class App extends React.Component {
   };
 
   render() {
-    return <div>Hello world</div>;
+    return (
+      <>
+        <h1>Hello world</h1>
+        <FullPageLoader />
+      </>
+    );
   }
 }
 
