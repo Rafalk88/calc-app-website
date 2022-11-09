@@ -1,6 +1,7 @@
 import React from "react";
 
 import FullPageLoader from "./FullPageLoader";
+import Typography from "./Typography/Typography";
 
 export class App extends React.Component {
   state = {
@@ -49,6 +50,11 @@ export class App extends React.Component {
       <>
         <h1>Hello world</h1>
         {isLoading ? <FullPageLoader /> : null}
+        <Typography variant={"title1"}>title1</Typography>
+        <br />
+        <Typography variant={"title2"}>title2</Typography>
+        <br />
+        <Typography variant={"h1-bold"}>ENTER</Typography>
       </>
     );
   }
