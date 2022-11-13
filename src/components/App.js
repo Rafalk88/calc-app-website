@@ -18,7 +18,7 @@ export class App extends React.Component {
     procedures: null,
 
     // router state
-    notLoginUserRoute: "RECOVER-PASSWORD", // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
+    notLoginUserRoute: "LOGIN", // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
     logedUserRoute: "WELCOME-PAGE", // "APP-PAGE", "DB-PAGE"
 
     // user/auth state
@@ -79,9 +79,11 @@ export class App extends React.Component {
                 this.setState(() => ({ loginPassword: value }));
               }}
               onClickLogin={() => console.log("onClickLogin")}
-              onClickCreateAccount={() => console.log("onClickCreateAccount")}
+              onClickCreateAccount={() =>
+                this.setState(() => ({ notLoginUserRoute: "CREATE-ACCOUNT" }))
+              }
               onClickRecoverPassword={() =>
-                console.log("onClickRecoverPassword")
+                this.setState(() => ({ notLoginUserRoute: "RECOVER-PASSWORD" }))
               }
             />
           </FullPageLayout>
@@ -103,7 +105,9 @@ export class App extends React.Component {
               this.setState(() => ({ createRepeatePassword: value }));
             }}
             onClickCreateAccount={() => console.log("onClickCreateAccount")}
-            onClickBackToLogin={() => console.log("onClickBackToLogin")}
+            onClickBackToLogin={() =>
+              this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
+            }
           />
         ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
           <RecoverPassword
@@ -113,7 +117,9 @@ export class App extends React.Component {
               this.setState(() => ({ recoverPasswordEmail: value }));
             }}
             onClickRecover={() => console.log("onClickRecover")}
-            onClickBackToLogin={() => console.log("onClickBackToLogin")}
+            onClickBackToLogin={() =>
+              this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
+            }
           />
         ) : null}
         {isLoading ? <FullPageLoader /> : null}
