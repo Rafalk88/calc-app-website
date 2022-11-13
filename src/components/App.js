@@ -2,7 +2,8 @@ import React from "react";
 
 import FullPageLoader from "./FullPageLoader/FullPageLoader";
 import FullPageMessage from "./FullPageMessage/FullPageMessage";
-import TextField from "./TextField";
+import FullPageLayout from "./FullPageLayout/FullPageLayout";
+import LoginForm from "./LoginForm";
 
 export class App extends React.Component {
   state = {
@@ -46,10 +47,39 @@ export class App extends React.Component {
   };
 
   render() {
-    const { isLoading, hasError, errorMessage, hasInfo, infoMessage } =
-      this.state;
+    const {
+      isLoading,
+      hasError,
+      errorMessage,
+      hasInfo,
+      infoMessage,
+      notLoginUserRoute,
+      loginEmail,
+      loginPassword,
+    } = this.state;
     return (
       <>
+        {notLoginUserRoute === "LOGIN" ? (
+          <FullPageLayout>
+            <LoginForm
+              email={loginEmail}
+              password={loginPassword}
+              onChangeEmail={(e) => {
+                const { value } = e.target;
+                this.setState(() => ({ loginEmail: value }));
+              }}
+              onChangePassword={(e) => {
+                const { value } = e.target;
+                this.setState(() => ({ loginPassword: value }));
+              }}
+              onClickLogin={() => console.log("onClickLogin")}
+              onClickCreateAccount={() => console.log("onClickCreateAccount")}
+              onClickRecoverPassword={() =>
+                console.log("onClickRecoverPassword")
+              }
+            />
+          </FullPageLayout>
+        ) : null}
         {isLoading ? <FullPageLoader /> : null}
         {hasInfo ? (
           <FullPageMessage
@@ -65,7 +95,6 @@ export class App extends React.Component {
             onButtonClick={() => console.log("error message")}
           />
         ) : null}
-        <TextField placeholder={"E-mail"} />
       </>
     );
   }
