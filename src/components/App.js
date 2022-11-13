@@ -5,6 +5,7 @@ import FullPageMessage from "./FullPageMessage/FullPageMessage";
 import FullPageLayout from "./FullPageLayout/FullPageLayout";
 import LoginForm from "./LoginForm";
 import CreateAccount from "./CreateAccount";
+import RecoverPassword from "./RecoverPassword";
 
 export class App extends React.Component {
   state = {
@@ -17,7 +18,7 @@ export class App extends React.Component {
     procedures: null,
 
     // router state
-    notLoginUserRoute: "CREATE-ACCOUNT", // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
+    notLoginUserRoute: "RECOVER-PASSWORD", // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
     logedUserRoute: "WELCOME-PAGE", // "APP-PAGE", "DB-PAGE"
 
     // user/auth state
@@ -60,6 +61,7 @@ export class App extends React.Component {
       createEmail,
       createPassword,
       createRepeatePassword,
+      recoverPasswordEmail,
     } = this.state;
     return (
       <>
@@ -101,6 +103,16 @@ export class App extends React.Component {
               this.setState(() => ({ createRepeatePassword: value }));
             }}
             onClickCreateAccount={() => console.log("onClickCreateAccount")}
+            onClickBackToLogin={() => console.log("onClickBackToLogin")}
+          />
+        ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
+          <RecoverPassword
+            email={recoverPasswordEmail}
+            onChangeEmail={(e) => {
+              const { value } = e.target;
+              this.setState(() => ({ recoverPasswordEmail: value }));
+            }}
+            onClickRecover={() => console.log("onClickRecover")}
             onClickBackToLogin={() => console.log("onClickBackToLogin")}
           />
         ) : null}
