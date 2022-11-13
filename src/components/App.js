@@ -1,7 +1,7 @@
 import React from "react";
 
-import FullPageLoader from "./FullPageLoader";
-import FullPageMessage from "./FullPageMessage";
+import FullPageLoader from "./FullPageLoader/FullPageLoader";
+import FullPageMessage from "./FullPageMessage/FullPageMessage";
 
 export class App extends React.Component {
   state = {
