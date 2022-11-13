@@ -2,6 +2,7 @@ import React from "react";
 
 import FullPageLoader from "./FullPageLoader/FullPageLoader";
 import FullPageMessage from "./FullPageMessage/FullPageMessage";
+import TextField from "./TextField";
 
 export class App extends React.Component {
   state = {
@@ -64,6 +65,7 @@ export class App extends React.Component {
             onButtonClick={() => console.log("error message")}
           />
         ) : null}
+        <TextField placeholder={"E-mail"} />
       </>
     );
   }
