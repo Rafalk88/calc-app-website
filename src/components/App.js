@@ -1,8 +1,7 @@
 import React from "react";
 
 import FullPageLoader from "./FullPageLoader";
-import Typography from "./Typography/Typography";
-import Button from "./Button";
+import FullPageMessage from "./FullPageMessage";
 
 export class App extends React.Component {
   state = {
@@ -46,28 +45,25 @@ export class App extends React.Component {
   };
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, hasError, errorMessage, hasInfo, infoMessage } =
+      this.state;
     return (
       <>
-        <h1>Hello world</h1>
         {isLoading ? <FullPageLoader /> : null}
-        <Typography variant={"title1"}>title1</Typography>
-        <br />
-        <Typography variant={"title2"}>title2</Typography>
-        <br />
-        <Typography variant={"h1-bold"}>ENTER</Typography>
-        <br />
-        <Button variant={"contained"} color={"secondary"}>
-          enter
-        </Button>
-        <br />
-        <br />
-        <Button variant={"text"}>CREATE ACCOUNT</Button>
-        <br />
-        <br />
-        <Button variant={"contained"} color={"primary"}>
-          enter
-        </Button>
+        {hasInfo ? (
+          <FullPageMessage
+            iconVariant={"info"}
+            message={infoMessage}
+            onButtonClick={() => console.log("info message")}
+          />
+        ) : null}
+        {hasError ? (
+          <FullPageMessage
+            iconVariant={"error"}
+            message={errorMessage}
+            onButtonClick={() => console.log("error message")}
+          />
+        ) : null}
       </>
     );
   }
