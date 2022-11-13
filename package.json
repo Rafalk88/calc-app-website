@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open",
-    "build": "webpack --env production"
+    "start": "react-app-rewired start", 
+  "build": "react-app-rewired build", 
+  "test": "react-app-rewired test", 
+  "eject": "react-scripts eject" 
+  },
+  "react-dotenv": {
+    "whitelist": ["REACT_APP_FIREBASE_APP_KEY"]
   },
   "keywords": [],
   "author": "rkdesign",
@@ -15,8 +20,19 @@
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.7.0",
+    "assert": "^2.0.0",
     "babel-loader": "^8.0.6",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "dotenv-webpack": "^8.0.1",
     "html-webpack-plugin": "^5.5.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.6.0"
@@ -25,13 +41,19 @@
     "classnames": "^2.3.2",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^5.2.7",
+    "dotenv": "^16.0.3",
     "file-loader": "^6.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mini-css-extract-plugin": "^2.6.1",
     "node-sass": "^6.0.1",
+    "path-browserify": "^1.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-dotenv": "^0.1.3",
+    "react-scripts": "^5.0.1",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "util": "^0.12.5"
   }
 }

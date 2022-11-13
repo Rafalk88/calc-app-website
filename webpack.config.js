@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 const path = require("path");
 // importuję bibliotękę [path] z [node.js]
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -116,7 +118,21 @@ module.exports = function (env = {}) {
         filename: "[name].[hash].css",
         // określam nazwę pliku css
       }),
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+        Buffer: ["buffer", "Buffer"],
+      }),
     ],
+    resolve: {
+      fallback: {
+        buffer: require.resolve("buffer/"),
+        stream: false,
+        util: require.resolve("util/"),
+        crypto: false,
+        path: require.resolve("path-browserify"),
+        os: require.resolve("os-browserify/browser"),
+      },
+    },
   };
 };
 // eksportuję ustawienia dla webpack-a
