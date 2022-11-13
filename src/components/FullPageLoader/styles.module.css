@@ -1,17 +1,6 @@
-.root {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  background-color: #FFFFFF;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.root {}
   
-  .spinner {
+.spinner {
     animation-name: spin;
     animation-duration: 1000ms;
     animation-iteration-count: infinite;
