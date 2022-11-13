@@ -57,6 +57,9 @@ export class App extends React.Component {
       notLoginUserRoute,
       loginEmail,
       loginPassword,
+      createEmail,
+      createPassword,
+      createRepeatePassword,
     } = this.state;
     return (
       <>
@@ -81,7 +84,25 @@ export class App extends React.Component {
             />
           </FullPageLayout>
         ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
-          <CreateAccount />
+          <CreateAccount
+            email={createEmail}
+            password={createPassword}
+            repeatPassword={createRepeatePassword}
+            onChangeEmail={(e) => {
+              const { value } = e.target;
+              this.setState(() => ({ createEmail: value }));
+            }}
+            onChangePassword={(e) => {
+              const { value } = e.target;
+              this.setState(() => ({ createPassword: value }));
+            }}
+            onChangeRepeatPassword={(e) => {
+              const { value } = e.target;
+              this.setState(() => ({ createRepeatePassword: value }));
+            }}
+            onClickCreateAccount={() => console.log("onClickCreateAccount")}
+            onClickBackToLogin={() => console.log("onClickBackToLogin")}
+          />
         ) : null}
         {isLoading ? <FullPageLoader /> : null}
         {hasInfo ? (
