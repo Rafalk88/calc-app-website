@@ -12,7 +12,9 @@ export const LoginForm = (props) => {
   const {
     className,
     email,
+    emailError,
     password,
+    passwordError,
     onChangeEmail,
     onChangePassword,
     onClickLogin,
@@ -31,6 +33,7 @@ export const LoginForm = (props) => {
       </Typography>
       <TextField
         className={classes.textField}
+        errorMessage={emailError}
         placeholder={"E-mail"}
         value={email}
         onChange={onChangeEmail}
@@ -38,6 +41,7 @@ export const LoginForm = (props) => {
       <TextField
         className={classes.textField}
         placeholder={"Password"}
+        errorMessage={passwordError}
         type={"password"}
         value={password}
         onChange={onChangePassword}
@@ -72,7 +76,9 @@ export const LoginForm = (props) => {
 LoginForm.propTypes = {
   className: PropTypes.string,
   email: PropTypes.string,
+  emailError: PropTypes.string,
   password: PropTypes.string,
+  passwordError: PropTypes.node,
   onChangeEmail: PropTypes.func,
   onChangePassword: PropTypes.func.isRequired,
   onClickLogin: PropTypes.func.isRequired,

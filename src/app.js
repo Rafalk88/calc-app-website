@@ -1,4 +1,6 @@
 import React from "react";
+import isEmail from "validator/lib/isEmail";
+import isStrongPassword from "validator/lib/isStrongPassword";
 
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
@@ -32,7 +34,9 @@ export class App extends React.Component {
 
     // login state
     loginEmail: "",
+    loginEmailError: "",
     loginPassword: "",
+    loginPasswordError: "",
 
     // createAccount state
     createEmail: "",
@@ -82,7 +86,9 @@ export class App extends React.Component {
       infoMessage,
       notLoginUserRoute,
       loginEmail,
+      loginEmailError,
       loginPassword,
+      loginPasswordError,
       createEmail,
       createPassword,
       createRepeatePassword,
@@ -94,14 +100,35 @@ export class App extends React.Component {
           <FullPageLayout>
             <LoginForm
               email={loginEmail}
+              emailError={loginEmailError}
+              passwordError={loginPasswordError}
               password={loginPassword}
               onChangeEmail={(e) => {
                 const { value } = e.target;
-                this.setState(() => ({ loginEmail: value }));
+                this.setState(() => ({
+                  loginEmail: value,
+                  loginEmailError: isEmail(value)
+                    ? ""
+                    : "Please type valid E-mail.",
+                }));
               }}
               onChangePassword={(e) => {
                 const { value } = e.target;
-                this.setState(() => ({ loginPassword: value }));
+                this.setState(() => ({
+                  loginPassword: value,
+                  loginPasswordError: isStrongPassword(value) ? (
+                    ""
+                  ) : (
+                    <div>
+                      Password should be:
+                      <br /> - at least 8 chars, <br /> - min. 1 lower case
+                      char,
+                      <br /> - min. 1 uppercase char,
+                      <br /> - min. 1 number,
+                      <br /> - min. 1 symbol.
+                    </div>
+                  ),
+                }));
               }}
               onClickLogin={this.onClickLogin}
               onClickCreateAccount={() =>

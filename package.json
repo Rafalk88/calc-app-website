@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "react-app-rewired start", 
-  "build": "react-app-rewired build", 
-  "test": "react-app-rewired test", 
-  "eject": "react-scripts eject" 
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
   },
   "react-dotenv": {
-    "whitelist": ["REACT_APP_FIREBASE_APP_KEY"]
+    "whitelist": [
+      "REACT_APP_FIREBASE_APP_KEY"
+    ]
   },
   "keywords": [],
   "author": "rkdesign",
@@ -54,6 +56,7 @@
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "styled-components": "^5.3.6",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "validator": "^13.7.0"
   }
 }

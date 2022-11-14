@@ -22,7 +22,7 @@ export const TextField = (props) => {
 
 TextField.propTypes = {
   className: PropTypes.string,
-  errorMessage: PropTypes.string,
+  errorMessage: PropTypes.node,
 };
 
 export default TextField;
