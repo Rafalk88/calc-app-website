@@ -9,8 +9,27 @@ import LoginForm from "./components/LoginForm";
 import CreateAccount from "./components/CreateAccount";
 import RecoverPassword from "./components/RecoverPassword";
 
-import { signIn } from "./auth";
+import {
+  signIn,
+  signUp,
+  getIdToken,
+  decodeToken,
+  checkIfUserIsLoggedIn,
+} from "./auth";
 import { handleHTTPErrors } from "./handleHTTPErrors";
+
+const EMAIL_VALIDATION_ERROR = "Please type valid E-mail.";
+const PASSWORD_VALIDATION_ERROR = (
+  <div>
+    Password should be:
+    <br /> - at least 8 chars, <br /> - min. 1 lower case char,
+    <br /> - min. 1 uppercase char,
+    <br /> - min. 1 number,
+    <br /> - min. 1 symbol.
+  </div>
+);
+const RECOVER_PASSWORD_VALIDATION_ERROR = "Passwords must be the same.";
+const CREATE_ACCOUNT_SUCCESS_INFO = "User account created.";
 
 export class App extends React.Component {
   state = {
@@ -34,18 +53,24 @@ export class App extends React.Component {
 
     // login state
     loginEmail: "",
-    loginEmailError: "",
+    loginEmailError: EMAIL_VALIDATION_ERROR,
     loginPassword: "",
-    loginPasswordError: "",
+    loginPasswordError: PASSWORD_VALIDATION_ERROR,
     loginSubmitted: false,
 
     // createAccount state
     createEmail: "",
+    createEmailError: EMAIL_VALIDATION_ERROR,
     createPassword: "",
+    createPasswordError: PASSWORD_VALIDATION_ERROR,
     createRepeatePassword: "",
+    createPasswordRepeatError: RECOVER_PASSWORD_VALIDATION_ERROR,
+    createSubmitted: false,
 
     // recover sate
     recoverPasswordEmail: "",
+    recoverPasswordEmailError: EMAIL_VALIDATION_ERROR,
+    recoverPasswordSubmitted: false,
 
     // counting app state
     timeInput: "",
@@ -58,14 +83,11 @@ export class App extends React.Component {
 
   onClickLogin = async () => {
     this.setState(() => ({ loginSubmitted: true }));
-    if (!this.stateloginEmail) {
-      this.setState(() => ({ loginEmailError: "Please type valid E-mail." }));
-      return;
-    }
     if (this.state.loginEmailError || this.state.loginPasswordError) return;
     this.setState(() => ({ isLoading: true }));
     try {
       await signIn(this.state.loginEmail, this.state.loginPassword);
+      this.onUserLogIn();
     } catch (error) {
       const errorMessage = handleHTTPErrors(error.data.error.message);
       this.setState(() => ({
@@ -77,12 +99,74 @@ export class App extends React.Component {
     }
   };
 
+  onClickCreateAccount = async () => {
+    this.setState(() => ({ createSubmitted: true }));
+    if (
+      this.state.createEmailError ||
+      this.state.createPasswordError ||
+      this.state.createPasswordRepeatError
+    )
+      return;
+    this.setState(() => ({ isLoading: true }));
+    try {
+      await signUp(this.state.createEmail, this.state.createPassword);
+      this.setState(() => ({
+        hasInfo: true,
+        infoMessage: CREATE_ACCOUNT_SUCCESS_INFO,
+      }));
+      this.onUserLogIn();
+    } catch (error) {
+      const errorMessage = handleHTTPErrors(error.data.error.message);
+      this.setState(() => ({
+        hasError: true,
+        errorMessage: errorMessage,
+      }));
+    } finally {
+      this.setState(() => ({ isLoading: false }));
+    }
+  };
+
+  onClickRecover = async () => {
+    this.setState(() => ({ recoverPasswordSubmitted: true }));
+    if (this.state.recoverPasswordEmailError) return;
+    this.setState(() => ({ isLoading: true }));
+    console.log("onClickRecover");
+  };
+
   dismissError = () => {
     this.setState(() => ({
       hasError: false,
       errorMessage: "",
     }));
   };
+
+  dismissInfo = () => {
+    this.setState(() => ({
+      hasInfo: false,
+      infoMessage: "",
+    }));
+  };
+
+  onUserLogIn = () => {
+    const token = getIdToken();
+    if (!token) return;
+    const user = decodeToken(token);
+
+    // @TODO replace this token decoding with request for user data
+    this.setState(() => ({
+      isUserLoged: true,
+      userFirstName: "Rafał Kochanecki",
+      userEmail: user.email,
+      userAvatar: "",
+    }));
+  };
+
+  async componentDidMount() {
+    this.setState(() => ({ isLoading: true }));
+    const userIsLogedIn = await checkIfUserIsLoggedIn();
+    this.setState(() => ({ isLoading: false }));
+    if (userIsLogedIn) this.onUserLogIn();
+  }
 
   render() {
     const {
@@ -98,13 +182,22 @@ export class App extends React.Component {
       loginPasswordError,
       loginSubmitted,
       createEmail,
+      createEmailError,
       createPassword,
+      createPasswordError,
       createRepeatePassword,
+      createPasswordRepeatError,
+      createSubmitted,
       recoverPasswordEmail,
+      recoverPasswordEmailError,
+      recoverPasswordSubmitted,
+      isUserLoged,
     } = this.state;
     return (
       <>
-        {notLoginUserRoute === "LOGIN" ? (
+        {isUserLoged ? (
+          "LOGED IN PAGE"
+        ) : notLoginUserRoute === "LOGIN" ? (
           <FullPageLayout>
             <LoginForm
               email={loginEmail}
@@ -116,7 +209,7 @@ export class App extends React.Component {
                 this.setState(() => ({
                   loginEmail: value,
                   loginEmailError:
-                    isEmail(value) || !value ? "" : "Please type valid E-mail.",
+                    isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
                 }));
                 if (!value) {
                   this.setState(() => ({ loginSubmitted: false }));
@@ -127,18 +220,9 @@ export class App extends React.Component {
                 this.setState(() => ({
                   loginPassword: value,
                   loginPasswordError:
-                    isStrongPassword(value) || !value ? (
-                      ""
-                    ) : (
-                      <div>
-                        Password should be:
-                        <br /> - at least 8 chars, <br /> - min. 1 lower case
-                        char,
-                        <br /> - min. 1 uppercase char,
-                        <br /> - min. 1 number,
-                        <br /> - min. 1 symbol.
-                      </div>
-                    )
+                    isStrongPassword(value) || !value
+                      ? ""
+                      : PASSWORD_VALIDATION_ERROR,
                 }));
                 if (!value) {
                   this.setState(() => ({ loginSubmitted: false }));
@@ -156,21 +240,55 @@ export class App extends React.Component {
         ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
           <CreateAccount
             email={createEmail}
+            emailError={createSubmitted ? createEmailError : undefined}
             password={createPassword}
+            passwordError={createSubmitted ? createPasswordError : undefined}
             repeatPassword={createRepeatePassword}
+            repeatPasswordError={
+              createSubmitted ? createPasswordRepeatError : undefined
+            }
             onChangeEmail={(e) => {
               const { value } = e.target;
-              this.setState(() => ({ createEmail: value }));
+              this.setState(() => ({
+                createEmail: value,
+                createEmailError:
+                  isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
+              }));
+              if (!value) {
+                this.setState(() => ({ createSubmitted: false }));
+              }
             }}
             onChangePassword={(e) => {
               const { value } = e.target;
-              this.setState(() => ({ createPassword: value }));
+              this.setState(() => ({
+                createPassword: value,
+                createPasswordError:
+                  isStrongPassword(value) || !value
+                    ? ""
+                    : PASSWORD_VALIDATION_ERROR,
+                createPasswordRepeatError:
+                  createPassword === value
+                    ? ""
+                    : RECOVER_PASSWORD_VALIDATION_ERROR,
+              }));
+              if (!value) {
+                this.setState(() => ({ createSubmitted: false }));
+              }
             }}
             onChangeRepeatPassword={(e) => {
               const { value } = e.target;
-              this.setState(() => ({ createRepeatePassword: value }));
+              this.setState(() => ({
+                createRepeatePassword: value,
+                createPasswordRepeatError:
+                  createPassword === value
+                    ? ""
+                    : RECOVER_PASSWORD_VALIDATION_ERROR,
+              }));
+              if (!value) {
+                this.setState(() => ({ createSubmitted: false }));
+              }
             }}
-            onClickCreateAccount={() => console.log("onClickCreateAccount")}
+            onClickCreateAccount={this.onClickCreateAccount}
             onClickBackToLogin={() =>
               this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
             }
@@ -178,11 +296,21 @@ export class App extends React.Component {
         ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
           <RecoverPassword
             email={recoverPasswordEmail}
+            emailError={
+              recoverPasswordSubmitted ? recoverPasswordEmailError : undefined
+            }
             onChangeEmail={(e) => {
               const { value } = e.target;
-              this.setState(() => ({ recoverPasswordEmail: value }));
+              this.setState(() => ({
+                recoverPasswordEmail: value,
+                recoverPasswordEmailError:
+                  isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
+              }));
+              if (!value) {
+                this.setState(() => ({ recoverPasswordSubmitted: false }));
+              }
             }}
-            onClickRecover={() => console.log("onClickRecover")}
+            onClickRecover={this.onClickRecover}
             onClickBackToLogin={() =>
               this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
             }
@@ -193,7 +321,8 @@ export class App extends React.Component {
           <FullPageMessage
             iconVariant={"info"}
             message={infoMessage}
-            onButtonClick={this.dismissError}
+            buttonLabel={"OK"}
+            onButtonClick={this.dismissInfo}
           />
         ) : null}
         {hasError ? (
