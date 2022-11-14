@@ -4,17 +4,25 @@ import PropTypes from "prop-types";
 import classes from "./styles.module.css";
 
 export const TextField = (props) => {
-  const { className, ...otherProps } = props;
+  const { className, errorMessage, ...otherProps } = props;
   return (
-    <input
-      className={`${classes.root}${className ? ` ${className}` : ""}`}
-      {...otherProps}
-    />
+    <div className={`${classes.root}${className ? ` ${className}` : ""}`}>
+      <input
+        className={`${classes.input}${
+          errorMessage ? ` ${classes.hasError}` : ""
+        }`}
+        {...otherProps}
+      />
+      {errorMessage ? (
+        <div className={classes.errorMessage}>{errorMessage}</div>
+      ) : null}
+    </div>
   );
 };
 
 TextField.propTypes = {
   className: PropTypes.string,
+  errorMessage: PropTypes.string,
 };
 
 export default TextField;

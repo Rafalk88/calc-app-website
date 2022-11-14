@@ -8,6 +8,7 @@ import CreateAccount from "./components/CreateAccount";
 import RecoverPassword from "./components/RecoverPassword";
 
 import { signIn } from "./auth";
+import { handleHTTPErrors } from "./handleHTTPErrors";
 
 export class App extends React.Component {
   state = {
@@ -55,9 +56,10 @@ export class App extends React.Component {
     try {
       await signIn(this.state.loginEmail, this.state.loginPassword);
     } catch (error) {
+      const errorMessage = handleHTTPErrors(error.data.error.message);
       this.setState(() => ({
         hasError: true,
-        errorMessage: error.data.error.message,
+        errorMessage: errorMessage,
       }));
     } finally {
       this.setState(() => ({ isLoading: false }));
