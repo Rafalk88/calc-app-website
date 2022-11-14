@@ -37,6 +37,7 @@ export class App extends React.Component {
     loginEmailError: "",
     loginPassword: "",
     loginPasswordError: "",
+    loginSubmitted: false,
 
     // createAccount state
     createEmail: "",
@@ -56,6 +57,12 @@ export class App extends React.Component {
   };
 
   onClickLogin = async () => {
+    this.setState(() => ({ loginSubmitted: true }));
+    if (!this.stateloginEmail) {
+      this.setState(() => ({ loginEmailError: "Please type valid E-mail." }));
+      return;
+    }
+    if (this.state.loginEmailError || this.state.loginPasswordError) return;
     this.setState(() => ({ isLoading: true }));
     try {
       await signIn(this.state.loginEmail, this.state.loginPassword);
@@ -89,6 +96,7 @@ export class App extends React.Component {
       loginEmailError,
       loginPassword,
       loginPasswordError,
+      loginSubmitted,
       createEmail,
       createPassword,
       createRepeatePassword,
@@ -100,35 +108,41 @@ export class App extends React.Component {
           <FullPageLayout>
             <LoginForm
               email={loginEmail}
-              emailError={loginEmailError}
-              passwordError={loginPasswordError}
+              emailError={loginSubmitted ? loginEmailError : undefined}
+              passwordError={loginSubmitted ? loginPasswordError : undefined}
               password={loginPassword}
               onChangeEmail={(e) => {
                 const { value } = e.target;
                 this.setState(() => ({
                   loginEmail: value,
-                  loginEmailError: isEmail(value)
-                    ? ""
-                    : "Please type valid E-mail.",
+                  loginEmailError:
+                    isEmail(value) || !value ? "" : "Please type valid E-mail.",
                 }));
+                if (!value) {
+                  this.setState(() => ({ loginSubmitted: false }));
+                }
               }}
               onChangePassword={(e) => {
                 const { value } = e.target;
                 this.setState(() => ({
                   loginPassword: value,
-                  loginPasswordError: isStrongPassword(value) ? (
-                    ""
-                  ) : (
-                    <div>
-                      Password should be:
-                      <br /> - at least 8 chars, <br /> - min. 1 lower case
-                      char,
-                      <br /> - min. 1 uppercase char,
-                      <br /> - min. 1 number,
-                      <br /> - min. 1 symbol.
-                    </div>
-                  ),
+                  loginPasswordError:
+                    isStrongPassword(value) || !value ? (
+                      ""
+                    ) : (
+                      <div>
+                        Password should be:
+                        <br /> - at least 8 chars, <br /> - min. 1 lower case
+                        char,
+                        <br /> - min. 1 uppercase char,
+                        <br /> - min. 1 number,
+                        <br /> - min. 1 symbol.
+                      </div>
+                    )
                 }));
+                if (!value) {
+                  this.setState(() => ({ loginSubmitted: false }));
+                }
               }}
               onClickLogin={this.onClickLogin}
               onClickCreateAccount={() =>
