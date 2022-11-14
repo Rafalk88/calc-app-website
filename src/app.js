@@ -15,6 +15,7 @@ import {
   getIdToken,
   decodeToken,
   checkIfUserIsLoggedIn,
+  sendPasswordResetEmail,
 } from "./auth";
 import { handleHTTPErrors } from "./handleHTTPErrors";
 
@@ -30,6 +31,7 @@ const PASSWORD_VALIDATION_ERROR = (
 );
 const RECOVER_PASSWORD_VALIDATION_ERROR = "Passwords must be the same.";
 const CREATE_ACCOUNT_SUCCESS_INFO = "User account created.";
+const RECOVER_PASSWORD_SUCCESS_INFO = "Check Your inbox.";
 
 export class App extends React.Component {
   state = {
@@ -130,7 +132,21 @@ export class App extends React.Component {
     this.setState(() => ({ recoverPasswordSubmitted: true }));
     if (this.state.recoverPasswordEmailError) return;
     this.setState(() => ({ isLoading: true }));
-    console.log("onClickRecover");
+    try {
+      await sendPasswordResetEmail(this.state.recoverPasswordEmail);
+      this.setState(() => ({
+        hasInfo: true,
+        infoMessage: RECOVER_PASSWORD_SUCCESS_INFO,
+      }));
+    } catch (error) {
+      //const errorMessage = handleHTTPErrors(error.data.error.message);
+      this.setState(() => ({
+        hasError: true,
+        errorMessage: errorMessage,
+      }));
+    } finally {
+      this.setState(() => ({ isLoading: false }));
+    }
   };
 
   dismissError = () => {
