@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
@@ -11,6 +11,8 @@ import RecoverPassword from "./components/RecoverPassword";
 import AppBar from "./components/AppBar/AppBar";
 import Logo from "./components/LoginForm/Logo";
 import User from "./components/User";
+import List from "./components/List";
+import ListItem from "./components/ListItem/ListItem";
 
 import {
   signIn,
@@ -232,11 +234,31 @@ export class App extends React.Component {
                 userFirstName={userFirstName}
                 userEmail={userEmail}
                 userAvatar={userAvatar}
-                contentList={isUserDropdownOpen ? "jest" : null}
                 onClick={() =>
                   this.setState((prevState) => ({
                     isUserDropdownOpen: !prevState.isUserDropdownOpen,
                   }))
+                }
+                contentList={
+                  isUserDropdownOpen ? (
+                    <List>
+                      <ListItem
+                        icon={"settings"}
+                        text={"Settings"}
+                        disabled={true}
+                      />
+                      <ListItem
+                        icon={"support"}
+                        text={"Support"}
+                        disabled={true}
+                      />
+                      <ListItem
+                        icon={"log-out"}
+                        text={"Log Out"}
+                        onClick={() => console.log("działa")}
+                      />
+                    </List>
+                  ) : null
                 }
               />
             </AppBar>
