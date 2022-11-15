@@ -8,6 +8,9 @@ import FullPageLayout from "./components/FullPageLayout";
 import LoginForm from "./components/LoginForm";
 import CreateAccount from "./components/CreateAccount";
 import RecoverPassword from "./components/RecoverPassword";
+import AppBar from "./components/AppBar/AppBar";
+import Logo from "./components/LoginForm/Logo";
+import User from "./components/User";
 
 import {
   signIn,
@@ -212,7 +215,12 @@ export class App extends React.Component {
     return (
       <>
         {isUserLoged ? (
-          "LOGED IN PAGE"
+          <div>
+            <AppBar>
+              <Logo />
+              <User />
+            </AppBar>
+          </div>
         ) : notLoginUserRoute === "LOGIN" ? (
           <FullPageLayout>
             <LoginForm
