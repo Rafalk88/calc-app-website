@@ -21,6 +21,7 @@ import {
   decodeToken,
   checkIfUserIsLoggedIn,
   sendPasswordResetEmail,
+  logOut,
 } from "./auth";
 import { handleHTTPErrors } from "./handleHTTPErrors";
 
@@ -109,6 +110,16 @@ export class App extends React.Component {
     } finally {
       this.setState(() => ({ isLoading: false }));
     }
+  };
+
+  onClickLogOut = async () => {
+    await logOut();
+    this.setState(() => ({
+      isUserLoged: false,
+      userFirstName: "",
+      userEmail: "",
+      userAvatar: "",
+    }));
   };
 
   onClickCreateAccount = async () => {
@@ -255,7 +266,7 @@ export class App extends React.Component {
                       <ListItem
                         icon={"log-out"}
                         text={"Log Out"}
-                        onClick={() => console.log("działa")}
+                        onClick={this.onClickLogOut}
                       />
                     </List>
                   ) : null
