@@ -224,6 +224,7 @@ export class App extends React.Component {
             <AppBar>
               <Logo className={classes.logo} />
               <User
+                className={classes.user}
                 userFirstName={userFirstName}
                 userEmail={userEmail}
                 userAvatar={userAvatar}

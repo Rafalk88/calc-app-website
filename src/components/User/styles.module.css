@@ -1,14 +1,41 @@
 .root {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   height: 100%;
+  padding: 4px 0;
 }
 
+.wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-radius: 5px;
+  padding: 4px;
+  cursor: pointer;
+  width: 100%;
+  overflow: hidden;
+}
+
+.wrapper:hover {
+  background-color: #fbfbfb;
+}
 .textWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
+  width: calc(100% - 55px);
 }
 
-.avatarWrapper {}
+.userEmail {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.avatarWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+}

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Typography from "../Typography";
+import Avatar from "../Avatar";
 
 import classes from "./styles.module.css";
 
@@ -14,11 +15,19 @@ export const User = (props) => {
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
     >
-      <div className={classes.textWrapper}>
-        <Typography variant={"title2"}>{userFirstName || "- . -"}</Typography>
-        <Typography variant={"title3"}>{userEmail}</Typography>
+      <div className={classes.wrapper}>
+        <div className={classes.textWrapper}>
+          <Typography className={classes.userFirstName} variant={"title2"}>
+            {userFirstName || "- . -"}
+          </Typography>
+          <Typography className={classes.userEmail} variant={"title3"}>
+            {userEmail}
+          </Typography>
+        </div>
+        <div className={classes.avatarWrapper}>
+          <Avatar src={userAvatar} />
+        </div>
       </div>
-      <div className={classes.avatarWrapper}></div>
     </div>
   );
 };
