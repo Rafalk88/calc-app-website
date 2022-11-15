@@ -22,6 +22,8 @@ import {
 } from "./auth";
 import { handleHTTPErrors } from "./handleHTTPErrors";
 
+import classes from "./styles.module.css";
+
 const EMAIL_VALIDATION_ERROR = "Please type valid E-mail.";
 const PASSWORD_VALIDATION_ERROR = (
   <div>
@@ -174,7 +176,7 @@ export class App extends React.Component {
     // @TODO replace this token decoding with request for user data
     this.setState(() => ({
       isUserLoged: true,
-      userFirstName: "Rafał Kochanecki",
+      userFirstName: "",
       userEmail: user.email,
       userAvatar: "",
     }));
@@ -211,14 +213,21 @@ export class App extends React.Component {
       recoverPasswordEmailError,
       recoverPasswordSubmitted,
       isUserLoged,
+      userFirstName,
+      userEmail,
+      userAvatar,
     } = this.state;
     return (
       <>
         {isUserLoged ? (
           <div>
             <AppBar>
-              <Logo />
-              <User />
+              <Logo className={classes.logo} />
+              <User
+                userFirstName={userFirstName}
+                userEmail={userEmail}
+                userAvatar={userAvatar}
+              />
             </AppBar>
           </div>
         ) : notLoginUserRoute === "LOGIN" ? (
