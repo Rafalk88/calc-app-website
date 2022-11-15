@@ -58,6 +58,9 @@ export class App extends React.Component {
     userEmail: "",
     userAvatar: "",
 
+    // user dropdown
+    isUserDropdownOpen: false,
+
     // login state
     loginEmail: "",
     loginEmailError: EMAIL_VALIDATION_ERROR,
@@ -216,6 +219,7 @@ export class App extends React.Component {
       userFirstName,
       userEmail,
       userAvatar,
+      isUserDropdownOpen,
     } = this.state;
     return (
       <>
@@ -228,7 +232,12 @@ export class App extends React.Component {
                 userFirstName={userFirstName}
                 userEmail={userEmail}
                 userAvatar={userAvatar}
-                contentList={"contentlist"}
+                contentList={isUserDropdownOpen ? "jest" : null}
+                onClick={() =>
+                  this.setState((prevState) => ({
+                    isUserDropdownOpen: !prevState.isUserDropdownOpen,
+                  }))
+                }
               />
             </AppBar>
           </div>
