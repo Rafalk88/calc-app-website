@@ -7,8 +7,14 @@ import Avatar from "../Avatar";
 import classes from "./styles.module.css";
 
 export const User = (props) => {
-  const { className, userFirstName, userEmail, userAvatar, ...otherProps } =
-    props;
+  const {
+    className,
+    userFirstName,
+    userEmail,
+    userAvatar,
+    contentList,
+    ...otherProps
+  } = props;
 
   return (
     <div
@@ -28,6 +34,9 @@ export const User = (props) => {
           <Avatar src={userAvatar} />
         </div>
       </div>
+      {contentList ? (
+        <div className={classes.listContainer}>{contentList}</div>
+      ) : null}
     </div>
   );
 };
@@ -37,6 +46,7 @@ User.propTypes = {
   userFirstName: PropTypes.string,
   userEmail: PropTypes.string,
   userAvatar: PropTypes.string,
+  contentList: PropTypes.node,
 };
 
 export default User;

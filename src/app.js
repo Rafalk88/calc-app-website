@@ -228,6 +228,7 @@ export class App extends React.Component {
                 userFirstName={userFirstName}
                 userEmail={userEmail}
                 userAvatar={userAvatar}
+                contentList={"contentlist"}
               />
             </AppBar>
           </div>
