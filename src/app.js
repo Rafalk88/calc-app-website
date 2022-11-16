@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
@@ -24,6 +24,7 @@ import {
   logOut,
 } from "./auth";
 import { handleHTTPErrors } from "./handleHTTPErrors";
+import { getAll as getAllProcedures } from "./components/api/procedures";
 
 import classes from "./styles.module.css";
 
@@ -184,6 +185,13 @@ export class App extends React.Component {
     }));
   };
 
+  fetchProcedures = async () => {
+    const procedures = await getAllProcedures();
+    this.setState(() => ({
+      procedures: procedures,
+    }));
+  };
+
   onUserLogIn = () => {
     const token = getIdToken();
     if (!token) return;
@@ -196,6 +204,8 @@ export class App extends React.Component {
       userEmail: user.email,
       userAvatar: "",
     }));
+
+    this.fetchProcedures();
   };
 
   async componentDidMount() {
