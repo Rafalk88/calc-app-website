@@ -17,9 +17,6 @@
   overflow: hidden;
 }
 
-.wrapper:hover {
-  background-color: #fbfbfb;
-}
 .textWrapper {
   display: flex;
   flex-direction: column;

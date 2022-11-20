@@ -1,0 +1,34 @@
+.root {
+  width: 100%;
+}
+
+.mainPageHeader {
+  padding: 127px 0 0 173px;
+  display: flex;
+  flex-direction: column;
+}
+
+.headersubTitle {
+  padding-left: 184px;
+  margin-top: 15px;
+  margin-bottom: 191px;
+}
+
+.buttonSection {
+  display: flex;
+  justify-content: center;
+}
+
+.mainPageButton {
+  margin-right: 21px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+}
+
+.icon {
+  margin-bottom: 15px;
+}

@@ -4,3 +4,31 @@
     overflow: hidden;
   }
 }
+.main_menu_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+  height: 200px;
+  color: rgba(0, 0, 0, 0.7);
+  margin-right: 21px;
+}
+
+.main_menu_btn:hover {
+  color: black;
+}
+
+.fixed {
+  position: fixed;
+  top: 64px;
+  height: calc(100% - 64px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.div {
+  display: flex;
+  margin-top: 229px;
+}

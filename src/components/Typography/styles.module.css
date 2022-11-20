@@ -1,10 +1,12 @@
 .root {}
 
 .title1 {
-  font-family: Outfit;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0em;
+  font-family: Roboto;
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 47px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 
 .title2 {
@@ -35,6 +37,14 @@
   letter-spacing: 0.1em;
 }
 
+.h3-light {
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 47px;
+  letter-spacing: 0em;
+  text-align: left;
+}
 .h3-bold {
   font-family: Roboto;
   font-size: 20px;

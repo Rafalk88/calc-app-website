@@ -1,0 +1,8 @@
+.root {
+  margin-top: 65px;
+}
+
+.contentMainWrapper {
+  display: flex;
+  justify-content: center;
+}

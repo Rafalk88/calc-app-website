@@ -8,11 +8,12 @@ import FullPageLayout from "./components/FullPageLayout";
 import LoginForm from "./components/LoginForm";
 import CreateAccount from "./components/CreateAccount";
 import RecoverPassword from "./components/RecoverPassword";
-import AppBar from "./components/AppBar/AppBar";
+import MainLayout from "./components/MainLayout";
 import Logo from "./components/LoginForm/Logo";
 import User from "./components/User";
 import List from "./components/List";
 import ListItem from "./components/ListItem/ListItem";
+import MainPage from "./components/MainPage";
 
 import {
   signIn,
@@ -23,6 +24,7 @@ import {
   sendPasswordResetEmail,
   logOut,
 } from "./auth";
+
 import { handleHTTPErrors } from "./handleHTTPErrors";
 import { getAll as getAllProcedures } from "./components/api/procedures";
 
@@ -54,7 +56,7 @@ export class App extends React.Component {
 
     // router state
     notLoginUserRoute: "LOGIN", // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
-    logedUserRoute: "WELCOME-PAGE", // "APP-PAGE", "DB-PAGE"
+    logedUserRoute: "WELCOME-PAGE", // "APP-PAGE", "DB-PAGE", "SETTINGS-PAGE"
 
     // user/auth state
     isUserLoged: false,
@@ -223,6 +225,7 @@ export class App extends React.Component {
       hasInfo,
       infoMessage,
       notLoginUserRoute,
+      logedUserRoute,
       loginEmail,
       loginEmailError,
       loginPassword,
@@ -247,43 +250,55 @@ export class App extends React.Component {
     return (
       <>
         {isUserLoged ? (
-          <div>
-            <AppBar>
-              <Logo className={classes.logo} />
-              <User
-                className={classes.user}
-                userFirstName={userFirstName}
-                userEmail={userEmail}
-                userAvatar={userAvatar}
-                onClick={() =>
-                  this.setState((prevState) => ({
-                    isUserDropdownOpen: !prevState.isUserDropdownOpen,
-                  }))
-                }
-                contentList={
-                  isUserDropdownOpen ? (
-                    <List>
-                      <ListItem
-                        icon={"settings"}
-                        text={"Settings"}
-                        disabled={true}
-                      />
-                      <ListItem
-                        icon={"support"}
-                        text={"Support"}
-                        disabled={true}
-                      />
-                      <ListItem
-                        icon={"log-out"}
-                        text={"Log Out"}
-                        onClick={this.onClickLogOut}
-                      />
-                    </List>
-                  ) : null
-                }
-              />
-            </AppBar>
-          </div>
+          <MainLayout
+            contentAppBar={
+              <>
+                <Logo className={classes.logo} />
+                <User
+                  className={classes.user}
+                  userFirstName={userFirstName}
+                  userEmail={userEmail}
+                  userAvatar={userAvatar}
+                  onClick={() =>
+                    this.setState((prevState) => ({
+                      isUserDropdownOpen: !prevState.isUserDropdownOpen,
+                    }))
+                  }
+                  contentList={
+                    isUserDropdownOpen ? (
+                      <List>
+                        <ListItem
+                          icon={"settings"}
+                          text={"Settings"}
+                          disabled={true}
+                        />
+                        <ListItem
+                          icon={"support"}
+                          text={"Support"}
+                          disabled={true}
+                        />
+                        <ListItem
+                          icon={"log-out"}
+                          text={"Log Out"}
+                          onClick={this.onClickLogOut}
+                        />
+                      </List>
+                    ) : null
+                  }
+                />
+              </>
+            }
+            contentMain={
+              logedUserRoute === "WELCOME-PAGE" ? (
+                <MainPage
+                  userName={userFirstName}
+                  onClickAppPage={() => console.log("AppPageButton")}
+                  onClickDBPage={() => console.log("DBPageButton")}
+                  onClickStatistic={() => console.log("StatisticButton")}
+                />
+              ) : null
+            }
+          />
         ) : notLoginUserRoute === "LOGIN" ? (
           <FullPageLayout>
             <LoginForm
