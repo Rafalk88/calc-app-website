@@ -14,6 +14,8 @@ import User from "./components/User";
 import List from "./components/List";
 import ListItem from "./components/ListItem/ListItem";
 import MainPage from "./components/MainPage";
+import Footer from "./components/Footer";
+import AppCountingPage from "./components/AppCountingPage";
 
 import {
   signIn,
@@ -292,12 +294,19 @@ export class App extends React.Component {
               logedUserRoute === "WELCOME-PAGE" ? (
                 <MainPage
                   userName={userFirstName}
-                  onClickAppPage={() => console.log("AppPageButton")}
+                  onClickAppPage={() =>
+                    this.setState(() => ({
+                      logedUserRoute: "APP-PAGE",
+                    }))
+                  }
                   onClickDBPage={() => console.log("DBPageButton")}
                   onClickStatistic={() => console.log("StatisticButton")}
                 />
+              ) : logedUserRoute === "APP-PAGE" ? (
+                <AppCountingPage />
               ) : null
             }
+            footer={<Footer />}
           />
         ) : notLoginUserRoute === "LOGIN" ? (
           <FullPageLayout>
