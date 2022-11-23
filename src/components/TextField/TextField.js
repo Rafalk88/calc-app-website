@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import classes from "./styles.module.css";
 
-export const TextField = (props) => {
+export const TextField = React.forwardRef((props, ref) => {
   const { className, errorMessage, ...otherProps } = props;
   return (
     <div className={`${classes.root}${className ? ` ${className}` : ""}`}>
@@ -11,6 +11,7 @@ export const TextField = (props) => {
         className={`${classes.input}${
           errorMessage ? ` ${classes.hasError}` : ""
         }`}
+        ref={ref}
         {...otherProps}
       />
       {errorMessage ? (
@@ -18,7 +19,9 @@ export const TextField = (props) => {
       ) : null}
     </div>
   );
-};
+});
+
+Textfield.displayName = "Textfield";
 
 TextField.propTypes = {
   className: PropTypes.string,
