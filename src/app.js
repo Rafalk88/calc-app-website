@@ -4,8 +4,6 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
-import FullPageLayout from "./components/FullPageLayout";
-import LoginForm from "./components/LoginForm";
 import CreateAccount from "./components/CreateAccount";
 import RecoverPassword from "./components/RecoverPassword";
 import MainLayout from "./components/MainLayout";
@@ -16,6 +14,14 @@ import ListItem from "./components/ListItem/ListItem";
 import MainPage from "./components/MainPage";
 import Footer from "./components/Footer";
 import AppCountingPage from "./components/AppCountingPage";
+import PageLogin from "./pages/PageLogin";
+import {
+  EMAIL_VALIDATION_ERROR,
+  PASSWORD_VALIDATION_ERROR,
+  RECOVER_PASSWORD_VALIDATION_ERROR,
+  CREATE_ACCOUNT_SUCCESS_INFO,
+  RECOVER_PASSWORD_SUCCESS_INFO,
+} from "./consts";
 
 import {
   signIn,
@@ -31,20 +37,6 @@ import { handleHTTPErrors } from "./handleHTTPErrors";
 import { getAll as getAllProcedures } from "./components/api/procedures";
 
 import classes from "./styles.module.css";
-
-const EMAIL_VALIDATION_ERROR = "Please type valid E-mail.";
-const PASSWORD_VALIDATION_ERROR = (
-  <div>
-    Password should be:
-    <br /> - at least 8 chars, <br /> - min. 1 lower case char,
-    <br /> - min. 1 uppercase char,
-    <br /> - min. 1 number,
-    <br /> - min. 1 symbol.
-  </div>
-);
-const RECOVER_PASSWORD_VALIDATION_ERROR = "Passwords must be the same.";
-const CREATE_ACCOUNT_SUCCESS_INFO = "User account created.";
-const RECOVER_PASSWORD_SUCCESS_INFO = "Check Your inbox.";
 
 export class App extends React.Component {
   state = {
@@ -69,13 +61,6 @@ export class App extends React.Component {
     // user dropdown
     isUserDropdownOpen: false,
 
-    // login state
-    loginEmail: "",
-    loginEmailError: EMAIL_VALIDATION_ERROR,
-    loginPassword: "",
-    loginPasswordError: PASSWORD_VALIDATION_ERROR,
-    loginSubmitted: false,
-
     // createAccount state
     createEmail: "",
     createEmailError: EMAIL_VALIDATION_ERROR,
@@ -99,12 +84,10 @@ export class App extends React.Component {
     outputData: ["", "", ""],
   };
 
-  onClickLogin = async () => {
-    this.setState(() => ({ loginSubmitted: true }));
-    if (this.state.loginEmailError || this.state.loginPasswordError) return;
+  onClickLogin = async (email, password) => {
     this.setState(() => ({ isLoading: true }));
     try {
-      await signIn(this.state.loginEmail, this.state.loginPassword);
+      await signIn(email, password);
       this.onUserLogIn();
     } catch (error) {
       const errorMessage = handleHTTPErrors(error.data.error.message);
@@ -228,11 +211,6 @@ export class App extends React.Component {
       infoMessage,
       notLoginUserRoute,
       logedUserRoute,
-      loginEmail,
-      loginEmailError,
-      loginPassword,
-      loginPasswordError,
-      loginSubmitted,
       createEmail,
       createEmailError,
       createPassword,
@@ -309,45 +287,7 @@ export class App extends React.Component {
             footer={<Footer />}
           />
         ) : notLoginUserRoute === "LOGIN" ? (
-          <FullPageLayout>
-            <LoginForm
-              email={loginEmail}
-              emailError={loginSubmitted ? loginEmailError : undefined}
-              passwordError={loginSubmitted ? loginPasswordError : undefined}
-              password={loginPassword}
-              onChangeEmail={(e) => {
-                const { value } = e.target;
-                this.setState(() => ({
-                  loginEmail: value,
-                  loginEmailError:
-                    isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
-                }));
-                if (!value) {
-                  this.setState(() => ({ loginSubmitted: false }));
-                }
-              }}
-              onChangePassword={(e) => {
-                const { value } = e.target;
-                this.setState(() => ({
-                  loginPassword: value,
-                  loginPasswordError:
-                    isStrongPassword(value) || !value
-                      ? ""
-                      : PASSWORD_VALIDATION_ERROR,
-                }));
-                if (!value) {
-                  this.setState(() => ({ loginSubmitted: false }));
-                }
-              }}
-              onClickLogin={this.onClickLogin}
-              onClickCreateAccount={() =>
-                this.setState(() => ({ notLoginUserRoute: "CREATE-ACCOUNT" }))
-              }
-              onClickRecoverPassword={() =>
-                this.setState(() => ({ notLoginUserRoute: "RECOVER-PASSWORD" }))
-              }
-            />
-          </FullPageLayout>
+          <PageLogin onClickLogin={this.onClickLogin} />
         ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
           <CreateAccount
             email={createEmail}
