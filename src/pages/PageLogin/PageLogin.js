@@ -33,7 +33,12 @@ export class PageLogin extends React.Component {
   };
 
   render() {
-    const { className, ...otherProps } = this.props;
+    const {
+      className,
+      onClickCreateAccountPage,
+      onClickRecoverPasswordPage,
+      ...otherProps
+    } = this.props;
 
     const {
       loginEmail,
@@ -79,12 +84,8 @@ export class PageLogin extends React.Component {
               }
             }}
             onClickLogin={this.onClickLogin}
-            onClickCreateAccount={() =>
-              this.setState(() => ({ notLoginUserRoute: "CREATE-ACCOUNT" }))
-            }
-            onClickRecoverPassword={() =>
-              this.setState(() => ({ notLoginUserRoute: "RECOVER-PASSWORD" }))
-            }
+            onClickCreateAccountPage={onClickCreateAccountPage}
+            onClickRecoverPasswordPage={onClickRecoverPasswordPage}
           />
         </FullPageLayout>
       </div>
@@ -95,6 +96,8 @@ export class PageLogin extends React.Component {
 PageLogin.propTypes = {
   className: PropTypes.string,
   onClickLogin: PropTypes.func.isRequired,
+  onClickCreateAccountPage: PropTypes.func.isRequired,
+  onClickRecoverPasswordPage: PropTypes.func.isRequired,
 };
 
 export default PageLogin;

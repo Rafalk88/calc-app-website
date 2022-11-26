@@ -18,8 +18,8 @@ export const LoginForm = (props) => {
     onChangeEmail,
     onChangePassword,
     onClickLogin,
-    onClickCreateAccount,
-    onClickRecoverPassword,
+    onClickCreateAccountPage,
+    onClickRecoverPasswordPage,
     ...otherProps
   } = props;
   return (
@@ -58,14 +58,14 @@ export const LoginForm = (props) => {
         className={classes.button}
         variant={"contained"}
         color={"secondary"}
-        onClick={onClickCreateAccount}
+        onClick={onClickCreateAccountPage}
       >
         CREATE ACCOUNT
       </Button>
       <Button
         className={classes.button}
         variant={"text"}
-        onClick={onClickRecoverPassword}
+        onClick={onClickRecoverPasswordPage}
       >
         RECOVER PASSWORD
       </Button>
@@ -82,8 +82,8 @@ LoginForm.propTypes = {
   onChangeEmail: PropTypes.func,
   onChangePassword: PropTypes.func.isRequired,
   onClickLogin: PropTypes.func.isRequired,
-  onClickCreateAccount: PropTypes.func.isRequired,
-  onClickRecoverPassword: PropTypes.func.isRequired,
+  onClickCreateAccountPage: PropTypes.func.isRequired,
+  onClickRecoverPasswordPage: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
