@@ -14,101 +14,80 @@ import {
 
 import classes from "./styles.module.css";
 
-export class PageCreateAccount extends React.Component {
-  state = {
-    email: "",
-    emailError: EMAIL_VALIDATION_ERROR,
-    password: "",
-    passwordError: PASSWORD_VALIDATION_ERROR,
-    repeatPassword: "",
-    repeatPasswordError: RECOVER_PASSWORD_VALIDATION_ERROR,
-    submitted: false,
-  };
+export const PageCreateAccount = (props) => {
+  const {
+    className,
+    onClickCreateAccount: onClickCreateAccountFromProps,
+    onClickBackToLogin,
+    ...otherProps
+  } = props;
 
-  onClickCreateAccount = async () => {
-    const { email, password, emailError, passwordError, repeatPasswordError } =
-      this.state;
+  const [email, setEmail] = React.useState("");
+  const [emailError, setEmailError] = React.useState(EMAIL_VALIDATION_ERROR);
+  const [password, setPassword] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState(
+    PASSWORD_VALIDATION_ERROR
+  );
+  const [repeatPassword, setRepeatPassword] = React.useState("");
+  const [repeatPasswordError, setRepeatPasswordError] = React.useState(
+    RECOVER_PASSWORD_VALIDATION_ERROR
+  );
+  const [submitted, setSubmitted] = React.useState(false);
 
-    this.setState(() => ({ submitted: true }));
+  const onClickCreateAccount = React.useCallback(async () => {
+    setSubmitted(() => true);
     if (emailError || passwordError || repeatPasswordError) return;
 
-    this.props.onClickCreateAccount(email, password);
-  };
+    onClickCreateAccountFromProps(email, password);
+  }, [
+    email,
+    emailError,
+    password,
+    passwordError,
+    repeatPasswordError,
+    onClickCreateAccountFromProps,
+  ]);
 
-  render() {
-    const {
-      className,
-      onClickCreateAccount,
-      onClickBackToLogin,
-      ...otherProps
-    } = this.props;
+  React.useEffect(() => {
+    setEmailError(() => (isEmail(email) ? "" : EMAIL_VALIDATION_ERROR));
+  }, [email]);
 
-    const {
-      email,
-      emailError,
-      password,
-      passwordError,
-      repeatPassword,
-      repeatPasswordError,
-      submitted,
-    } = this.state;
-
-    return (
-      <div
-        className={`${classes.root}${className ? ` ${className}` : ""}`}
-        {...otherProps}
-      >
-        <CreateAccount
-          email={email}
-          emailError={submitted ? emailError : undefined}
-          password={password}
-          passwordError={submitted ? passwordError : undefined}
-          repeatPassword={repeatPassword}
-          repeatPasswordError={submitted ? repeatPasswordError : undefined}
-          onChangeEmail={(e) => {
-            const { value } = e.target;
-            this.setState(() => ({
-              email: value,
-              emailError:
-                isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
-            }));
-            if (!value) {
-              this.setState(() => ({ submitted: false }));
-            }
-          }}
-          onChangePassword={(e) => {
-            const { value } = e.target;
-            this.setState(() => ({
-              password: value,
-              passwordError:
-                isStrongPassword(value) || !value
-                  ? ""
-                  : PASSWORD_VALIDATION_ERROR,
-              repeatPasswordError:
-                password === value ? "" : RECOVER_PASSWORD_VALIDATION_ERROR,
-            }));
-            if (!value) {
-              this.setState(() => ({ submitted: false }));
-            }
-          }}
-          onChangeRepeatPassword={(e) => {
-            const { value } = e.target;
-            this.setState(() => ({
-              repeatPassword: value,
-              repeatPasswordError:
-                password === value ? "" : RECOVER_PASSWORD_VALIDATION_ERROR,
-            }));
-            if (!value) {
-              this.setState(() => ({ submitted: false }));
-            }
-          }}
-          onClickCreateAccount={this.onClickCreateAccount}
-          onClickBackToLogin={onClickBackToLogin}
-        />
-      </div>
+  React.useEffect(() => {
+    setPasswordError(() =>
+      isStrongPassword(password) ? "" : PASSWORD_VALIDATION_ERROR
     );
-  }
-}
+    setRepeatPasswordError(() =>
+      password === repeatPassword ? "" : RECOVER_PASSWORD_VALIDATION_ERROR
+    );
+  }, [password, repeatPassword]);
+
+  return (
+    <div
+      className={`${classes.root}${className ? ` ${className}` : ""}`}
+      {...otherProps}
+    >
+      <CreateAccount
+        email={email}
+        emailError={submitted ? emailError : undefined}
+        password={password}
+        passwordError={submitted ? passwordError : undefined}
+        repeatPassword={repeatPassword}
+        repeatPasswordError={submitted ? repeatPasswordError : undefined}
+        onChangeEmail={(e) => {
+          setEmail(() => e.target.value);
+        }}
+        onChangePassword={(e) => {
+          setPassword(() => e.target.value);
+        }}
+        onChangeRepeatPassword={(e) => {
+          setRepeatPassword(() => e.target.value);
+        }}
+        onClickCreateAccount={onClickCreateAccount}
+        onClickBackToLogin={onClickBackToLogin}
+      />
+    </div>
+  );
+};
 
 PageCreateAccount.propTypes = {
   className: PropTypes.string,
