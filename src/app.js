@@ -1,5 +1,9 @@
 import React from "react";
 
+import {
+  NotLogedRouterContext,
+  LogedRouterContext,
+} from "./contexts/RouterContext";
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
 import MainLayout from "./components/MainLayout";
@@ -44,10 +48,11 @@ export const App = () => {
   const [procedures, setProcedures] = React.useState(null);
 
   // router state
-  // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
-  const [notLoginUserRoute, setNotLoginUserRoute] = React.useState("LOGIN");
-  // "APP-PAGE", "DB-PAGE", "SETTINGS-PAGE"
-  const [logedUserRoute, setLogedUserRoute] = React.useState("WELCOME-PAGE");
+  const { route: notLoginUserRoute, setRoute: setNotLoginUserRoute } =
+    React.useContext(NotLogedRouterContext);
+
+  const { route: logedUserRoute, setRoute: setLogedUserRoute } =
+    React.useContext(LogedRouterContext);
 
   // user/auth state
   const [isUserLoged, setIsUserLoged] = React.useState(false);
@@ -159,10 +164,13 @@ export const App = () => {
     setInfoMessage(() => "");
   }, []);
 
-  const routeTo = React.useCallback((routeName, logStatus) => {
-    if (logStatus === "notLoged") setNotLoginUserRoute(routeName);
-    if (logStatus === "loged") setLogedUserRoute(routeName);
-  }, []);
+  const routeTo = React.useCallback(
+    (routeName, logStatus) => {
+      if (logStatus === "notLoged") setNotLoginUserRoute(routeName);
+      if (logStatus === "loged") setLogedUserRoute(routeName);
+    },
+    [setNotLoginUserRoute, setLogedUserRoute]
+  );
 
   React.useEffect(() => {
     (async () => {
