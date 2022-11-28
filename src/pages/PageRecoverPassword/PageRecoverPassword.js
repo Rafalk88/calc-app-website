@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import isEmail from "validator/lib/isEmail";
 
+import { useNotLogedRouteTo } from "../../contexts/RouterContext";
 import RecoverPassword from "../../components/RecoverPassword";
 import { EMAIL_VALIDATION_ERROR } from "../../consts";
 
@@ -12,13 +13,17 @@ export const PageRecoverPassword = (props) => {
   const {
     className,
     onClickRecover: onClickRecoverFromProps,
-    onClickBackToLogin,
     ...otherProps
   } = props;
 
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState(EMAIL_VALIDATION_ERROR);
   const [submitted, setSubmitted] = React.useState(false);
+
+  const routeTo = useNotLogedRouteTo();
+  const onClickBackToLogin = React.useCallback(() => {
+    routeTo("LOGIN");
+  }, [routeTo]);
 
   const onClickRecover = React.useCallback(async () => {
     setSubmitted(() => true);
@@ -52,7 +57,6 @@ export const PageRecoverPassword = (props) => {
 PageRecoverPassword.propTypes = {
   className: PropTypes.string,
   onClickRecover: PropTypes.func.isRequired,
-  onClickBackToLogin: PropTypes.func.isRequired,
 };
 
 export default PageRecoverPassword;

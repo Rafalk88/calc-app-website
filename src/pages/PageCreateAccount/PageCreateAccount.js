@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
+import { useNotLogedRouteTo } from "../../contexts/RouterContext";
 import CreateAccount from "../../components/CreateAccount";
 
 import {
@@ -18,7 +19,6 @@ export const PageCreateAccount = (props) => {
   const {
     className,
     onClickCreateAccount: onClickCreateAccountFromProps,
-    onClickBackToLogin,
     ...otherProps
   } = props;
 
@@ -33,6 +33,11 @@ export const PageCreateAccount = (props) => {
     RECOVER_PASSWORD_VALIDATION_ERROR
   );
   const [submitted, setSubmitted] = React.useState(false);
+
+  const routeTo = useNotLogedRouteTo();
+  const onClickBackToLogin = React.useCallback(() => {
+    routeTo("LOGIN");
+  }, [routeTo]);
 
   const onClickCreateAccount = React.useCallback(async () => {
     setSubmitted(() => true);
@@ -92,7 +97,6 @@ export const PageCreateAccount = (props) => {
 PageCreateAccount.propTypes = {
   className: PropTypes.string,
   onClickCreateAccount: PropTypes.func.isRequired,
-  onClickBackToLogin: PropTypes.func.isRequired,
 };
 
 export default PageCreateAccount;

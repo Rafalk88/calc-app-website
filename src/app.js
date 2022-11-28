@@ -1,8 +1,9 @@
 import React from "react";
 
 import {
-  NotLogedRouterContext,
-  LogedRouterContext,
+  useNotLogedRoute,
+  useLogedRoute,
+  useLogedRouteTo,
 } from "./contexts/RouterContext";
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
@@ -48,11 +49,8 @@ export const App = () => {
   const [procedures, setProcedures] = React.useState(null);
 
   // router state
-  const { route: notLoginUserRoute, setRoute: setNotLoginUserRoute } =
-    React.useContext(NotLogedRouterContext);
-
-  const { route: logedUserRoute, setRoute: setLogedUserRoute } =
-    React.useContext(LogedRouterContext);
+  const notLoginUserRoute = useNotLogedRoute();
+  const logedUserRoute = useLogedRoute();
 
   // user/auth state
   const [isUserLoged, setIsUserLoged] = React.useState(false);
@@ -76,6 +74,11 @@ export const App = () => {
   // editDatabase state
   const [searchPhrase, setSearchPhrase] = React.useState("");
   const [outputData, setOutputData] = React.useState(["", "", ""]);
+
+  const routeTo = useLogedRouteTo();
+  const onClickAppPage = React.useCallback(() => {
+    routeTo("APP-PAGE");
+  }, [routeTo]);
 
   const fetchProcedures = React.useCallback(async () => {
     const procedures = await getAllProcedures();
@@ -164,14 +167,6 @@ export const App = () => {
     setInfoMessage(() => "");
   }, []);
 
-  const routeTo = React.useCallback(
-    (routeName, logStatus) => {
-      if (logStatus === "notLoged") setNotLoginUserRoute(routeName);
-      if (logStatus === "loged") setLogedUserRoute(routeName);
-    },
-    [setNotLoginUserRoute, setLogedUserRoute]
-  );
-
   React.useEffect(() => {
     (async () => {
       setIsLoading(() => true);
@@ -223,7 +218,7 @@ export const App = () => {
             logedUserRoute === "WELCOME-PAGE" ? (
               <MainPage
                 userName={userFirstName}
-                onClickAppPage={() => routeTo("APP-PAGE", "loged")}
+                onClickAppPage={onClickAppPage}
                 onClickDBPage={() => console.log("DBPageButton")}
                 onClickStatistic={() => console.log("StatisticButton")}
               />
@@ -236,15 +231,9 @@ export const App = () => {
       ) : notLoginUserRoute === "LOGIN" ? (
         <PageLogin onClickLogin={onClickLogin} />
       ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
-        <PageCreateAccount
-          onClickCreateAccount={onClickCreateAccount}
-          onClickBackToLogin={() => routeTo("LOGIN", "notLoged")}
-        />
+        <PageCreateAccount onClickCreateAccount={onClickCreateAccount} />
       ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
-        <PageRecoverPassword
-          onClickRecover={onClickRecover}
-          onClickBackToLogin={() => routeTo("LOGIN", "notLoged")}
-        />
+        <PageRecoverPassword onClickRecover={onClickRecover} />
       ) : null}
       {isLoading ? <FullPageLoader /> : null}
       {hasInfo ? (

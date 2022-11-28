@@ -35,6 +35,16 @@ export const useLogedRouteTo = () => {
   return setRoute;
 };
 
+export const useNotLogedRoute = () => {
+  const { route } = React.useContext(NotLogedRouterContext);
+  return route;
+};
+
+export const useLogedRoute = () => {
+  const { route } = React.useContext(LogedRouterContext);
+  return route;
+};
+
 export const NotLogedRouterContextProvider = (props) => {
   const { children } = props;
   const [route, setRoute] = React.useState(initialContextNotLogedState.route);
