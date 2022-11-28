@@ -6,6 +6,7 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 
 import FullPageLayout from "../../components/FullPageLayout";
 import LoginForm from "../../components/LoginForm";
+
 import {
   EMAIL_VALIDATION_ERROR,
   PASSWORD_VALIDATION_ERROR,
@@ -15,21 +16,20 @@ import classes from "./styles.module.css";
 
 export class PageLogin extends React.Component {
   state = {
-    loginEmail: "",
-    loginEmailError: EMAIL_VALIDATION_ERROR,
-    loginPassword: "",
-    loginPasswordError: PASSWORD_VALIDATION_ERROR,
-    loginSubmitted: false,
+    email: "",
+    emailError: EMAIL_VALIDATION_ERROR,
+    password: "",
+    passwordError: PASSWORD_VALIDATION_ERROR,
+    submitted: false,
   };
 
   onClickLogin = async () => {
-    const { loginEmail, loginPassword, loginEmailError, loginPasswordError } =
-      this.state;
+    const { email, password, emailError, passwordError } = this.state;
 
-    this.setState(() => ({ loginSubmitted: true }));
-    if (loginEmailError || loginPasswordError) return;
+    this.setState(() => ({ submitted: true }));
+    if (emailError || passwordError) return;
 
-    this.props.onClickLogin(loginEmail, loginPassword);
+    this.props.onClickLogin(email, password);
   };
 
   render() {
@@ -40,13 +40,8 @@ export class PageLogin extends React.Component {
       ...otherProps
     } = this.props;
 
-    const {
-      loginEmail,
-      loginSubmitted,
-      loginEmailError,
-      loginPassword,
-      loginPasswordError,
-    } = this.state;
+    const { email, submitted, emailError, password, passwordError } =
+      this.state;
 
     return (
       <div
@@ -55,32 +50,32 @@ export class PageLogin extends React.Component {
       >
         <FullPageLayout>
           <LoginForm
-            email={loginEmail}
-            emailError={loginSubmitted ? loginEmailError : undefined}
-            password={loginPassword}
-            passwordError={loginSubmitted ? loginPasswordError : undefined}
+            email={email}
+            emailError={submitted ? emailError : undefined}
+            password={password}
+            passwordError={submitted ? passwordError : undefined}
             onChangeEmail={(e) => {
               const { value } = e.target;
               this.setState(() => ({
-                loginEmail: value,
-                loginEmailError:
+                email: value,
+                emailError:
                   isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
               }));
               if (!value) {
-                this.setState(() => ({ loginSubmitted: false }));
+                this.setState(() => ({ submitted: false }));
               }
             }}
             onChangePassword={(e) => {
               const { value } = e.target;
               this.setState(() => ({
-                loginPassword: value,
-                loginPasswordError:
+                password: value,
+                passwordError:
                   isStrongPassword(value) || !value
                     ? ""
                     : PASSWORD_VALIDATION_ERROR,
               }));
               if (!value) {
-                this.setState(() => ({ loginSubmitted: false }));
+                this.setState(() => ({ submitted: false }));
               }
             }}
             onClickLogin={this.onClickLogin}

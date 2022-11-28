@@ -1,10 +1,8 @@
 import React from "react";
 import isEmail from "validator/lib/isEmail";
-import isStrongPassword from "validator/lib/isStrongPassword";
 
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
-import CreateAccount from "./components/CreateAccount";
 import RecoverPassword from "./components/RecoverPassword";
 import MainLayout from "./components/MainLayout";
 import Logo from "./components/LoginForm/Logo";
@@ -15,10 +13,10 @@ import MainPage from "./components/MainPage";
 import Footer from "./components/Footer";
 import AppCountingPage from "./components/AppCountingPage";
 import PageLogin from "./pages/PageLogin";
+import PageCreateAccount from "./pages/PageCreateAccount";
+
 import {
   EMAIL_VALIDATION_ERROR,
-  PASSWORD_VALIDATION_ERROR,
-  RECOVER_PASSWORD_VALIDATION_ERROR,
   CREATE_ACCOUNT_SUCCESS_INFO,
   RECOVER_PASSWORD_SUCCESS_INFO,
 } from "./consts";
@@ -61,15 +59,6 @@ export class App extends React.Component {
     // user dropdown
     isUserDropdownOpen: false,
 
-    // createAccount state
-    createEmail: "",
-    createEmailError: EMAIL_VALIDATION_ERROR,
-    createPassword: "",
-    createPasswordError: PASSWORD_VALIDATION_ERROR,
-    createRepeatePassword: "",
-    createPasswordRepeatError: RECOVER_PASSWORD_VALIDATION_ERROR,
-    createSubmitted: false,
-
     // recover sate
     recoverPasswordEmail: "",
     recoverPasswordEmailError: EMAIL_VALIDATION_ERROR,
@@ -110,17 +99,9 @@ export class App extends React.Component {
     }));
   };
 
-  onClickCreateAccount = async () => {
-    this.setState(() => ({ createSubmitted: true }));
-    if (
-      this.state.createEmailError ||
-      this.state.createPasswordError ||
-      this.state.createPasswordRepeatError
-    )
-      return;
-    this.setState(() => ({ isLoading: true }));
+  onClickCreateAccount = async (email, password) => {
     try {
-      await signUp(this.state.createEmail, this.state.createPassword);
+      await signUp(email, password);
       this.setState(() => ({
         hasInfo: true,
         infoMessage: CREATE_ACCOUNT_SUCCESS_INFO,
@@ -211,13 +192,6 @@ export class App extends React.Component {
       infoMessage,
       notLoginUserRoute,
       logedUserRoute,
-      createEmail,
-      createEmailError,
-      createPassword,
-      createPasswordError,
-      createRepeatePassword,
-      createPasswordRepeatError,
-      createSubmitted,
       recoverPasswordEmail,
       recoverPasswordEmailError,
       recoverPasswordSubmitted,
@@ -287,58 +261,17 @@ export class App extends React.Component {
             footer={<Footer />}
           />
         ) : notLoginUserRoute === "LOGIN" ? (
-          <PageLogin onClickLogin={this.onClickLogin} />
-        ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
-          <CreateAccount
-            email={createEmail}
-            emailError={createSubmitted ? createEmailError : undefined}
-            password={createPassword}
-            passwordError={createSubmitted ? createPasswordError : undefined}
-            repeatPassword={createRepeatePassword}
-            repeatPasswordError={
-              createSubmitted ? createPasswordRepeatError : undefined
+          <PageLogin
+            onClickLogin={this.onClickLogin}
+            onClickCreateAccountPage={() =>
+              this.setState(() => ({ notLoginUserRoute: "CREATE-ACCOUNT" }))
             }
-            onChangeEmail={(e) => {
-              const { value } = e.target;
-              this.setState(() => ({
-                createEmail: value,
-                createEmailError:
-                  isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
-              }));
-              if (!value) {
-                this.setState(() => ({ createSubmitted: false }));
-              }
-            }}
-            onChangePassword={(e) => {
-              const { value } = e.target;
-              this.setState(() => ({
-                createPassword: value,
-                createPasswordError:
-                  isStrongPassword(value) || !value
-                    ? ""
-                    : PASSWORD_VALIDATION_ERROR,
-                createPasswordRepeatError:
-                  createPassword === value
-                    ? ""
-                    : RECOVER_PASSWORD_VALIDATION_ERROR,
-              }));
-              if (!value) {
-                this.setState(() => ({ createSubmitted: false }));
-              }
-            }}
-            onChangeRepeatPassword={(e) => {
-              const { value } = e.target;
-              this.setState(() => ({
-                createRepeatePassword: value,
-                createPasswordRepeatError:
-                  createPassword === value
-                    ? ""
-                    : RECOVER_PASSWORD_VALIDATION_ERROR,
-              }));
-              if (!value) {
-                this.setState(() => ({ createSubmitted: false }));
-              }
-            }}
+            onClickRecoverPasswordPage={() =>
+              this.setState(() => ({ notLoginUserRoute: "RECOVER-PASSWORD" }))
+            }
+          />
+        ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
+          <PageCreateAccount
             onClickCreateAccount={this.onClickCreateAccount}
             onClickBackToLogin={() =>
               this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
