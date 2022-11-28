@@ -5,6 +5,7 @@ import {
   useLogedRoute,
   useLogedRouteTo,
 } from "./contexts/RouterContext";
+import { useAuthUser } from "./contexts/UserContext";
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
 import MainLayout from "./components/MainLayout";
@@ -52,12 +53,6 @@ export const App = () => {
   const notLoginUserRoute = useNotLogedRoute();
   const logedUserRoute = useLogedRoute();
 
-  // user/auth state
-  const [isUserLoged, setIsUserLoged] = React.useState(false);
-  const [userFirstName, setUserFirstName] = React.useState("");
-  const [userEmail, setUserEmail] = React.useState("");
-  const [userAvatar, setUserAvatar] = React.useState("");
-
   // user dropdown
   const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
 
@@ -80,6 +75,17 @@ export const App = () => {
     routeTo("APP-PAGE");
   }, [routeTo]);
 
+  const {
+    isUserLoged,
+    userFirstName,
+    userEmail,
+    userAvatar,
+    setIsUserLoged,
+    setUserFirstName,
+    setUserEmail,
+    setUserAvatar,
+  } = useAuthUser();
+
   const fetchProcedures = React.useCallback(async () => {
     const procedures = await getAllProcedures();
     setProcedures(() => procedures);
@@ -97,7 +103,13 @@ export const App = () => {
     setUserAvatar(() => "");
 
     fetchProcedures();
-  }, [fetchProcedures]);
+  }, [
+    setIsUserLoged,
+    setUserFirstName,
+    setUserEmail,
+    setUserAvatar,
+    fetchProcedures,
+  ]);
 
   const handleAsyncAction = React.useCallback(
     async (asyncAction) => {
@@ -132,7 +144,13 @@ export const App = () => {
     setUserEmail(() => "");
     setUserAvatar(() => "");
     setIsUserDropdownOpen(() => false);
-  }, []);
+  }, [
+    setIsUserLoged,
+    setUserFirstName,
+    setUserEmail,
+    setUserAvatar,
+    setIsUserDropdownOpen,
+  ]);
 
   const onClickCreateAccount = React.useCallback(
     async (email, password) => {
