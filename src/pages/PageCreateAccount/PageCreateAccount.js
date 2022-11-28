@@ -36,7 +36,12 @@ export class PageCreateAccount extends React.Component {
   };
 
   render() {
-    const { className, onClickBackToLogin, ...otherProps } = this.props;
+    const {
+      className,
+      onClickCreateAccount,
+      onClickBackToLogin,
+      ...otherProps
+    } = this.props;
 
     const {
       email,

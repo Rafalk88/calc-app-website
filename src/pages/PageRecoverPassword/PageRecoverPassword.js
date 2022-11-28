@@ -24,7 +24,8 @@ export class PageRecoverPassword extends React.Component {
   };
 
   render() {
-    const { className, onClickBackToLogin, ...otherProps } = this.props;
+    const { className, onClickRecover, onClickBackToLogin, ...otherProps } =
+      this.props;
     const { email, emailError, submitted } = this.state;
 
     return (

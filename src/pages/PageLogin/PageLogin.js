@@ -35,6 +35,7 @@ export class PageLogin extends React.Component {
   render() {
     const {
       className,
+      onClickLogin,
       onClickCreateAccountPage,
       onClickRecoverPasswordPage,
       ...otherProps
