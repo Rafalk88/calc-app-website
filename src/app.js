@@ -66,11 +66,10 @@ export class App extends React.Component {
     outputData: ["", "", ""],
   };
 
-  onClickLogin = async (email, password) => {
+  handleAsyncAction = async (asyncAction) => {
     this.setState(() => ({ isLoading: true }));
     try {
-      await signIn(email, password);
-      this.onUserLogIn();
+      await asyncAction();
     } catch (error) {
       const errorMessage = handleHTTPErrors(error.data.error.message);
       this.setState(() => ({
@@ -80,6 +79,13 @@ export class App extends React.Component {
     } finally {
       this.setState(() => ({ isLoading: false }));
     }
+  };
+
+  onClickLogin = async (email, password) => {
+    this.handleAsyncAction(async () => {
+      await signIn(email, password);
+      this.onUserLogIn();
+    });
   };
 
   onClickLogOut = async () => {
@@ -89,44 +95,29 @@ export class App extends React.Component {
       userFirstName: "",
       userEmail: "",
       userAvatar: "",
+      isUserDropdownOpen: false,
     }));
   };
 
   onClickCreateAccount = async (email, password) => {
-    try {
+    this.handleAsyncAction(async () => {
       await signUp(email, password);
       this.setState(() => ({
         hasInfo: true,
         infoMessage: CREATE_ACCOUNT_SUCCESS_INFO,
       }));
       this.onUserLogIn();
-    } catch (error) {
-      const errorMessage = handleHTTPErrors(error.data.error.message);
-      this.setState(() => ({
-        hasError: true,
-        errorMessage: errorMessage,
-      }));
-    } finally {
-      this.setState(() => ({ isLoading: false }));
-    }
+    });
   };
 
   onClickRecover = async (email) => {
-    try {
+    this.handleAsyncAction(async () => {
       await sendPasswordResetEmail(email);
       this.setState(() => ({
         hasInfo: true,
         infoMessage: RECOVER_PASSWORD_SUCCESS_INFO,
       }));
-    } catch (error) {
-      const errorMessage = handleHTTPErrors(error.data.error.message);
-      this.setState(() => ({
-        hasError: true,
-        errorMessage: errorMessage,
-      }));
-    } finally {
-      this.setState(() => ({ isLoading: false }));
-    }
+    });
   };
 
   dismissError = () => {
