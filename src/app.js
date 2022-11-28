@@ -77,9 +77,6 @@ export const App = () => {
 
   const {
     isUserLoged,
-    userFirstName,
-    userEmail,
-    userAvatar,
     setIsUserLoged,
     setUserFirstName,
     setUserEmail,
@@ -203,9 +200,6 @@ export const App = () => {
               <Logo className={classes.logo} />
               <User
                 className={classes.user}
-                userFirstName={userFirstName}
-                userEmail={userEmail}
-                userAvatar={userAvatar}
                 onOpenRequested={() => setIsUserDropdownOpen(() => true)}
                 onCloseRequested={() => setIsUserDropdownOpen(() => false)}
                 contentList={
@@ -235,7 +229,6 @@ export const App = () => {
           contentMain={
             logedUserRoute === "WELCOME-PAGE" ? (
               <MainPage
-                userName={userFirstName}
                 onClickAppPage={onClickAppPage}
                 onClickDBPage={() => console.log("DBPageButton")}
                 onClickStatistic={() => console.log("StatisticButton")}

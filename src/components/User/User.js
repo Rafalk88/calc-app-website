@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { useAuthUser } from "../../contexts/UserContext";
 import Typography from "../Typography";
 import Avatar from "../Avatar";
 
@@ -9,14 +10,13 @@ import classes from "./styles.module.css";
 export const User = (props) => {
   const {
     className,
-    userFirstName,
-    userEmail,
-    userAvatar,
     contentList,
     onOpenRequested,
     onCloseRequested,
     ...otherProps
   } = props;
+
+  const { userFirstName, userEmail, userAvatar } = useAuthUser();
 
   return (
     <div
@@ -48,9 +48,6 @@ export const User = (props) => {
 
 User.propTypes = {
   className: PropTypes.string,
-  userFirstName: PropTypes.string,
-  userEmail: PropTypes.string,
-  userAvatar: PropTypes.string,
   contentList: PropTypes.node,
   onOpenRequested: PropTypes.func.isRequired,
   onCloseRequested: PropTypes.func.isRequired,

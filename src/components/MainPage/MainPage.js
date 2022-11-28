@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { useAuthUser } from "../../contexts/UserContext";
 import CountingAppIcon from "../Icons/CountingAppIcon";
-
 import Typography from "../Typography";
 import Button from "../Button";
 
@@ -11,12 +11,14 @@ import classes from "./styles.module.css";
 export const MainPage = (props) => {
   const {
     className,
-    userName,
     onClickAppPage,
     onClickDBPage,
     onClickStatistic,
     ...otherProps
   } = props;
+
+  const { userFirstName } = useAuthUser();
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -24,7 +26,7 @@ export const MainPage = (props) => {
     >
       <div className={classes.mainPageHeader}>
         <Typography variant={"title1"}>
-          Welcome, {userName ? userName : "Guest"}!{" "}
+          Welcome, {userFirstName ? userFirstName : "Guest"}!{" "}
         </Typography>
         <Typography className={classes.headersubTitle} variant={"h3-light"}>
           Choose what you want to do...
@@ -60,7 +62,6 @@ export const MainPage = (props) => {
 
 MainPage.propTypes = {
   className: PropTypes.string,
-  userName: PropTypes.string,
   onClickAppPage: PropTypes.func.isRequired,
   onClickDBPage: PropTypes.func.isRequired,
   onClickStatistic: PropTypes.func.isRequired,
