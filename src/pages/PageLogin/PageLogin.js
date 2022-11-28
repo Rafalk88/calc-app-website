@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import isEmail from "validator/lib/isEmail";
 import isStrongPassword from "validator/lib/isStrongPassword";
 
+import { NotLogedRouterContext } from "../../contexts/RouterContext";
 import FullPageLayout from "../../components/FullPageLayout";
 import LoginForm from "../../components/LoginForm";
 
@@ -18,8 +19,6 @@ export const PageLogin = (props) => {
   const {
     className,
     onClickLogin: onClickLoginFromProps,
-    onClickCreateAccountPage,
-    onClickRecoverPasswordPage,
     ...otherProps
   } = props;
 
@@ -30,6 +29,15 @@ export const PageLogin = (props) => {
     PASSWORD_VALIDATION_ERROR
   );
   const [submitted, setSubmitted] = React.useState(false);
+
+  const { setRoute } = React.useContext(NotLogedRouterContext);
+
+  const onClickCreateAccountPage = React.useCallback(() => {
+    setRoute("CREATE-ACCOUNT");
+  }, [setRoute]);
+  const onClickRecoverPasswordPage = React.useCallback(() => {
+    setRoute("RECOVER-PASSWORD");
+  }, [setRoute]);
 
   const onClickLogin = React.useCallback(async () => {
     setSubmitted(() => true);
@@ -77,8 +85,6 @@ export const PageLogin = (props) => {
 PageLogin.propTypes = {
   className: PropTypes.string,
   onClickLogin: PropTypes.func.isRequired,
-  onClickCreateAccountPage: PropTypes.func.isRequired,
-  onClickRecoverPasswordPage: PropTypes.func.isRequired,
 };
 
 export default PageLogin;
