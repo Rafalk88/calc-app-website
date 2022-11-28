@@ -8,52 +8,46 @@ import { EMAIL_VALIDATION_ERROR } from "../../consts";
 
 import classes from "./styles.module.css";
 
-export class PageRecoverPassword extends React.Component {
-  state = {
-    email: "",
-    emailError: EMAIL_VALIDATION_ERROR,
-    submitted: false,
-  };
+export const PageRecoverPassword = (props) => {
+  const {
+    className,
+    onClickRecover: onClickRecoverFromProps,
+    onClickBackToLogin,
+    ...otherProps
+  } = props;
 
-  onClickRecover = async () => {
-    const { email, emailError } = this.state;
-    this.setState(() => ({ submitted: true }));
+  const [email, setEmail] = React.useState("");
+  const [emailError, setEmailError] = React.useState(EMAIL_VALIDATION_ERROR);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  const onClickRecover = React.useCallback(async () => {
+    setSubmitted(() => true);
     if (emailError) return;
 
-    this.props.onClickRecover(email);
-  };
+    onClickRecoverFromProps(email);
+    setEmail(() => "");
+    setSubmitted(() => false);
+  }, [email, emailError, onClickRecoverFromProps]);
 
-  render() {
-    const { className, onClickRecover, onClickBackToLogin, ...otherProps } =
-      this.props;
-    const { email, emailError, submitted } = this.state;
+  React.useEffect(() => {
+    setEmailError(() => (isEmail(email) ? "" : EMAIL_VALIDATION_ERROR));
+  }, [email]);
 
-    return (
-      <div
-        className={`${classes.root}${className ? ` ${className}` : ""}`}
-        {...otherProps}
-      >
-        <RecoverPassword
-          email={email}
-          emailError={submitted ? emailError : undefined}
-          onChangeEmail={(e) => {
-            const { value } = e.target;
-            this.setState(() => ({
-              email: value,
-              emailError:
-                isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
-            }));
-            if (!value) {
-              this.setState(() => ({ submitted: false }));
-            }
-          }}
-          onClickRecover={this.onClickRecover}
-          onClickBackToLogin={onClickBackToLogin}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className={`${classes.root}${className ? ` ${className}` : ""}`}
+      {...otherProps}
+    >
+      <RecoverPassword
+        email={email}
+        emailError={submitted ? emailError : undefined}
+        onChangeEmail={(e) => setEmail(() => e.target.value)}
+        onClickRecover={onClickRecover}
+        onClickBackToLogin={onClickBackToLogin}
+      />
+    </div>
+  );
+};
 
 PageRecoverPassword.propTypes = {
   className: PropTypes.string,
