@@ -34,259 +34,234 @@ import { getAll as getAllProcedures } from "./components/api/procedures";
 
 import classes from "./styles.module.css";
 
-export class App extends React.Component {
-  state = {
-    // global state
-    isLoading: false,
-    hasError: false,
-    errorMessage: "",
-    hasInfo: false,
-    infoMessage: "",
-    procedures: null,
+export const App = () => {
+  // global state
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [hasError, setHasError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [hasInfo, setHasInfo] = React.useState(false);
+  const [infoMessage, setInfoMessage] = React.useState("");
+  const [procedures, setProcedures] = React.useState(null);
 
-    // router state
-    notLoginUserRoute: "LOGIN", // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
-    logedUserRoute: "WELCOME-PAGE", // "APP-PAGE", "DB-PAGE", "SETTINGS-PAGE"
+  // router state
+  // "CREATE-ACCOUNT", "RECOVER-PASSWORD"
+  const [notLoginUserRoute, setNotLoginUserRoute] = React.useState("LOGIN");
+  // "APP-PAGE", "DB-PAGE", "SETTINGS-PAGE"
+  const [logedUserRoute, setLogedUserRoute] = React.useState("WELCOME-PAGE");
 
-    // user/auth state
-    isUserLoged: false,
-    userFirstName: "",
-    userEmail: "",
-    userAvatar: "",
+  // user/auth state
+  const [isUserLoged, setIsUserLoged] = React.useState(false);
+  const [userFirstName, setUserFirstName] = React.useState("");
+  const [userEmail, setUserEmail] = React.useState("");
+  const [userAvatar, setUserAvatar] = React.useState("");
 
-    // user dropdown
-    isUserDropdownOpen: false,
+  // user dropdown
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
 
-    // counting app state
-    timeInput: "",
-    procedureInput: ["", "", "", "", ""],
+  // counting app state
+  const [timeInput, setTimeInput] = React.useState("");
+  const [procedureInput, setProcedureInput] = React.useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
-    // editDatabase state
-    searchPhrase: "",
-    outputData: ["", "", ""],
-  };
+  // editDatabase state
+  const [searchPhrase, setSearchPhrase] = React.useState("");
+  const [outputData, setOutputData] = React.useState(["", "", ""]);
 
-  handleAsyncAction = async (asyncAction) => {
-    this.setState(() => ({ isLoading: true }));
-    try {
-      await asyncAction();
-    } catch (error) {
-      const errorMessage = handleHTTPErrors(error.data.error.message);
-      this.setState(() => ({
-        hasError: true,
-        errorMessage: errorMessage,
-      }));
-    } finally {
-      this.setState(() => ({ isLoading: false }));
-    }
-  };
-
-  onClickLogin = async (email, password) => {
-    this.handleAsyncAction(async () => {
-      await signIn(email, password);
-      this.onUserLogIn();
-    });
-  };
-
-  onClickLogOut = async () => {
-    await logOut();
-    this.setState(() => ({
-      isUserLoged: false,
-      userFirstName: "",
-      userEmail: "",
-      userAvatar: "",
-      isUserDropdownOpen: false,
-    }));
-  };
-
-  onClickCreateAccount = async (email, password) => {
-    this.handleAsyncAction(async () => {
-      await signUp(email, password);
-      this.setState(() => ({
-        hasInfo: true,
-        infoMessage: CREATE_ACCOUNT_SUCCESS_INFO,
-      }));
-      this.onUserLogIn();
-    });
-  };
-
-  onClickRecover = async (email) => {
-    this.handleAsyncAction(async () => {
-      await sendPasswordResetEmail(email);
-      this.setState(() => ({
-        hasInfo: true,
-        infoMessage: RECOVER_PASSWORD_SUCCESS_INFO,
-      }));
-    });
-  };
-
-  dismissError = () => {
-    this.setState(() => ({
-      hasError: false,
-      errorMessage: "",
-    }));
-  };
-
-  dismissInfo = () => {
-    this.setState(() => ({
-      hasInfo: false,
-      infoMessage: "",
-    }));
-  };
-
-  fetchProcedures = async () => {
+  const fetchProcedures = React.useCallback(async () => {
     const procedures = await getAllProcedures();
-    this.setState(() => ({
-      procedures: procedures,
-    }));
-  };
+    setProcedures(() => procedures);
+  }, []);
 
-  onUserLogIn = () => {
+  const onUserLogIn = React.useCallback(() => {
     const token = getIdToken();
     if (!token) return;
     const user = decodeToken(token);
 
     // @TODO replace this token decoding with request for user data
-    this.setState(() => ({
-      isUserLoged: true,
-      userFirstName: "",
-      userEmail: user.email,
-      userAvatar: "",
-    }));
+    setIsUserLoged(() => true);
+    setUserFirstName(() => "");
+    setUserEmail(() => user.email);
+    setUserAvatar(() => "");
 
-    this.fetchProcedures();
-  };
+    fetchProcedures();
+  }, [fetchProcedures]);
 
-  async componentDidMount() {
-    this.setState(() => ({ isLoading: true }));
-    const userIsLogedIn = await checkIfUserIsLoggedIn();
-    this.setState(() => ({ isLoading: false }));
-    if (userIsLogedIn) this.onUserLogIn();
-  }
+  const handleAsyncAction = React.useCallback(
+    async (asyncAction) => {
+      setIsLoading(() => true);
+      try {
+        await asyncAction();
+      } catch (error) {
+        const errorMessage = handleHTTPErrors(error.data.error.message);
+        setHasError(() => true);
+        setErrorMessage(() => errorMessage);
+      } finally {
+        setIsLoading(() => false);
+      }
+    },
+    [handleHTTPErrors]
+  );
 
-  render() {
-    const {
-      isLoading,
-      hasError,
-      errorMessage,
-      hasInfo,
-      infoMessage,
-      notLoginUserRoute,
-      logedUserRoute,
-      isUserLoged,
-      userFirstName,
-      userEmail,
-      userAvatar,
-      isUserDropdownOpen,
-    } = this.state;
-    return (
-      <>
-        {isUserLoged ? (
-          <MainLayout
-            contentAppBar={
-              <>
-                <Logo className={classes.logo} />
-                <User
-                  className={classes.user}
-                  userFirstName={userFirstName}
-                  userEmail={userEmail}
-                  userAvatar={userAvatar}
-                  onOpenRequested={() =>
-                    this.setState(() => ({
-                      isUserDropdownOpen: true,
-                    }))
-                  }
-                  onCloseRequested={() =>
-                    this.setState(() => ({
-                      isUserDropdownOpen: false,
-                    }))
-                  }
-                  contentList={
-                    isUserDropdownOpen ? (
-                      <List>
-                        <ListItem
-                          icon={"settings"}
-                          text={"Settings"}
-                          disabled={true}
-                        />
-                        <ListItem
-                          icon={"support"}
-                          text={"Support"}
-                          disabled={true}
-                        />
-                        <ListItem
-                          icon={"log-out"}
-                          text={"Log Out"}
-                          onClick={this.onClickLogOut}
-                        />
-                      </List>
-                    ) : null
-                  }
-                />
-              </>
-            }
-            contentMain={
-              logedUserRoute === "WELCOME-PAGE" ? (
-                <MainPage
-                  userName={userFirstName}
-                  onClickAppPage={() =>
-                    this.setState(() => ({
-                      logedUserRoute: "APP-PAGE",
-                    }))
-                  }
-                  onClickDBPage={() => console.log("DBPageButton")}
-                  onClickStatistic={() => console.log("StatisticButton")}
-                />
-              ) : logedUserRoute === "APP-PAGE" ? (
-                <AppCountingPage />
-              ) : null
-            }
-            footer={<Footer />}
-          />
-        ) : notLoginUserRoute === "LOGIN" ? (
-          <PageLogin
-            onClickLogin={this.onClickLogin}
-            onClickCreateAccountPage={() =>
-              this.setState(() => ({ notLoginUserRoute: "CREATE-ACCOUNT" }))
-            }
-            onClickRecoverPasswordPage={() =>
-              this.setState(() => ({ notLoginUserRoute: "RECOVER-PASSWORD" }))
-            }
-          />
-        ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
-          <PageCreateAccount
-            onClickCreateAccount={this.onClickCreateAccount}
-            onClickBackToLogin={() =>
-              this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
-            }
-          />
-        ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
-          <PageRecoverPassword
-            onClickRecover={this.onClickRecover}
-            onClickBackToLogin={() =>
-              this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
-            }
-          />
-        ) : null}
-        {isLoading ? <FullPageLoader /> : null}
-        {hasInfo ? (
-          <FullPageMessage
-            iconVariant={"info"}
-            message={infoMessage}
-            buttonLabel={"OK"}
-            onButtonClick={this.dismissInfo}
-          />
-        ) : null}
-        {hasError ? (
-          <FullPageMessage
-            iconVariant={"error"}
-            message={errorMessage}
-            onButtonClick={this.dismissError}
-          />
-        ) : null}
-      </>
-    );
-  }
-}
+  const onClickLogin = React.useCallback(
+    async (email, password) => {
+      handleAsyncAction(async () => {
+        await signIn(email, password);
+        onUserLogIn();
+      });
+    },
+    [handleAsyncAction, onUserLogIn]
+  );
+
+  const onClickLogOut = React.useCallback(async () => {
+    await logOut();
+    setIsUserLoged(() => false);
+    setUserFirstName(() => "");
+    setUserEmail(() => "");
+    setUserAvatar(() => "");
+    setIsUserDropdownOpen(() => false);
+  }, []);
+
+  const onClickCreateAccount = React.useCallback(
+    async (email, password) => {
+      handleAsyncAction(async () => {
+        await signUp(email, password);
+        setHasInfo(() => true);
+        setInfoMessage(() => CREATE_ACCOUNT_SUCCESS_INFO);
+        onUserLogIn();
+      });
+    },
+    [handleAsyncAction, onUserLogIn]
+  );
+
+  const onClickRecover = React.useCallback(
+    async (email) => {
+      handleAsyncAction(async () => {
+        await sendPasswordResetEmail(email);
+        setHasInfo(() => true);
+        setInfoMessage(() => RECOVER_PASSWORD_SUCCESS_INFO);
+      });
+    },
+    [handleAsyncAction]
+  );
+
+  const dismissError = React.useCallback(() => {
+    setHasError(() => false);
+    setErrorMessage(() => "");
+  }, []);
+
+  const dismissInfo = React.useCallback(() => {
+    setHasInfo(() => false);
+    setInfoMessage(() => "");
+  }, []);
+
+  const routeTo = React.useCallback((routeName, logStatus) => {
+    if (logStatus === "notLoged") setNotLoginUserRoute(routeName);
+    if (logStatus === "loged") setLogedUserRoute(routeName);
+  }, []);
+
+  React.useEffect(() => {
+    (async () => {
+      setIsLoading(() => true);
+      const userIsLogedIn = await checkIfUserIsLoggedIn();
+      setIsLoading(() => false);
+      if (userIsLogedIn) onUserLogIn();
+    })();
+  }, []);
+
+  return (
+    <>
+      {isUserLoged ? (
+        <MainLayout
+          contentAppBar={
+            <>
+              <Logo className={classes.logo} />
+              <User
+                className={classes.user}
+                userFirstName={userFirstName}
+                userEmail={userEmail}
+                userAvatar={userAvatar}
+                onOpenRequested={() => setIsUserDropdownOpen(() => true)}
+                onCloseRequested={() => setIsUserDropdownOpen(() => false)}
+                contentList={
+                  isUserDropdownOpen ? (
+                    <List>
+                      <ListItem
+                        icon={"settings"}
+                        text={"Settings"}
+                        disabled={true}
+                      />
+                      <ListItem
+                        icon={"support"}
+                        text={"Support"}
+                        disabled={true}
+                      />
+                      <ListItem
+                        icon={"log-out"}
+                        text={"Log Out"}
+                        onClick={onClickLogOut}
+                      />
+                    </List>
+                  ) : null
+                }
+              />
+            </>
+          }
+          contentMain={
+            logedUserRoute === "WELCOME-PAGE" ? (
+              <MainPage
+                userName={userFirstName}
+                onClickAppPage={() => routeTo("APP-PAGE", "loged")}
+                onClickDBPage={() => console.log("DBPageButton")}
+                onClickStatistic={() => console.log("StatisticButton")}
+              />
+            ) : logedUserRoute === "APP-PAGE" ? (
+              <AppCountingPage />
+            ) : null
+          }
+          footer={<Footer />}
+        />
+      ) : notLoginUserRoute === "LOGIN" ? (
+        <PageLogin
+          onClickLogin={onClickLogin}
+          onClickCreateAccountPage={() => routeTo("CREATE-ACCOUNT", "notLoged")}
+          onClickRecoverPasswordPage={() =>
+            routeTo("RECOVER-PASSWORD", "notLoged")
+          }
+        />
+      ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
+        <PageCreateAccount
+          onClickCreateAccount={onClickCreateAccount}
+          onClickBackToLogin={() => routeTo("LOGIN", "notLoged")}
+        />
+      ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
+        <PageRecoverPassword
+          onClickRecover={onClickRecover}
+          onClickBackToLogin={() => routeTo("LOGIN", "notLoged")}
+        />
+      ) : null}
+      {isLoading ? <FullPageLoader /> : null}
+      {hasInfo ? (
+        <FullPageMessage
+          iconVariant={"info"}
+          message={infoMessage}
+          buttonLabel={"OK"}
+          onButtonClick={dismissInfo}
+        />
+      ) : null}
+      {hasError ? (
+        <FullPageMessage
+          iconVariant={"error"}
+          message={errorMessage}
+          onButtonClick={dismissError}
+        />
+      ) : null}
+    </>
+  );
+};
 
 export default App;
