@@ -75,13 +75,7 @@ export const App = () => {
     routeTo("APP-PAGE");
   }, [routeTo]);
 
-  const {
-    isUserLoged,
-    setIsUserLoged,
-    setUserFirstName,
-    setUserEmail,
-    setUserAvatar,
-  } = useAuthUser();
+  const { isUserLoged, setUser, clearUser } = useAuthUser();
 
   const fetchProcedures = React.useCallback(async () => {
     const procedures = await getAllProcedures();
@@ -94,19 +88,14 @@ export const App = () => {
     const user = decodeToken(token);
 
     // @TODO replace this token decoding with request for user data
-    setIsUserLoged(() => true);
-    setUserFirstName(() => "");
-    setUserEmail(() => user.email);
-    setUserAvatar(() => "");
+    setUser({
+      userFirstName: "",
+      userEmail: user.email,
+      userAvatar: "",
+    });
 
     fetchProcedures();
-  }, [
-    setIsUserLoged,
-    setUserFirstName,
-    setUserEmail,
-    setUserAvatar,
-    fetchProcedures,
-  ]);
+  }, [setUser, fetchProcedures]);
 
   const handleAsyncAction = React.useCallback(
     async (asyncAction) => {
@@ -136,18 +125,9 @@ export const App = () => {
 
   const onClickLogOut = React.useCallback(async () => {
     await logOut();
-    setIsUserLoged(() => false);
-    setUserFirstName(() => "");
-    setUserEmail(() => "");
-    setUserAvatar(() => "");
+    clearUser();
     setIsUserDropdownOpen(() => false);
-  }, [
-    setIsUserLoged,
-    setUserFirstName,
-    setUserEmail,
-    setUserAvatar,
-    setIsUserDropdownOpen,
-  ]);
+  }, [setIsUserDropdownOpen]);
 
   const onClickCreateAccount = React.useCallback(
     async (email, password) => {

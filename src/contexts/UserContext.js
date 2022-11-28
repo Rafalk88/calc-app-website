@@ -14,6 +14,8 @@ const initialContextState = {
   setUserFirstName: errorProviderNotFound,
   setUserEmail: errorProviderNotFound,
   setUserAvatar: errorProviderNotFound,
+  clearUser: errorProviderNotFound,
+  setUser: errorProviderNotFound,
 };
 
 export const UserContext = React.createContext(initialContextState.route);
@@ -39,6 +41,21 @@ export const UserContextProvider = (props) => {
     initialContextState.userAvatar
   );
 
+  const clearUser = React.useCallback(() => {
+    setIsUserLoged(() => false);
+    setUserFirstName(() => "");
+    setUserEmail(() => "");
+    setUserAvatar(() => "");
+  }, []);
+
+  const setUser = React.useCallback((user) => {
+    setIsUserLoged(() => true);
+    if (user.userFirstName !== undefined)
+      setUserFirstName(() => user.userFirstName);
+    if (user.userEmail !== undefined) setUserEmail(() => user.userEmail);
+    if (user.userAvatar !== undefined) setUserAvatar(() => user.userAvatar);
+  }, []);
+
   return (
     <UserContext.Provider
       value={{
@@ -46,10 +63,8 @@ export const UserContextProvider = (props) => {
         userFirstName,
         userEmail,
         userAvatar,
-        setIsUserLoged,
-        setUserFirstName,
-        setUserEmail,
-        setUserAvatar,
+        clearUser,
+        setUser,
       }}
     >
       {children}
