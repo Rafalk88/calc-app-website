@@ -22,14 +22,15 @@ export class PageCreateAccount extends React.Component {
     passwordError: PASSWORD_VALIDATION_ERROR,
     repeatPassword: "",
     repeatPasswordError: RECOVER_PASSWORD_VALIDATION_ERROR,
-    createSubmitted: false,
+    submitted: false,
   };
 
   onClickCreateAccount = async () => {
-    const { email, password, passwordError, repeatPasswordError } = this.state;
+    const { email, password, emailError, passwordError, repeatPasswordError } =
+      this.state;
 
-    this.setState(() => ({ createSubmitted: true }));
-    if (email || passwordError || repeatPasswordError) return;
+    this.setState(() => ({ submitted: true }));
+    if (emailError || passwordError || repeatPasswordError) return;
 
     this.props.onClickCreateAccount(email, password);
   };

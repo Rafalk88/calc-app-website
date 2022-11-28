@@ -1,9 +1,7 @@
 import React from "react";
-import isEmail from "validator/lib/isEmail";
 
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
-import RecoverPassword from "./components/RecoverPassword";
 import MainLayout from "./components/MainLayout";
 import Logo from "./components/LoginForm/Logo";
 import User from "./components/User";
@@ -14,9 +12,9 @@ import Footer from "./components/Footer";
 import AppCountingPage from "./components/AppCountingPage";
 import PageLogin from "./pages/PageLogin";
 import PageCreateAccount from "./pages/PageCreateAccount";
+import PageRecoverPassword from "./pages/PageRecoverPassword/PageRecoverPassword";
 
 import {
-  EMAIL_VALIDATION_ERROR,
   CREATE_ACCOUNT_SUCCESS_INFO,
   RECOVER_PASSWORD_SUCCESS_INFO,
 } from "./consts";
@@ -58,11 +56,6 @@ export class App extends React.Component {
 
     // user dropdown
     isUserDropdownOpen: false,
-
-    // recover sate
-    recoverPasswordEmail: "",
-    recoverPasswordEmailError: EMAIL_VALIDATION_ERROR,
-    recoverPasswordSubmitted: false,
 
     // counting app state
     timeInput: "",
@@ -118,18 +111,15 @@ export class App extends React.Component {
     }
   };
 
-  onClickRecover = async () => {
-    this.setState(() => ({ recoverPasswordSubmitted: true }));
-    if (this.state.recoverPasswordEmailError) return;
-    this.setState(() => ({ isLoading: true }));
+  onClickRecover = async (email) => {
     try {
-      await sendPasswordResetEmail(this.state.recoverPasswordEmail);
+      await sendPasswordResetEmail(email);
       this.setState(() => ({
         hasInfo: true,
         infoMessage: RECOVER_PASSWORD_SUCCESS_INFO,
       }));
     } catch (error) {
-      //const errorMessage = handleHTTPErrors(error.data.error.message);
+      const errorMessage = handleHTTPErrors(error.data.error.message);
       this.setState(() => ({
         hasError: true,
         errorMessage: errorMessage,
@@ -192,9 +182,6 @@ export class App extends React.Component {
       infoMessage,
       notLoginUserRoute,
       logedUserRoute,
-      recoverPasswordEmail,
-      recoverPasswordEmailError,
-      recoverPasswordSubmitted,
       isUserLoged,
       userFirstName,
       userEmail,
@@ -213,9 +200,14 @@ export class App extends React.Component {
                   userFirstName={userFirstName}
                   userEmail={userEmail}
                   userAvatar={userAvatar}
-                  onClick={() =>
-                    this.setState((prevState) => ({
-                      isUserDropdownOpen: !prevState.isUserDropdownOpen,
+                  onOpenRequested={() =>
+                    this.setState(() => ({
+                      isUserDropdownOpen: true,
+                    }))
+                  }
+                  onCloseRequested={() =>
+                    this.setState(() => ({
+                      isUserDropdownOpen: false,
                     }))
                   }
                   contentList={
@@ -278,22 +270,7 @@ export class App extends React.Component {
             }
           />
         ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
-          <RecoverPassword
-            email={recoverPasswordEmail}
-            emailError={
-              recoverPasswordSubmitted ? recoverPasswordEmailError : undefined
-            }
-            onChangeEmail={(e) => {
-              const { value } = e.target;
-              this.setState(() => ({
-                recoverPasswordEmail: value,
-                recoverPasswordEmailError:
-                  isEmail(value) || !value ? "" : EMAIL_VALIDATION_ERROR,
-              }));
-              if (!value) {
-                this.setState(() => ({ recoverPasswordSubmitted: false }));
-              }
-            }}
+          <PageRecoverPassword
             onClickRecover={this.onClickRecover}
             onClickBackToLogin={() =>
               this.setState(() => ({ notLoginUserRoute: "LOGIN" }))
