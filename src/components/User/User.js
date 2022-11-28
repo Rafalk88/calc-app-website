@@ -13,6 +13,8 @@ export const User = (props) => {
     userEmail,
     userAvatar,
     contentList,
+    onOpenRequested,
+    onCloseRequested,
     ...otherProps
   } = props;
 
@@ -21,7 +23,7 @@ export const User = (props) => {
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
     >
-      <div className={classes.wrapper}>
+      <div className={classes.wrapper} onClick={onOpenRequested}>
         <div className={classes.textWrapper}>
           <Typography className={classes.userFirstName} variant={"title2"}>
             {userFirstName || "- . -"}
@@ -35,7 +37,10 @@ export const User = (props) => {
         </div>
       </div>
       {contentList ? (
-        <div className={classes.listContainer}>{contentList}</div>
+        <>
+          <div className={classes.overlay} onClick={onCloseRequested}></div>
+          <div className={classes.listContainer}>{contentList}</div>
+        </>
       ) : null}
     </div>
   );
@@ -47,6 +52,8 @@ User.propTypes = {
   userEmail: PropTypes.string,
   userAvatar: PropTypes.string,
   contentList: PropTypes.node,
+  onOpenRequested: PropTypes.func.isRequired,
+  onCloseRequested: PropTypes.func.isRequired,
 };
 
 export default User;
