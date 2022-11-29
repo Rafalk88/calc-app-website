@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom"; 
 
 import { useForm, FormProvider } from "react-hook-form";
 
-import { useNotLogedRouteTo } from "../../contexts/RouterContext";
 import CreateAccount from "../../components/CreateAccount";
 
 import classes from "./styles.module.css";
@@ -14,10 +14,10 @@ export const PageCreateAccount = (props) => {
   const methods = useForm();
   const { handleSubmit } = methods;
 
-  const routeTo = useNotLogedRouteTo();
+  const navigate = useNavigate();
   const onClickBackToLogin = React.useCallback(() => {
-    routeTo("LOGIN");
-  }, [routeTo]);
+    navigate("/");
+  }, [navigate]);
 
   return (
     <div

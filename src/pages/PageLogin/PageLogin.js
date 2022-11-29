@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import { useForm, FormProvider } from "react-hook-form";
 
-import { useNotLogedRouteTo } from "../../contexts/RouterContext";
 import FullPageLayout from "../../components/FullPageLayout";
 import LoginForm from "../../components/LoginForm";
 
@@ -15,14 +15,14 @@ export const PageLogin = (props) => {
   const methods = useForm();
   const { handleSubmit } = methods;
 
-  const notLogedRouteTo = useNotLogedRouteTo();
+  const navigate = useNavigate();
 
   const onClickCreateAccountPage = React.useCallback(() => {
-    notLogedRouteTo("CREATE-ACCOUNT");
-  }, [notLogedRouteTo]);
+    navigate("/create-account");
+  }, [navigate]);
   const onClickRecoverPasswordPage = React.useCallback(() => {
-    notLogedRouteTo("RECOVER-PASSWORD");
-  }, [notLogedRouteTo]);
+    navigate("/recover-password");
+  }, [navigate]);
 
   return (
     <div

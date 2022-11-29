@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import MainLayout from "../../components/MainLayout";
 import Logo from "../../components/LoginForm/Logo";
@@ -13,19 +14,19 @@ import AppCountingPage from "../../components/AppCountingPage";
 import classes from "./styles.module.css";
 
 export const PageMainLogged = (props) => {
-  const {
-    className,
-    logedUserRoute,
-    onClickAppPage,
-    onClickLogOut,
-    ...otherProps
-  } = props;
+  const { className, onClickLogOut, ...otherProps } = props;
 
   const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
   const [procedureInput, setProcedureInput] = React.useState([]);
   const [timeInput, setTimeInput] = React.useState("");
   const [searchPhrase, setSearchPhrase] = React.useState("");
   const [outputData, setOutputData] = React.useState([]);
+
+  const navigate = useNavigate();
+  const onClickAppPage = React.useCallback(
+    () => navigate("app-page"),
+    [navigate]
+  );
 
   return (
     <div
@@ -65,15 +66,20 @@ export const PageMainLogged = (props) => {
           </>
         }
         contentMain={
-          logedUserRoute === "WELCOME-PAGE" ? (
-            <MainPage
-              onClickAppPage={onClickAppPage}
-              onClickDBPage={() => console.log("DBPageButton")}
-              onClickStatistic={() => console.log("StatisticButton")}
-            />
-          ) : logedUserRoute === "APP-PAGE" ? (
-            <AppCountingPage />
-          ) : null
+          //<Routes>
+          //  <Route
+          //    path={"/main-page"}
+          //    element={
+          <MainPage
+            onClickAppPage={onClickAppPage}
+            onClickDBPage={() => console.log("DBPageButton")}
+            onClickStatistic={() => console.log("StatisticButton")}
+          />
+          //    }
+          //  />
+
+          //</div>  <Route path={"/main-page"} element={<AppCountingPage />} />
+          //</Routes>
         }
         footer={<Footer />}
       />
@@ -83,8 +89,6 @@ export const PageMainLogged = (props) => {
 
 PageMainLogged.propTypes = {
   className: PropTypes.string,
-  logedUserRoute: PropTypes.string.isRequired,
-  onClickAppPage: PropTypes.func.isRequired,
   onClickLogOut: PropTypes.func.isRequired,
 };
 

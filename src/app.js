@@ -1,10 +1,6 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-import {
-  useNotLogedRoute,
-  useLogedRoute,
-  useLogedRouteTo,
-} from "./contexts/RouterContext";
 import { useAuthUser } from "./contexts/UserContext";
 
 import FullPageLoader from "./components/FullPageLoader";
@@ -39,16 +35,6 @@ export const App = () => {
   const [hasInfo, setHasInfo] = React.useState(false);
   const [infoMessage, setInfoMessage] = React.useState("");
   const [procedures, setProcedures] = React.useState(null);
-
-  // router state
-  const notLoginUserRoute = useNotLogedRoute();
-  const logedUserRoute = useLogedRoute();
-
-  const routeTo = useLogedRouteTo();
-
-  const onClickAppPage = React.useCallback(() => {
-    routeTo("APP-PAGE");
-  }, [routeTo]);
 
   const { isUserLoged, setUser, clearUser } = useAuthUser();
 
@@ -148,18 +134,35 @@ export const App = () => {
   return (
     <>
       {isUserLoged ? (
-        <PageMainLogged
-          logedUserRoute={logedUserRoute}
-          onClickAppPage={onClickAppPage}
-          onClickLogOut={onClickLogOut}
-        />
-      ) : notLoginUserRoute === "LOGIN" ? (
-        <PageLogin onClickLogin={onClickLogin} />
-      ) : notLoginUserRoute === "CREATE-ACCOUNT" ? (
-        <PageCreateAccount onClickCreateAccount={onClickCreateAccount} />
-      ) : notLoginUserRoute === "RECOVER-PASSWORD" ? (
-        <PageRecoverPassword onClickRecover={onClickRecover} />
+        <Routes>
+          <Route
+            path={"*"}
+            element={<PageMainLogged onClickLogOut={onClickLogOut} />}
+          />
+        </Routes>
       ) : null}
+
+      {!isUserLoged ? (
+        <Routes>
+          <Route
+            path={"*"}
+            element={<PageLogin onClickLogin={onClickLogin} />}
+          />
+
+          <Route
+            path={"/create-account"}
+            element={
+              <PageCreateAccount onClickCreateAccount={onClickCreateAccount} />
+            }
+          />
+
+          <Route
+            path={"/recover-password"}
+            element={<PageRecoverPassword onClickRecover={onClickRecover} />}
+          />
+        </Routes>
+      ) : null}
+
       {isLoading ? <FullPageLoader /> : null}
       {hasInfo ? (
         <FullPageMessage
