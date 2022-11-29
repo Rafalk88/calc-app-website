@@ -1,26 +1,33 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import isEmail from "validator/lib/isEmail";
+import { useFormContext } from "react-hook-form";
+
 import Logo from "../LoginForm/Logo";
 import Typography from "../Typography";
 import TextField from "../TextField";
 import Button from "../Button";
+import { EMAIL_VALIDATION_ERROR } from "../../consts";
 
 import classes from "./styles.module.css";
 
 export const RecoverPassword = (props) => {
+  const { className, onSubmit, onClickBackToLogin, ...otherProps } = props;
+
+  const methods = useFormContext();
   const {
-    className,
-    email,
-    emailError,
-    onChangeEmail,
-    onClickRecover,
-    onClickBackToLogin,
-    ...otherProps
-  } = props;
+    register,
+    formState: { errors },
+  } = methods;
+  const registeredEmailProps = register("email", {
+    validate: (email) => isEmail(email) || EMAIL_VALIDATION_ERROR,
+  });
+
   return (
-    <div
+    <form
       className={`${classes.root}${className ? ` ${className}` : ""}`}
+      onSubmit={onSubmit}
       {...otherProps}
     >
       <Logo className={classes.logo} />
@@ -30,15 +37,14 @@ export const RecoverPassword = (props) => {
       <TextField
         className={classes.textField}
         placeholder={"E-mail"}
-        value={email}
-        errorMessage={emailError}
-        onChange={onChangeEmail}
+        errorMessage={errors.email && errors.email.message}
+        {...registeredEmailProps}
       />
       <Button
         className={classes.button}
         variant={"contained"}
         color={"primary"}
-        onClick={onClickRecover}
+        type={"submit"}
       >
         RECOVER
       </Button>
@@ -49,16 +55,13 @@ export const RecoverPassword = (props) => {
       >
         GO BACK
       </Button>
-    </div>
+    </form>
   );
 };
 
 RecoverPassword.propTypes = {
   className: PropTypes.string,
-  email: PropTypes.string,
-  emailError: PropTypes.string,
-  onChangeEmail: PropTypes.func.isRequired,
-  onClickRecover: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onClickBackToLogin: PropTypes.func.isRequired,
 };
 

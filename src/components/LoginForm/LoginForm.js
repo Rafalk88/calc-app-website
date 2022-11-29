@@ -1,30 +1,49 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import isEmail from "validator/lib/isEmail";
+import isStrongPassword from "validator/lib/isStrongPassword";
+import { useFormContext } from "react-hook-form";
+
 import Logo from "./Logo";
 import TextField from "../TextField";
 import Typography from "../Typography";
 import Button from "../Button";
+import {
+  EMAIL_VALIDATION_ERROR,
+  PASSWORD_VALIDATION_ERROR,
+} from "../../consts";
 
 import classes from "./styles.module.css";
 
 export const LoginForm = (props) => {
   const {
     className,
-    email,
-    emailError,
-    password,
-    passwordError,
-    onChangeEmail,
-    onChangePassword,
-    onClickLogin,
+    onSubmit,
     onClickCreateAccountPage,
     onClickRecoverPasswordPage,
     ...otherProps
   } = props;
+
+  const methods = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = methods;
+
+  const registeredEmailProps = register("email", {
+    validate: (email) => isEmail(email) || EMAIL_VALIDATION_ERROR,
+  });
+
+  const registeredPasswordProps = register("password", {
+    validate: (password) =>
+      isStrongPassword(password) || PASSWORD_VALIDATION_ERROR,
+  });
+
   return (
-    <div
+    <form
       className={`${classes.root}${className ? ` ${className}` : ""}`}
+      onSubmit={onSubmit}
       {...otherProps}
     >
       <Logo className={classes.logo} />
@@ -33,24 +52,22 @@ export const LoginForm = (props) => {
       </Typography>
       <TextField
         className={classes.textField}
-        errorMessage={emailError}
         placeholder={"E-mail"}
-        value={email}
-        onChange={onChangeEmail}
+        errorMessage={errors.email && errors.email.message}
+        {...registeredEmailProps}
       />
       <TextField
         className={classes.textField}
         placeholder={"Password"}
-        errorMessage={passwordError}
+        errorMessage={errors.password && errors.password.message}
         type={"password"}
-        value={password}
-        onChange={onChangePassword}
+        {...registeredPasswordProps}
       />
       <Button
         className={classes.button}
         variant={"contained"}
         color={"primary"}
-        onClick={onClickLogin}
+        type={"submit"}
       >
         LOGIN
       </Button>
@@ -69,19 +86,13 @@ export const LoginForm = (props) => {
       >
         RECOVER PASSWORD
       </Button>
-    </div>
+    </form>
   );
 };
 
 LoginForm.propTypes = {
   className: PropTypes.string,
-  email: PropTypes.string,
-  emailError: PropTypes.string,
-  password: PropTypes.string,
-  passwordError: PropTypes.node,
-  onChangeEmail: PropTypes.func,
-  onChangePassword: PropTypes.func.isRequired,
-  onClickLogin: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onClickCreateAccountPage: PropTypes.func.isRequired,
   onClickRecoverPasswordPage: PropTypes.func.isRequired,
 };
