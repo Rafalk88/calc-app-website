@@ -6,16 +6,11 @@ import {
   useLogedRouteTo,
 } from "./contexts/RouterContext";
 import { useAuthUser } from "./contexts/UserContext";
+
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
-import MainLayout from "./components/MainLayout";
-import Logo from "./components/LoginForm/Logo";
-import User from "./components/User";
-import List from "./components/List";
-import ListItem from "./components/ListItem/ListItem";
-import MainPage from "./components/MainPage";
-import Footer from "./components/Footer";
-import AppCountingPage from "./components/AppCountingPage";
+
+import PageMainLogged from "./pages/PageMainLogged/PageMainLogged";
 import PageLogin from "./pages/PageLogin";
 import PageCreateAccount from "./pages/PageCreateAccount";
 import PageRecoverPassword from "./pages/PageRecoverPassword/PageRecoverPassword";
@@ -24,7 +19,6 @@ import {
   CREATE_ACCOUNT_SUCCESS_INFO,
   RECOVER_PASSWORD_SUCCESS_INFO,
 } from "./consts";
-
 import {
   signIn,
   signUp,
@@ -34,11 +28,8 @@ import {
   sendPasswordResetEmail,
   logOut,
 } from "./auth";
-
 import { handleHTTPErrors } from "./handleHTTPErrors";
 import { getAll as getAllProcedures } from "./components/api/procedures";
-
-import classes from "./styles.module.css";
 
 export const App = () => {
   // global state
@@ -53,24 +44,8 @@ export const App = () => {
   const notLoginUserRoute = useNotLogedRoute();
   const logedUserRoute = useLogedRoute();
 
-  // user dropdown
-  const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
-
-  // counting app state
-  const [timeInput, setTimeInput] = React.useState("");
-  const [procedureInput, setProcedureInput] = React.useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
-
-  // editDatabase state
-  const [searchPhrase, setSearchPhrase] = React.useState("");
-  const [outputData, setOutputData] = React.useState(["", "", ""]);
-
   const routeTo = useLogedRouteTo();
+
   const onClickAppPage = React.useCallback(() => {
     routeTo("APP-PAGE");
   }, [routeTo]);
@@ -97,6 +72,11 @@ export const App = () => {
     fetchProcedures();
   }, [setUser, fetchProcedures]);
 
+  const onClickLogOut = React.useCallback(async () => {
+    await logOut();
+    clearUser();
+  }, []);
+
   const handleAsyncAction = React.useCallback(
     async (asyncAction) => {
       setIsLoading(() => true);
@@ -122,12 +102,6 @@ export const App = () => {
     },
     [handleAsyncAction, onUserLogIn]
   );
-
-  const onClickLogOut = React.useCallback(async () => {
-    await logOut();
-    clearUser();
-    setIsUserDropdownOpen(() => false);
-  }, [setIsUserDropdownOpen]);
 
   const onClickCreateAccount = React.useCallback(
     async (email, password) => {
@@ -174,50 +148,10 @@ export const App = () => {
   return (
     <>
       {isUserLoged ? (
-        <MainLayout
-          contentAppBar={
-            <>
-              <Logo className={classes.logo} />
-              <User
-                className={classes.user}
-                onOpenRequested={() => setIsUserDropdownOpen(() => true)}
-                onCloseRequested={() => setIsUserDropdownOpen(() => false)}
-                contentList={
-                  isUserDropdownOpen ? (
-                    <List>
-                      <ListItem
-                        icon={"settings"}
-                        text={"Settings"}
-                        disabled={true}
-                      />
-                      <ListItem
-                        icon={"support"}
-                        text={"Support"}
-                        disabled={true}
-                      />
-                      <ListItem
-                        icon={"log-out"}
-                        text={"Log Out"}
-                        onClick={onClickLogOut}
-                      />
-                    </List>
-                  ) : null
-                }
-              />
-            </>
-          }
-          contentMain={
-            logedUserRoute === "WELCOME-PAGE" ? (
-              <MainPage
-                onClickAppPage={onClickAppPage}
-                onClickDBPage={() => console.log("DBPageButton")}
-                onClickStatistic={() => console.log("StatisticButton")}
-              />
-            ) : logedUserRoute === "APP-PAGE" ? (
-              <AppCountingPage />
-            ) : null
-          }
-          footer={<Footer />}
+        <PageMainLogged
+          logedUserRoute={logedUserRoute}
+          onClickAppPage={onClickAppPage}
+          onClickLogOut={onClickLogOut}
         />
       ) : notLoginUserRoute === "LOGIN" ? (
         <PageLogin onClickLogin={onClickLogin} />

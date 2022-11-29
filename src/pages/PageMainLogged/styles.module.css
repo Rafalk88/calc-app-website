@@ -1,9 +1,12 @@
+.root {}
+
 @media (max-width: 500px) {
   .user {
     max-width: 150px;
     overflow: hidden;
   }
 }
+
 .main_menu_btn {
   display: flex;
   align-items: center;
