@@ -1,32 +1,53 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import isEmail from "validator/lib/isEmail";
+import isStrongPassword from "validator/lib/isStrongPassword";
+import { useFormContext } from "react-hook-form";
+
 import Logo from "../LoginForm/Logo";
 import Typhography from "../Typography";
 import TextField from "../TextField";
 import Button from "../Button";
 
+import {
+  EMAIL_VALIDATION_ERROR,
+  PASSWORD_VALIDATION_ERROR,
+  RECOVER_PASSWORD_VALIDATION_ERROR,
+} from "../../consts";
+
 import classes from "./styles.module.css";
 
 export const CreateAccount = (props) => {
+  const { className, onSubmit, onClickBackToLogin, ...otherProps } = props;
+
+  const methods = useFormContext();
   const {
-    className,
-    email,
-    emailError,
-    password,
-    passwordError,
-    repeatPassword,
-    repeatPasswordError,
-    onChangeEmail,
-    onChangePassword,
-    onChangeRepeatPassword,
-    onClickCreateAccount,
-    onClickBackToLogin,
-    ...otherProps
-  } = props;
+    register,
+    formState: { errors },
+    watch,
+  } = methods;
+
+  const password = watch("password");
+
+  const registeredEmailProps = register("email", {
+    validate: (email) => isEmail(email) || EMAIL_VALIDATION_ERROR,
+  });
+
+  const registeredPasswordProps = register("password", {
+    validate: (password) =>
+      isStrongPassword(password) || PASSWORD_VALIDATION_ERROR,
+  });
+
+  const registeredRepeatPasswordProps = register("repeatPassword", {
+    validate: (repeatPassword) =>
+      repeatPassword === password || RECOVER_PASSWORD_VALIDATION_ERROR,
+  });
+
   return (
-    <div
+    <form
       className={`${classes.root}${className ? ` ${className}` : ""}`}
+      onSubmit={onSubmit}
       {...otherProps}
     >
       <Logo className={classes.logo} />
@@ -36,31 +57,28 @@ export const CreateAccount = (props) => {
       <TextField
         className={classes.textField}
         placeholder={"E-mail"}
-        value={email}
-        errorMessage={emailError}
-        onChange={onChangeEmail}
+        errorMessage={errors.email && errors.email.message}
+        {...registeredEmailProps}
       />
       <TextField
         className={classes.textField}
         placeholder={"Password"}
         type={"password"}
-        errorMessage={passwordError}
-        value={password}
-        onChange={onChangePassword}
+        errorMessage={errors.password && errors.password.message}
+        {...registeredPasswordProps}
       />
       <TextField
         className={classes.textField}
         placeholder={"Repeat password"}
         type={"password"}
-        errorMessage={repeatPasswordError}
-        value={repeatPassword}
-        onChange={onChangeRepeatPassword}
+        errorMessage={errors.repeatPassword && errors.repeatPassword.message}
+        {...registeredRepeatPasswordProps}
       />
       <Button
         className={classes.button}
         variant={"contained"}
         color={"primary"}
-        onClick={onClickCreateAccount}
+        type={"submit"}
       >
         CREATE
       </Button>
@@ -71,22 +89,13 @@ export const CreateAccount = (props) => {
       >
         GO BACK
       </Button>
-    </div>
+    </form>
   );
 };
 
 CreateAccount.propTypes = {
   className: PropTypes.string,
-  email: PropTypes.string,
-  emailError: PropTypes.string,
-  password: PropTypes.string,
-  passwordError: PropTypes.node,
-  repeatPassword: PropTypes.string,
-  repeatPasswordError: PropTypes.string,
-  onChangeEmail: PropTypes.func.isRequired,
-  onChangePassword: PropTypes.func.isRequired,
-  onChangeRepeatPassword: PropTypes.func.isRequired,
-  onClickCreateAccount: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onClickBackToLogin: PropTypes.func.isRequired,
 };
 
