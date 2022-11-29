@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { useAuthUser } from "./contexts/UserContext";
 
@@ -10,6 +10,9 @@ import PageMainLogged from "./pages/PageMainLogged/PageMainLogged";
 import PageLogin from "./pages/PageLogin";
 import PageCreateAccount from "./pages/PageCreateAccount";
 import PageRecoverPassword from "./pages/PageRecoverPassword/PageRecoverPassword";
+
+import MainPage from "./components/MainPage";
+import AppCountingPage from "./components/AppCountingPage";
 
 import {
   CREATE_ACCOUNT_SUCCESS_INFO,
@@ -131,13 +134,50 @@ export const App = () => {
     })();
   }, []);
 
+  const navigate = useNavigate();
+
+  const onClickAppPage = React.useCallback(
+    () => navigate("app-page"),
+    [navigate]
+  );
+
+  const onClickDBPage = React.useCallback(
+    () => navigate("db-page"),
+    [navigate]
+  );
+
+  const onClickStatisticPage = React.useCallback(
+    () => navigate("statistic-page"),
+    [navigate]
+  );
+
   return (
     <>
       {isUserLoged ? (
         <Routes>
           <Route
+            path={"/app-page"}
+            element={
+              <PageMainLogged
+                contentMain={<AppCountingPage />}
+                onClickLogOut={onClickLogOut}
+              />
+            }
+          />
+          <Route
             path={"*"}
-            element={<PageMainLogged onClickLogOut={onClickLogOut} />}
+            element={
+              <PageMainLogged
+                contentMain={
+                  <MainPage
+                    onClickAppPage={onClickAppPage}
+                    onClickDBPage={onClickDBPage}
+                    onClickStatistic={onClickStatisticPage}
+                  />
+                }
+                onClickLogOut={onClickLogOut}
+              />
+            }
           />
         </Routes>
       ) : null}
