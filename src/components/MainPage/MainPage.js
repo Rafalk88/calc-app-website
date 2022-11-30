@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import { useAuthUser } from "../../contexts/UserContext";
 import CountingAppIcon from "../Icons/CountingAppIcon";
@@ -9,15 +10,22 @@ import Button from "../Button";
 import classes from "./styles.module.css";
 
 export const MainPage = (props) => {
-  const {
-    className,
-    onClickAppPage,
-    onClickDBPage,
-    onClickStatistic,
-    ...otherProps
-  } = props;
+  const { className, ...otherProps } = props;
 
   const { userFirstName } = useAuthUser();
+  const navigate = useNavigate();
+
+  const onClickAppPage = React.useCallback(() => {
+    navigate("app-page");
+  }, [navigate]);
+
+  const onClickDBPage = React.useCallback(() => {
+    navigate("app-page");
+  }, [navigate]);
+
+  const onClickStatisticPage = React.useCallback(() => {
+    navigate("app-page");
+  }, [navigate]);
 
   return (
     <div
@@ -51,7 +59,7 @@ export const MainPage = (props) => {
         <Button
           className={classes.mainPageButton}
           variant={"main_menu"}
-          onClick={onClickStatistic}
+          onClick={onClickStatisticPage}
         >
           STATISTICS
         </Button>
@@ -62,9 +70,6 @@ export const MainPage = (props) => {
 
 MainPage.propTypes = {
   className: PropTypes.string,
-  onClickAppPage: PropTypes.func.isRequired,
-  onClickDBPage: PropTypes.func.isRequired,
-  onClickStatistic: PropTypes.func.isRequired,
 };
 
 export default MainPage;

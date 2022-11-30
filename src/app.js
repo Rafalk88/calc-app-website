@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import { useAuthUser } from "./contexts/UserContext";
 
@@ -134,51 +134,17 @@ export const App = () => {
     })();
   }, []);
 
-  const navigate = useNavigate();
-
-  const onClickAppPage = React.useCallback(
-    () => navigate("app-page"),
-    [navigate]
-  );
-
-  const onClickDBPage = React.useCallback(
-    () => navigate("db-page"),
-    [navigate]
-  );
-
-  const onClickStatisticPage = React.useCallback(
-    () => navigate("statistic-page"),
-    [navigate]
-  );
-
   return (
     <>
       {isUserLoged ? (
         <Routes>
           <Route
-            path={"/app-page"}
-            element={
-              <PageMainLogged
-                contentMain={<AppCountingPage />}
-                onClickLogOut={onClickLogOut}
-              />
-            }
-          />
-          <Route
             path={"*"}
-            element={
-              <PageMainLogged
-                contentMain={
-                  <MainPage
-                    onClickAppPage={onClickAppPage}
-                    onClickDBPage={onClickDBPage}
-                    onClickStatistic={onClickStatisticPage}
-                  />
-                }
-                onClickLogOut={onClickLogOut}
-              />
-            }
-          />
+            element={<PageMainLogged onClickLogOut={onClickLogOut} />}
+          >
+            <Route path={"*"} element={<MainPage />} />
+            <Route path={"app-page"} element={<AppCountingPage />} />
+          </Route>
         </Routes>
       ) : null}
 

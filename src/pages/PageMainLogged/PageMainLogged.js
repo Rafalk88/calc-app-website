@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import MainLayout from "../../components/MainLayout";
 import Logo from "../../components/LoginForm/Logo";
@@ -56,7 +57,7 @@ export const PageMainLogged = (props) => {
             />
           </>
         }
-        contentMain={contentMain}
+        contentMain={<Outlet />}
         footer={<Footer />}
       />
     </div>
