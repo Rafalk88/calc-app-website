@@ -5,6 +5,7 @@ import { useAuthUser } from "./contexts/UserContext";
 
 import FullPageLoader from "./components/FullPageLoader";
 import FullPageMessage from "./components/FullPageMessage";
+import FullPage404Error from "./components/FullPage404Error/FullPage404Error";
 
 import PageMainLogged from "./pages/PageMainLogged/PageMainLogged";
 import PageLogin from "./pages/PageLogin";
@@ -139,12 +140,13 @@ export const App = () => {
       {isUserLoged ? (
         <Routes>
           <Route
-            path={"*"}
+            path={"/"}
             element={<PageMainLogged onClickLogOut={onClickLogOut} />}
           >
-            <Route path={"*"} element={<MainPage />} />
+            <Route path={"/"} element={<MainPage />} />
             <Route path={"app-page"} element={<AppCountingPage />} />
           </Route>
+          <Route path={"*"} element={<FullPage404Error buttonLabel={"OK"} />} />
         </Routes>
       ) : null}
 
