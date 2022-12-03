@@ -12,6 +12,8 @@ import classes from "./styles.module.css";
 export const PageLogin = (props) => {
   const { className, onClickLogin, ...otherProps } = props;
 
+  const [passwordShown, setPasswordShown] = React.useState(false);
+
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -24,6 +26,10 @@ export const PageLogin = (props) => {
     navigate("/recover-password");
   }, [navigate]);
 
+  const tooglePassword = React.useCallback(() => {
+    setPasswordShown(!passwordShown);
+  }, [passwordShown]);
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -32,6 +38,8 @@ export const PageLogin = (props) => {
       <FullPageLayout>
         <FormProvider {...methods}>
           <LoginForm
+            passwordShown={passwordShown}
+            tooglePassword={tooglePassword}
             onSubmit={handleSubmit((data) =>
               onClickLogin(data.email, data.password)
             )}

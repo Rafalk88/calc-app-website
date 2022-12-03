@@ -8,20 +8,23 @@ import { useFormContext } from "react-hook-form";
 import Logo from "./Logo";
 import TextField from "../TextField";
 import Typography from "../Typography";
+import Link from "../Link";
 import Button from "../Button";
-import {
-  EMAIL_VALIDATION_ERROR,
-  PASSWORD_VALIDATION_ERROR,
-} from "../../consts";
+import IconLine from "./IconLine";
+import IconGoogle from "./IconGoogle";
+import IconFacebook from "./IconFacebook";
+import { EMAIL_VALIDATION_ERROR, WRONG_PASSWORD_ERROR } from "../../consts";
 
 import classes from "./styles.module.css";
 
 export const LoginForm = (props) => {
   const {
     className,
+    passwordShown,
     onSubmit,
     onClickCreateAccountPage,
     onClickRecoverPasswordPage,
+    tooglePassword,
     ...otherProps
   } = props;
 
@@ -36,8 +39,7 @@ export const LoginForm = (props) => {
   });
 
   const registeredPasswordProps = register("password", {
-    validate: (password) =>
-      isStrongPassword(password) || PASSWORD_VALIDATION_ERROR,
+    validate: (password) => isStrongPassword(password) || WRONG_PASSWORD_ERROR,
   });
 
   return (
@@ -47,9 +49,7 @@ export const LoginForm = (props) => {
       {...otherProps}
     >
       <Logo className={classes.logo} />
-      <Typography className={classes.header} variant={"h4-extraLight"}>
-        Log In !
-      </Typography>
+      <Typography variant={"h4-extraLight"}>Log In !</Typography>
       <TextField
         className={classes.textField}
         placeholder={"E-mail"}
@@ -60,16 +60,22 @@ export const LoginForm = (props) => {
         className={classes.textField}
         placeholder={"Password"}
         errorMessage={errors.password && errors.password.message}
-        type={"password"}
+        type={passwordShown ? "text" : "password"}
+        passwordInput={true}
+        passwordShown={passwordShown}
+        tooglePassword={tooglePassword}
         {...registeredPasswordProps}
       />
+      <Link className={classes.link} onClick={onClickRecoverPasswordPage}>
+        <Typography variant={"h5-bold"}>Recover Password</Typography>
+      </Link>
       <Button
         className={classes.button}
         variant={"contained"}
         color={"primary"}
         type={"submit"}
       >
-        LOGIN
+        <Typography variant={"h5-bold"}>Login</Typography>
       </Button>
       <Button
         className={classes.button}
@@ -77,14 +83,30 @@ export const LoginForm = (props) => {
         color={"secondary"}
         onClick={onClickCreateAccountPage}
       >
-        CREATE ACCOUNT
+        <Typography variant={"h5-bold"}>Create Account</Typography>
+      </Button>
+      <div className={classes.additionalLogin}>
+        <IconLine />
+        <Typography className={classes.span} variant={"h4-extraLight"}>
+          or
+        </Typography>
+        <IconLine />
+      </div>
+      <Button
+        className={classes.button}
+        variant={"text"}
+        onClick={() => console.log("Log by Google")}
+      >
+        <IconGoogle className={classes.icon} />
+        <Typography variant={"h5-bold"}>Log by Google</Typography>
       </Button>
       <Button
         className={classes.button}
         variant={"text"}
-        onClick={onClickRecoverPasswordPage}
+        onClick={() => console.log("Log by Facebook")}
       >
-        RECOVER PASSWORD
+        <IconFacebook className={classes.icon} />
+        <Typography variant={"h5-bold"}>Log by Facebook</Typography>
       </Button>
     </form>
   );
@@ -92,9 +114,11 @@ export const LoginForm = (props) => {
 
 LoginForm.propTypes = {
   className: PropTypes.string,
+  isVisible: PropTypes.bool,
   onSubmit: PropTypes.func.isRequired,
   onClickCreateAccountPage: PropTypes.func.isRequired,
   onClickRecoverPasswordPage: PropTypes.func.isRequired,
+  tooglePassword: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

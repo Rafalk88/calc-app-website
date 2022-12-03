@@ -2,39 +2,41 @@
   height: 45px;
   background: none;
   cursor: pointer;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   transition: background-color 0.35s ease-in-out;
 }
 
 .contained {
   color: #FFFFFF;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.15);
 }
 
 .text {
   color: #000000;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.15);
 }
 
 .primary {
-  background-color: #2D2D2D;
+  background-color: #16BAC5;
 }
 
 .primary:hover {
-  background-color: #575757;
+  background-color: #0f828a;
 }
 
 .secondary {
-  background-color: #F59518;
+  background-color: rgba(22, 186, 197, 0.15);
+    border: 1px solid #16BAC5;
+    color: #16BAC5;
 }
 
 .secondary:hover {
-  background-color: #f7aa46;
+  background-color: #a0d6c9;
 }
 
 .text:hover {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  background-color: #dee0de;
 }
 
 .main_menu {

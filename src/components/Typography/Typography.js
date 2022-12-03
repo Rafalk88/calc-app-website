@@ -32,6 +32,7 @@ Typography.propTypes = {
     "h3-light",
     "h3-bold",
     "h5-light",
+    "h5-bold",
     "h6-light",
     "h4-extraLight",
   ]),

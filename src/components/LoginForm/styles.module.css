@@ -9,19 +9,46 @@
 }
 
 .logo {
-  margin-bottom: 20px;
-}
-
-.header {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .textField {
   width: 275px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  background-color: #FFFFFF;
+}
+
+.link {
+  margin-top: 5px;
+  margin-bottom: 55px;
+  width: 275px;
+  display: flex;
+    justify-content: flex-end;
+    color: #5462D8;
+  }
+  
+  .link:hover {
+    color: #434ead;
 }
 
 .button {
   width: 275px;
   margin-bottom: 20px;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .span {
+    margin: 0 12px;
+  }
+  
+  .additionalLogin {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .icon {
+    margin-right: 10px;
 }
