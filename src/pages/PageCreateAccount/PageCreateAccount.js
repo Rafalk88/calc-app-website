@@ -4,12 +4,21 @@ import { useNavigate } from "react-router-dom";
 
 import { useForm, FormProvider } from "react-hook-form";
 
+import FullPageLayout from "../../components/FullPageLayout";
 import CreateAccount from "../../components/CreateAccount";
 
 import classes from "./styles.module.css";
 
 export const PageCreateAccount = (props) => {
-  const { className, onClickCreateAccount, ...otherProps } = props;
+  const {
+    className,
+    passwordShown,
+    repeatPasswordShown,
+    tooglePassword,
+    toogleRepeatPassword,
+    onClickCreateAccount,
+    ...otherProps
+  } = props;
 
   const methods = useForm();
   const { handleSubmit } = methods;
@@ -24,20 +33,30 @@ export const PageCreateAccount = (props) => {
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
     >
-      <FormProvider {...methods}>
-        <CreateAccount
-          onSubmit={handleSubmit((data) =>
-            onClickCreateAccount(data.email, data.password)
-          )}
-          onClickBackToLogin={onClickBackToLogin}
-        />
-      </FormProvider>
+      <FullPageLayout>
+        <FormProvider {...methods}>
+          <CreateAccount
+            passwordShown={passwordShown}
+            repeatPasswordShown={repeatPasswordShown}
+            tooglePassword={tooglePassword}
+            toogleRepeatPassword={toogleRepeatPassword}
+            onSubmit={handleSubmit((data) =>
+              onClickCreateAccount(data.email, data.password)
+            )}
+            onClickBackToLogin={onClickBackToLogin}
+          />
+        </FormProvider>
+      </FullPageLayout>
     </div>
   );
 };
 
 PageCreateAccount.propTypes = {
   className: PropTypes.string,
+  passwordShown: PropTypes.bool,
+  repeatPasswordShown: PropTypes.bool,
+  tooglePassword: PropTypes.func,
+  toogleRepeatPassword: PropTypes.func,
   onClickCreateAccount: PropTypes.func.isRequired,
 };
 

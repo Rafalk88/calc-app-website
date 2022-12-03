@@ -6,9 +6,10 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 import { useFormContext } from "react-hook-form";
 
 import Logo from "../LoginForm/Logo";
-import Typhography from "../Typography";
+import Typography from "../Typography";
 import TextField from "../TextField";
 import Button from "../Button";
+import IconCheck from "./IconCheck";
 
 import {
   EMAIL_VALIDATION_ERROR,
@@ -19,7 +20,16 @@ import {
 import classes from "./styles.module.css";
 
 export const CreateAccount = (props) => {
-  const { className, onSubmit, onClickBackToLogin, ...otherProps } = props;
+  const {
+    className,
+    passwordShown,
+    repeatPasswordShown,
+    tooglePassword,
+    toogleRepeatPassword,
+    onSubmit,
+    onClickBackToLogin,
+    ...otherProps
+  } = props;
 
   const methods = useFormContext();
   const {
@@ -51,9 +61,9 @@ export const CreateAccount = (props) => {
       {...otherProps}
     >
       <Logo className={classes.logo} />
-      <Typhography className={classes.header} variant={"h4-extraLight"}>
+      <Typography className={classes.header} variant={"h4-extraLight"}>
         Create account !
-      </Typhography>
+      </Typography>
       <TextField
         className={classes.textField}
         placeholder={"E-mail"}
@@ -63,14 +73,35 @@ export const CreateAccount = (props) => {
       <TextField
         className={classes.textField}
         placeholder={"Password"}
-        type={"password"}
+        type={passwordShown ? "text" : "password"}
+        passwordShown={passwordShown}
+        tooglePassword={tooglePassword}
         errorMessage={errors.password && errors.password.message}
         {...registeredPasswordProps}
       />
+      <Typography className={classes.passwordInfo} variant={"h6-light"}>
+        {PASSWORD_VALIDATION_ERROR.map((el, i) => (
+          <div
+            key={i}
+            className={`${classes.passwordMessageWrapper}${
+              el.toValid
+                ? ` ${classes.validationMessage}`
+                : ` ${classes.validationHeader}`
+            }`}
+          >
+            {el.toValid ? (
+              <div className={classes.passwordIconWrapper}></div>
+            ) : null}
+            <p className={classes.passMessageParagraph}>{el.message}</p>
+          </div>
+        ))}
+      </Typography>
       <TextField
         className={classes.textField}
         placeholder={"Repeat password"}
-        type={"password"}
+        type={repeatPasswordShown ? "text" : "password"}
+        repeatPasswordShown={repeatPasswordShown}
+        toogleRepeatPassword={toogleRepeatPassword}
         errorMessage={errors.repeatPassword && errors.repeatPassword.message}
         {...registeredRepeatPasswordProps}
       />
@@ -80,14 +111,15 @@ export const CreateAccount = (props) => {
         color={"primary"}
         type={"submit"}
       >
-        CREATE
+        <Typography variant={"h5-bold"}>Create Account</Typography>
       </Button>
       <Button
         className={classes.button}
-        variant={"text"}
+        variant={"contained"}
+        color={"secondary"}
         onClick={onClickBackToLogin}
       >
-        GO BACK
+        <Typography variant={"h5-bold"}>Go Back</Typography>
       </Button>
     </form>
   );
@@ -95,6 +127,9 @@ export const CreateAccount = (props) => {
 
 CreateAccount.propTypes = {
   className: PropTypes.string,
+  passwordShown: PropTypes.bool,
+  repeatPasswordShown: PropTypes.bool,
+  tooglePassword: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClickBackToLogin: PropTypes.func.isRequired,
 };

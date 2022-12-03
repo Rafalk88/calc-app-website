@@ -39,6 +39,8 @@ export const App = () => {
   const [hasInfo, setHasInfo] = React.useState(false);
   const [infoMessage, setInfoMessage] = React.useState("");
   const [procedures, setProcedures] = React.useState(null);
+  const [passwordShown, setPasswordShown] = React.useState(false);
+  const [repeatPasswordShown, setRepeatPasswordShown] = React.useState(false);
 
   const { isUserLoged, setUser, clearUser } = useAuthUser();
 
@@ -126,6 +128,14 @@ export const App = () => {
     setInfoMessage(() => "");
   }, []);
 
+  const tooglePassword = React.useCallback(() => {
+    setPasswordShown(!passwordShown);
+  }, [passwordShown]);
+
+  const toogleRepeatPassword = React.useCallback(() => {
+    setRepeatPasswordShown(!repeatPasswordShown);
+  }, [repeatPasswordShown]);
+
   React.useEffect(() => {
     (async () => {
       setIsLoading(() => true);
@@ -154,13 +164,25 @@ export const App = () => {
         <Routes>
           <Route
             path={"*"}
-            element={<PageLogin onClickLogin={onClickLogin} />}
+            element={
+              <PageLogin
+                onClickLogin={onClickLogin}
+                passwordShown={passwordShown}
+                tooglePassword={tooglePassword}
+              />
+            }
           />
 
           <Route
             path={"/create-account"}
             element={
-              <PageCreateAccount onClickCreateAccount={onClickCreateAccount} />
+              <PageCreateAccount
+                onClickCreateAccount={onClickCreateAccount}
+                passwordShown={passwordShown}
+                repeatPasswordShown={repeatPasswordShown}
+                tooglePassword={tooglePassword}
+                toogleRepeatPassword={toogleRepeatPassword}
+              />
             }
           />
 

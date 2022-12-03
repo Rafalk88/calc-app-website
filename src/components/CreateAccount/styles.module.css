@@ -9,16 +9,46 @@
 }
 
 .logo {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  }
+  
+  .passwordIconWrapper {
+    width: 19px;
+    padding-right: 10px;
 }
 
 .textField {
   width: 275px;
   margin-bottom: 20px;
+}
+.passwordInfo {
+  width: 275px;
+  padding-left: 25px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.passwordMessageWrapper {
+  display: flex;
+  align-items: center;
+  height: 22px;
+}
+
+.validationHeader {
+  margin-bottom: 5px;
+}
+
+.validationMessage {
+  padding-left: 4px;
+  margin-bottom: 5px;
+}
+
+.passMessageParagraph {
+  margin: 0;
 }
 
 .button {
