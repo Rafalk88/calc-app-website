@@ -61,7 +61,6 @@ export const LoginForm = (props) => {
         placeholder={"Password"}
         errorMessage={errors.password && errors.password.message}
         type={passwordShown ? "text" : "password"}
-        passwordInput={true}
         passwordShown={passwordShown}
         tooglePassword={tooglePassword}
         {...registeredPasswordProps}
@@ -114,7 +113,7 @@ export const LoginForm = (props) => {
 
 LoginForm.propTypes = {
   className: PropTypes.string,
-  isVisible: PropTypes.bool,
+  passwordShown: PropTypes.bool,
   onSubmit: PropTypes.func.isRequired,
   onClickCreateAccountPage: PropTypes.func.isRequired,
   onClickRecoverPasswordPage: PropTypes.func.isRequired,

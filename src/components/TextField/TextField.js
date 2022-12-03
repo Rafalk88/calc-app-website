@@ -8,12 +8,14 @@ import classes from "./styles.module.css";
 
 export const TextField = React.forwardRef((props, ref) => {
   const {
+    name,
     className,
     errorMessage,
     type,
     passwordShown,
+    repeatPasswordShown,
     tooglePassword,
-    passwordInput,
+    toogleRepeatPassword,
     ...otherProps
   } = props;
 
@@ -27,10 +29,11 @@ export const TextField = React.forwardRef((props, ref) => {
         <input
           className={classes.input}
           ref={ref}
+          name={name}
           type={type}
           {...otherProps}
         />
-        {passwordInput ? (
+        {["password"].indexOf(name) >= 0 ? (
           passwordShown ? (
             <IconHiddenPassword
               className={classes.passwordIcon}
@@ -40,6 +43,18 @@ export const TextField = React.forwardRef((props, ref) => {
             <IconVisiblePassword
               className={classes.passwordIcon}
               onClick={tooglePassword}
+            />
+          )
+        ) : ["repeatPassword"].indexOf(name) >= 0 ? (
+          repeatPasswordShown ? (
+            <IconHiddenPassword
+              className={classes.passwordIcon}
+              onClick={toogleRepeatPassword}
+            />
+          ) : (
+            <IconVisiblePassword
+              className={classes.passwordIcon}
+              onClick={toogleRepeatPassword}
             />
           )
         ) : null}
@@ -54,12 +69,14 @@ export const TextField = React.forwardRef((props, ref) => {
 TextField.displayName = "TextField";
 
 TextField.propTypes = {
+  name: PropTypes.string,
   className: PropTypes.string,
   errorMessage: PropTypes.node,
   type: PropTypes.string,
-  isVisible: PropTypes.bool,
+  passwordShown: PropTypes.bool,
+  repeatPasswordShown: PropTypes.bool,
   tooglePassword: PropTypes.func,
-  passwordInput: PropTypes.bool,
+  toogleRepeatPassword: PropTypes.func,
 };
 
 export default TextField;

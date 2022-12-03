@@ -10,9 +10,13 @@ import LoginForm from "../../components/LoginForm";
 import classes from "./styles.module.css";
 
 export const PageLogin = (props) => {
-  const { className, onClickLogin, ...otherProps } = props;
-
-  const [passwordShown, setPasswordShown] = React.useState(false);
+  const {
+    className,
+    passwordShown,
+    tooglePassword,
+    onClickLogin,
+    ...otherProps
+  } = props;
 
   const methods = useForm();
   const { handleSubmit } = methods;
@@ -25,10 +29,6 @@ export const PageLogin = (props) => {
   const onClickRecoverPasswordPage = React.useCallback(() => {
     navigate("/recover-password");
   }, [navigate]);
-
-  const tooglePassword = React.useCallback(() => {
-    setPasswordShown(!passwordShown);
-  }, [passwordShown]);
 
   return (
     <div
@@ -54,6 +54,8 @@ export const PageLogin = (props) => {
 
 PageLogin.propTypes = {
   className: PropTypes.string,
+  passwordShown: PropTypes.bool,
+  tooglePassword: PropTypes.func,
   onClickLogin: PropTypes.func.isRequired,
 };
 
