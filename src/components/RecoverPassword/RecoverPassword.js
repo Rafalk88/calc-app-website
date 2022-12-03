@@ -46,14 +46,15 @@ export const RecoverPassword = (props) => {
         color={"primary"}
         type={"submit"}
       >
-        RECOVER
+        <Typography variant={"h5-bold"}>Recover Password</Typography>
       </Button>
       <Button
         className={classes.button}
-        variant={"text"}
+        variant={"contained"}
+        color={"secondary"}
         onClick={onClickBackToLogin}
       >
-        GO BACK
+        <Typography variant={"h5-bold"}>Go Back</Typography>
       </Button>
     </form>
   );

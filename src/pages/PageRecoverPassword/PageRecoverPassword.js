@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 
+import FullPageLayout from "../../components/FullPageLayout";
 import RecoverPassword from "../../components/RecoverPassword";
 
 import classes from "./styles.module.css";
@@ -23,12 +24,14 @@ export const PageRecoverPassword = (props) => {
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
     >
-      <FormProvider {...methods}>
-        <RecoverPassword
-          onSubmit={handleSubmit((data) => onClickRecover(data.email))}
-          onClickBackToLogin={onClickBackToLogin}
-        />
-      </FormProvider>
+      <FullPageLayout>
+        <FormProvider {...methods}>
+          <RecoverPassword
+            onSubmit={handleSubmit((data) => onClickRecover(data.email))}
+            onClickBackToLogin={onClickBackToLogin}
+          />
+        </FormProvider>
+      </FullPageLayout>
     </div>
   );
 };
