@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useOutletContext } from "react-router-dom";
 
 import Typography from "../Typography";
 import TextField from "../TextField";
@@ -13,6 +14,8 @@ import classes from "./styles.module.css";
 
 export const AppCountingPage = (props) => {
   const { className, ...otherProps } = props;
+
+  const onClickBackToLogin = useOutletContext();
 
   return (
     <div
@@ -109,7 +112,7 @@ export const AppCountingPage = (props) => {
             className={classes.button}
             variant={"contained"}
             color={"secondary"}
-            onClick={() => console.log("Go Backg")}
+            onClick={onClickBackToLogin}
           >
             <Typography variant={"h5-bold"}>Go Back</Typography>
           </Button>
@@ -128,7 +131,7 @@ export const AppCountingPage = (props) => {
   );
 };
 
-AppCountingPage.propTypes ={
+AppCountingPage.propTypes = {
   className: PropTypes.string,
 };
 

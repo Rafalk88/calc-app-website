@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import MainLayout from "../../components/MainLayout";
 import LogoForIsLoaded from "../../components/Icons/LogoForIsLoaded";
@@ -19,6 +19,11 @@ export const PageMainLogged = (props) => {
   const [timeInput, setTimeInput] = React.useState("");
   const [searchPhrase, setSearchPhrase] = React.useState("");
   const [outputData, setOutputData] = React.useState([]);
+
+  const navigate = useNavigate();
+  const onClickBackToLogin = React.useCallback(() => {
+    navigate("/");
+  }, [navigate]);
 
   return (
     <div
@@ -57,7 +62,7 @@ export const PageMainLogged = (props) => {
             />
           </>
         }
-        contentMain={<Outlet />}
+        contentMain={<Outlet context={onClickBackToLogin} />}
         footer={<Footer />}
       />
     </div>
