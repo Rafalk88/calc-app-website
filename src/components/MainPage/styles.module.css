@@ -11,7 +11,7 @@
 .headersubTitle {
   padding-left: 184px;
   margin-top: 15px;
-  margin-bottom: 191px;
+  margin-bottom: 120px;
 }
 
 .buttonSection {
@@ -27,8 +27,29 @@
   justify-content: center;
   height: 200px;
   width: 200px;
+  background-color: #FFFFFF;
 }
 
 .icon {
   margin-bottom: 15px;
+}
+@media (max-width: 865px) {
+  .mainPageHeader {
+    padding-left: 0;
+    align-items: center;
+  }
+
+  .headersubTitle {
+    padding-left: 0;
+    margin-bottom: 41px;
+  }
+
+  .buttonSection {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mainPageButton {
+    margin-bottom: 21px;
+  }
 }

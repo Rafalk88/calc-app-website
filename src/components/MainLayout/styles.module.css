@@ -1,9 +1,19 @@
-.root {
-  margin-top: 65px;
+.root {}
+
+.appBarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .contentMainWrapper {
-  display: flex;
-  justify-content: center;
-  height: calc(100vh - 185px);
+  margin-top: 65px;
+    position: static;
+      height: calc(100vh - 185px)
+}
+
+@media (max-width: 865px) {
+  .contentMainWrapper {
+    height: calc(100vh - 65px);
+    }
 }

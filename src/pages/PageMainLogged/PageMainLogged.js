@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import MainLayout from "../../components/MainLayout";
-import Logo from "../../components/LoginForm/Logo";
+import LogoForIsLoaded from "../../components/Icons/LogoForIsLoaded";
 import User from "../../components/User";
 import List from "../../components/List";
 import ListItem from "../../components/ListItem/ListItem";
@@ -28,7 +28,7 @@ export const PageMainLogged = (props) => {
       <MainLayout
         contentAppBar={
           <>
-            <Logo className={classes.logo} />
+            <LogoForIsLoaded className={classes.logo} />
             <User
               className={classes.user}
               onOpenRequested={() => setIsUserDropdownOpen(() => true)}

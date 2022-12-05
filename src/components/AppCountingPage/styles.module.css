@@ -1,1 +1,90 @@
-.root {}
+.root {
+  display: flex;
+  flex-direction: column;
+  margin-top: 49px;
+}
+
+.title {
+  margin-bottom: 9px;
+}
+
+.header {
+  width: 735px;
+  padding-left: 49px;
+  margin-bottom: 56px;
+}
+
+.link {
+  width: 275px;
+  display: flex;
+  justify-content: flex-end;
+  color: #FE585D;
+}
+
+.link:hover {
+  color: #cb464a;
+}
+
+.tableHeaderWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.tableHeaderField {
+  width: 150px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
+}
+
+.tableHeaderText {
+  padding-top: 14px;
+}
+
+.tableHeaderIcon {
+  cursor: pointer;
+}
+
+.tableBodyWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.textField {
+  width: 150px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.textField__space {
+  margin-left: 5px;
+}
+
+.IconPlus {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.buttonSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 25px;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 17px;
+}
+
+.button {
+  width: 275px;
+  margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

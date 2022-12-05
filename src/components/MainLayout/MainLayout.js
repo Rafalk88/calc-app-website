@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import AppBar from "../AppBar";
+import FullPageLayout from "../FullPageLayout";
 import Container from "../Container";
 
 import classes from "./styles.module.css";
@@ -15,11 +16,13 @@ export const MainLayout = (props) => {
       {...otherProps}
     >
       <AppBar>
-        <Container>{contentAppBar}</Container>
+        <Container className={classes.appBarContainer}>
+          {contentAppBar}
+        </Container>
       </AppBar>
-      <main className={classes.contentMainWrapper}>
+      <FullPageLayout className={classes.contentMainWrapper}>
         <Container>{contentMain}</Container>
-      </main>
+      </FullPageLayout>
       {footer}
     </section>
   );
