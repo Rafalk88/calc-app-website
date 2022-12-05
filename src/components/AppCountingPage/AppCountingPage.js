@@ -8,6 +8,7 @@ import IconInfoAppCountingPage from "../Icons/IconInfoAppCountingPage";
 import Link from "../Link";
 import IconPlusAppCounting from "../Icons/IconPlusAppCounting";
 import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
+import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
 import Button from "../Button";
 
 import classes from "./styles.module.css";
@@ -15,7 +16,15 @@ import classes from "./styles.module.css";
 export const AppCountingPage = (props) => {
   const { className, ...otherProps } = props;
 
-  const onClickBackToLogin = useOutletContext();
+  const [
+    onClickBackToLogin,
+    timeInput,
+    setTimeInput,
+    procedureInput,
+    setProcedureInput,
+    isInfoShown,
+    setInfoShown,
+  ] = useOutletContext();
 
   return (
     <div
@@ -35,7 +44,12 @@ export const AppCountingPage = (props) => {
       </Typography>
       <div>
         <div className={classes.tableHeaderWrapper}>
-          <TextField className={classes.textField} type={"time"} />
+          <TextField
+            className={classes.textField}
+            type={"time"}
+            defaultValue={timeInput}
+            onChange={(e) => setTimeInput(e.target.value)}
+          />
           <div className={classes.tableHeaderField}>
             <Typography variant={"title3"} className={classes.tableHeaderText}>
               5.11.01.00000...
@@ -47,8 +61,19 @@ export const AppCountingPage = (props) => {
             </Typography>
             <IconInfoAppCountingPage
               className={classes.tableHeaderIcon}
-              onClick={() => console.log("IconInfoAppCountingPage")}
+              onClick={() => setInfoShown(() => [true, false, false])}
             />
+            {isInfoShown[0] ? (
+              <>
+                <div
+                  className={classes.InfoPageOverlay}
+                  onClick={() => setInfoShown(() => [false, false, false])}
+                ></div>
+                <div className={classes.InfoPageContainer}>
+                  <CountingAppPopUpInfoPage />
+                </div>
+              </>
+            ) : null}
           </div>
           <div className={classes.tableHeaderField}>
             <Typography variant={"title3"} className={classes.tableHeaderText}>
@@ -56,8 +81,19 @@ export const AppCountingPage = (props) => {
             </Typography>
             <IconInfoAppCountingPage
               className={classes.tableHeaderIcon}
-              onClick={() => console.log("IconInfoAppCountingPage")}
+              onClick={() => setInfoShown(() => [false, true, false])}
             />
+            {isInfoShown[1] ? (
+              <>
+                <div
+                  className={classes.InfoPageOverlay}
+                  onClick={() => setInfoShown(() => [false, false, false])}
+                ></div>
+                <div className={classes.InfoPageContainer}>
+                  <CountingAppPopUpInfoPage />
+                </div>
+              </>
+            ) : null}
           </div>
           <div className={classes.tableHeaderField}>
             <Typography variant={"title3"} className={classes.tableHeaderText}>
@@ -65,8 +101,19 @@ export const AppCountingPage = (props) => {
             </Typography>
             <IconInfoAppCountingPage
               className={classes.tableHeaderIcon}
-              onClick={() => console.log("IconInfoAppCountingPage")}
+              onClick={() => setInfoShown(() => [false, false, true])}
             />
+            {isInfoShown[2] ? (
+              <>
+                <div
+                  className={classes.InfoPageOverlay}
+                  onClick={() => setInfoShown(() => [false, false, false])}
+                ></div>
+                <div className={classes.InfoPageContainer}>
+                  <CountingAppPopUpInfoPage />
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
         <div className={classes.tableBodyWrapper}>
@@ -74,6 +121,10 @@ export const AppCountingPage = (props) => {
             className={classes.textField}
             type={"number"}
             placeholder={"Type 93.00000..."}
+            defaultValue={procedureInput[0]}
+            onChange={(e) =>
+              setProcedureInput((oldArray) => [...oldArray, e.target.value])
+            }
           />
           <TextField
             className={`${classes.textField} ${classes.textField__space}`}

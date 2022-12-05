@@ -15,6 +15,7 @@ export const PageMainLogged = (props) => {
   const { className, contentMain, onClickLogOut, ...otherProps } = props;
 
   const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
+  const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
   const [procedureInput, setProcedureInput] = React.useState([]);
   const [timeInput, setTimeInput] = React.useState("");
   const [searchPhrase, setSearchPhrase] = React.useState("");
@@ -62,7 +63,19 @@ export const PageMainLogged = (props) => {
             />
           </>
         }
-        contentMain={<Outlet context={onClickBackToLogin} />}
+        contentMain={
+          <Outlet
+            context={[
+              onClickBackToLogin,
+              timeInput,
+              setTimeInput,
+              procedureInput,
+              setProcedureInput,
+              isInfoShown,
+              setInfoShown,
+            ]}
+          />
+        }
         footer={<Footer />}
       />
     </div>
