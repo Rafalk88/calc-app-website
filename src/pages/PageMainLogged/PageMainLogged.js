@@ -16,8 +16,7 @@ export const PageMainLogged = (props) => {
 
   const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
   const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
-  const [procedureInput, setProcedureInput] = React.useState([]);
-  const [timeInput, setTimeInput] = React.useState("");
+  const [isIconShown, setIconShown] = React.useState("plus");
   const [searchPhrase, setSearchPhrase] = React.useState("");
   const [outputData, setOutputData] = React.useState([]);
 
@@ -67,12 +66,10 @@ export const PageMainLogged = (props) => {
           <Outlet
             context={[
               onClickBackToLogin,
-              timeInput,
-              setTimeInput,
-              procedureInput,
-              setProcedureInput,
               isInfoShown,
               setInfoShown,
+              isIconShown,
+              setIconShown,
             ]}
           />
         }

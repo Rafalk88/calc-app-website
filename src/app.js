@@ -154,7 +154,10 @@ export const App = () => {
             element={<PageMainLogged onClickLogOut={onClickLogOut} />}
           >
             <Route path={"/"} element={<MainPage />} />
-            <Route path={"app-page"} element={<AppCountingPage />} />
+            <Route
+              path={"app-page"}
+              element={<AppCountingPage database={procedures} />}
+            />
           </Route>
           <Route path={"*"} element={<FullPage404Error buttonLabel={"OK"} />} />
         </Routes>

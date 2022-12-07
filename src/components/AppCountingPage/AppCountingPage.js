@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useOutletContext } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import Typography from "../Typography";
 import TextField from "../TextField";
@@ -14,17 +15,78 @@ import Button from "../Button";
 import classes from "./styles.module.css";
 
 export const AppCountingPage = (props) => {
-  const { className, ...otherProps } = props;
+  const { className, database, ...otherProps } = props;
 
   const [
     onClickBackToLogin,
-    timeInput,
-    setTimeInput,
-    procedureInput,
-    setProcedureInput,
     isInfoShown,
     setInfoShown,
+    isIconShown,
+    setIconShown,
   ] = useOutletContext();
+
+  const methods = useForm();
+  const {
+    register,
+    handleSubmit,
+    setFocus,
+    formState: { errors },
+    setValue,
+    reset,
+  } = methods;
+
+  const registerTimeInput = register("timeInput", {
+    required: {
+      value: true,
+      message: "Field is required.",
+    },
+  });
+
+  const registerProcedureInput = register("procedureInput", {
+    required: {
+      value: true,
+      message: "Field is required.",
+    },
+    maxLength: {
+      value: 4,
+      message: "You must type max 4 digits.",
+    },
+    validate: (procedureInput) =>
+      database.find((obj) => obj.id === procedureInput) ||
+      "Invalid procedure code.",
+  });
+  const registerProcedureCode = register("procedureCode");
+  const registerProcedureTime = register("procedureTime");
+  const registerStartTime = register("startTime");
+  const registerEndTime = register("endTime");
+
+  const countData = handleSubmit((data) => {
+    database.map((obj) => {
+      if (obj.id === data.procedureInput) {
+        let now = new Date();
+        now.setHours(data.timeInput.split(":")[0]);
+        now.setMinutes(data.timeInput.split(":")[1]);
+        now.setHours(now.getHours() + parseInt(obj.time.split(":")[0]));
+        now.setMinutes(now.getMinutes() + parseInt(obj.time.split(":")[1]));
+        let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+        let minutes =
+          now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+
+        setValue("procedureCode", obj.settlementProduct);
+        setValue("procedureTime", obj.time);
+        setValue("startTime", data.timeInput);
+        setValue("endTime", `${hour}:${minutes}`);
+      }
+    });
+  });
+
+  const clearBtn = React.useCallback(() => {
+    reset();
+  }, [reset]);
+
+  React.useEffect(() => {
+    setFocus("timeInput");
+  }, [setFocus]);
 
   return (
     <div
@@ -42,13 +104,13 @@ export const AppCountingPage = (props) => {
         procedures, use the 'plus' at the end of the table. After approval, the
         application will display the times of treatments as well as their hours.
       </Typography>
-      <div>
+      <form onSubmit={countData}>
         <div className={classes.tableHeaderWrapper}>
           <TextField
             className={classes.textField}
             type={"time"}
-            defaultValue={timeInput}
-            onChange={(e) => setTimeInput(e.target.value)}
+            errorMessage={errors.timeInput && errors.timeInput.message}
+            {...registerTimeInput}
           />
           <div className={classes.tableHeaderField}>
             <Typography variant={"title3"} className={classes.tableHeaderText}>
@@ -121,69 +183,80 @@ export const AppCountingPage = (props) => {
             className={classes.textField}
             type={"number"}
             placeholder={"Type 93.00000..."}
-            defaultValue={procedureInput[0]}
-            onChange={(e) =>
-              setProcedureInput((oldArray) => [...oldArray, e.target.value])
+            errorMessage={
+              errors.procedureInput && errors.procedureInput.message
             }
+            {...registerProcedureInput}
           />
           <TextField
             className={`${classes.textField} ${classes.textField__space}`}
-            value={""}
+            defaultValue={""}
+            {...registerProcedureCode}
             disabled={true}
           />
           <TextField
             className={`${classes.textField} ${classes.textField__space}`}
-            value={""}
+            defaultValue={""}
+            {...registerProcedureTime}
             disabled={true}
           />
           <TextField
             className={`${classes.textField} ${classes.textField__space}`}
-            value={""}
+            defaultValue={""}
+            {...registerStartTime}
             disabled={true}
           />
           <TextField
             className={`${classes.textField} ${classes.textField__space}`}
-            value={""}
+            defaultValue={""}
+            {...registerEndTime}
             disabled={true}
           />
-          <IconPlusAppCounting
-            className={classes.IconPlus}
-            onClick={() => console.log("IconPlusAppCounting")}
-          />
+          {isIconShown === "plus" ? (
+            <IconPlusAppCounting
+              className={classes.IconPlus}
+              onClick={() => setIconShown("minus")}
+            />
+          ) : isIconShown === "minus" ? (
+            <IconMinusAppCounting
+              className={classes.IconPlus}
+              onClick={() => setIconShown("plus")}
+            />
+          ) : null}
         </div>
-      </div>
-      <div className={classes.buttonSection}>
-        <Link className={classes.link}>
-          <Typography variant={"h5-bold"} onClick={() => console.log("Clear")}>
-            Clear
-          </Typography>
-        </Link>
-        <div className={classes.buttons}>
-          <Button
-            className={classes.button}
-            variant={"contained"}
-            color={"secondary"}
-            onClick={onClickBackToLogin}
-          >
-            <Typography variant={"h5-bold"}>Go Back</Typography>
-          </Button>
-          <Button
-            className={classes.button}
-            variant={"contained"}
-            color={"primary"}
-            type={"submit"}
-            onClick={() => console.log("Count Data")}
-          >
-            <Typography variant={"h5-bold"}>Count Data</Typography>
-          </Button>
+        <div className={classes.buttonSection}>
+          <Link className={classes.link}>
+            <Typography variant={"h5-bold"} onClick={clearBtn}>
+              Clear
+            </Typography>
+          </Link>
+          <div className={classes.buttons}>
+            <Button
+              className={classes.button}
+              variant={"contained"}
+              color={"secondary"}
+              onClick={onClickBackToLogin}
+            >
+              <Typography variant={"h5-bold"}>Go Back</Typography>
+            </Button>
+            <Button
+              className={classes.button}
+              variant={"contained"}
+              color={"primary"}
+              type={"submit"}
+            >
+              <Typography variant={"h5-bold"}>Count Data</Typography>
+            </Button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
 AppCountingPage.propTypes = {
   className: PropTypes.string,
+  database: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default AppCountingPage;
