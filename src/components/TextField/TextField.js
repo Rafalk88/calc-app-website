@@ -10,6 +10,7 @@ export const TextField = React.forwardRef((props, ref) => {
   const {
     name,
     className,
+    inputAditionalClass,
     errorMessage,
     type,
     passwordShown,
@@ -27,7 +28,9 @@ export const TextField = React.forwardRef((props, ref) => {
         }`}
       >
         <input
-          className={classes.input}
+          className={`${classes.input}${
+            inputAditionalClass ? ` ${inputAditionalClass}` : ""
+          }`}
           ref={ref}
           name={name}
           type={type}
@@ -71,6 +74,7 @@ TextField.displayName = "TextField";
 TextField.propTypes = {
   name: PropTypes.string,
   className: PropTypes.string,
+  inputAditionalClass: PropTypes.string,
   errorMessage: PropTypes.node,
   type: PropTypes.string,
   passwordShown: PropTypes.bool,
