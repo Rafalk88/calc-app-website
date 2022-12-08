@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useOutletContext } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 
 import Typography from "../Typography";
-import TextField from "../TextField";
-import IconInfoAppCountingPage from "../Icons/IconInfoAppCountingPage";
 import Link from "../Link";
-import IconPlusAppCounting from "../Icons/IconPlusAppCounting";
-import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
-import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
+import AppCountingField from "../AppCountingField";
 import Button from "../Button";
 
 import classes from "./styles.module.css";
@@ -17,50 +13,12 @@ import classes from "./styles.module.css";
 export const AppCountingPage = (props) => {
   const { className, database, ...otherProps } = props;
 
-  const [
-    onClickBackToLogin,
-    isInfoShown,
-    setInfoShown,
-    isIconShown,
-    setIconShown,
-  ] = useOutletContext();
+  const [onClickBackToLogin] = useOutletContext();
 
   const methods = useForm();
-  const {
-    register,
-    handleSubmit,
-    setFocus,
-    formState: { errors },
-    setValue,
-    reset,
-  } = methods;
+  const { handleSubmit, setValue, reset } = methods;
 
-  const registerTimeInput = register("timeInput", {
-    required: {
-      value: true,
-      message: "Field is required.",
-    },
-  });
-
-  const registerProcedureInput = register("procedureInput", {
-    required: {
-      value: true,
-      message: "Field is required.",
-    },
-    maxLength: {
-      value: 4,
-      message: "You must type max 4 digits.",
-    },
-    validate: (procedureInput) =>
-      database.find((obj) => obj.id === procedureInput) ||
-      "Invalid procedure code.",
-  });
-  const registerProcedureCode = register("procedureCode");
-  const registerProcedureTime = register("procedureTime");
-  const registerStartTime = register("startTime");
-  const registerEndTime = register("endTime");
-
-  const countData = handleSubmit((data) => {
+  const countData = (data) => {
     database.map((obj) => {
       if (obj.id === data.procedureInput) {
         let now = new Date();
@@ -78,15 +36,11 @@ export const AppCountingPage = (props) => {
         setValue("endTime", `${hour}:${minutes}`);
       }
     });
-  });
+  };
 
   const clearBtn = React.useCallback(() => {
     reset();
   }, [reset]);
-
-  React.useEffect(() => {
-    setFocus("timeInput");
-  }, [setFocus]);
 
   return (
     <div
@@ -104,152 +58,37 @@ export const AppCountingPage = (props) => {
         procedures, use the 'plus' at the end of the table. After approval, the
         application will display the times of treatments as well as their hours.
       </Typography>
-      <form onSubmit={countData}>
-        <div className={classes.tableHeaderWrapper}>
-          <TextField
-            className={classes.textField}
-            type={"time"}
-            errorMessage={errors.timeInput && errors.timeInput.message}
-            {...registerTimeInput}
-          />
-          <div className={classes.tableHeaderField}>
-            <Typography variant={"title3"} className={classes.tableHeaderText}>
-              5.11.01.00000...
-            </Typography>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(countData)}>
+          <AppCountingField database={database} />
+          <div className={classes.buttonSection}>
+            <Link className={classes.link}>
+              <Typography variant={"h5-bold"} onClick={clearBtn}>
+                Clear
+              </Typography>
+            </Link>
+            <div className={classes.buttons}>
+              <Button
+                className={classes.button}
+                variant={"contained"}
+                color={"secondary"}
+                onClick={onClickBackToLogin}
+                type={"button"}
+              >
+                <Typography variant={"h5-bold"}>Go Back</Typography>
+              </Button>
+              <Button
+                className={classes.button}
+                variant={"contained"}
+                color={"primary"}
+                type={"submit"}
+              >
+                <Typography variant={"h5-bold"}>Count Data</Typography>
+              </Button>
+            </div>
           </div>
-          <div className={classes.tableHeaderField}>
-            <Typography variant={"title3"} className={classes.tableHeaderText}>
-              Procedure time
-            </Typography>
-            <IconInfoAppCountingPage
-              className={classes.tableHeaderIcon}
-              onClick={() => setInfoShown(() => [true, false, false])}
-            />
-            {isInfoShown[0] ? (
-              <>
-                <div
-                  className={classes.InfoPageOverlay}
-                  onClick={() => setInfoShown(() => [false, false, false])}
-                ></div>
-                <div className={classes.InfoPageContainer}>
-                  <CountingAppPopUpInfoPage />
-                </div>
-              </>
-            ) : null}
-          </div>
-          <div className={classes.tableHeaderField}>
-            <Typography variant={"title3"} className={classes.tableHeaderText}>
-              Start time
-            </Typography>
-            <IconInfoAppCountingPage
-              className={classes.tableHeaderIcon}
-              onClick={() => setInfoShown(() => [false, true, false])}
-            />
-            {isInfoShown[1] ? (
-              <>
-                <div
-                  className={classes.InfoPageOverlay}
-                  onClick={() => setInfoShown(() => [false, false, false])}
-                ></div>
-                <div className={classes.InfoPageContainer}>
-                  <CountingAppPopUpInfoPage />
-                </div>
-              </>
-            ) : null}
-          </div>
-          <div className={classes.tableHeaderField}>
-            <Typography variant={"title3"} className={classes.tableHeaderText}>
-              End time
-            </Typography>
-            <IconInfoAppCountingPage
-              className={classes.tableHeaderIcon}
-              onClick={() => setInfoShown(() => [false, false, true])}
-            />
-            {isInfoShown[2] ? (
-              <>
-                <div
-                  className={classes.InfoPageOverlay}
-                  onClick={() => setInfoShown(() => [false, false, false])}
-                ></div>
-                <div className={classes.InfoPageContainer}>
-                  <CountingAppPopUpInfoPage />
-                </div>
-              </>
-            ) : null}
-          </div>
-        </div>
-        <div className={classes.tableBodyWrapper}>
-          <TextField
-            className={classes.textField}
-            type={"number"}
-            placeholder={"Type 93.00000..."}
-            errorMessage={
-              errors.procedureInput && errors.procedureInput.message
-            }
-            {...registerProcedureInput}
-          />
-          <TextField
-            className={`${classes.textField} ${classes.textField__space}`}
-            defaultValue={""}
-            {...registerProcedureCode}
-            disabled={true}
-          />
-          <TextField
-            className={`${classes.textField} ${classes.textField__space}`}
-            defaultValue={""}
-            {...registerProcedureTime}
-            disabled={true}
-          />
-          <TextField
-            className={`${classes.textField} ${classes.textField__space}`}
-            defaultValue={""}
-            {...registerStartTime}
-            disabled={true}
-          />
-          <TextField
-            className={`${classes.textField} ${classes.textField__space}`}
-            defaultValue={""}
-            {...registerEndTime}
-            disabled={true}
-          />
-          {isIconShown === "plus" ? (
-            <IconPlusAppCounting
-              className={classes.IconPlus}
-              onClick={() => setIconShown("minus")}
-            />
-          ) : isIconShown === "minus" ? (
-            <IconMinusAppCounting
-              className={classes.IconPlus}
-              onClick={() => setIconShown("plus")}
-            />
-          ) : null}
-        </div>
-        <div className={classes.buttonSection}>
-          <Link className={classes.link}>
-            <Typography variant={"h5-bold"} onClick={clearBtn}>
-              Clear
-            </Typography>
-          </Link>
-          <div className={classes.buttons}>
-            <Button
-              className={classes.button}
-              variant={"contained"}
-              color={"secondary"}
-              onClick={onClickBackToLogin}
-            >
-              <Typography variant={"h5-bold"}>Go Back</Typography>
-            </Button>
-            <Button
-              className={classes.button}
-              variant={"contained"}
-              color={"primary"}
-              type={"submit"}
-            >
-              <Typography variant={"h5-bold"}>Count Data</Typography>
-            </Button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </FormProvider>
     </div>
   );
 };

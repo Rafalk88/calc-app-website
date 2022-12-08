@@ -15,8 +15,6 @@ export const PageMainLogged = (props) => {
   const { className, contentMain, onClickLogOut, ...otherProps } = props;
 
   const [isUserDropdownOpen, setIsUserDropdownOpen] = React.useState(false);
-  const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
-  const [isIconShown, setIconShown] = React.useState("plus");
   const [searchPhrase, setSearchPhrase] = React.useState("");
   const [outputData, setOutputData] = React.useState([]);
 
@@ -62,17 +60,7 @@ export const PageMainLogged = (props) => {
             />
           </>
         }
-        contentMain={
-          <Outlet
-            context={[
-              onClickBackToLogin,
-              isInfoShown,
-              setInfoShown,
-              isIconShown,
-              setIconShown,
-            ]}
-          />
-        }
+        contentMain={<Outlet context={[onClickBackToLogin]} />}
         footer={<Footer />}
       />
     </div>

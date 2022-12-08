@@ -4,6 +4,15 @@
   margin-top: 49px;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
 .title {
   margin-bottom: 9px;
 }
@@ -23,72 +32,6 @@
 
 .link:hover {
   color: #cb464a;
-}
-
-.tableHeaderWrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.tableHeaderField {
-  position: relative;
-  width: 150px;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  margin-left: 5px;
-}
-
-.tableHeaderText {
-  padding-top: 14px;
-}
-
-.tableHeaderIcon {
-  cursor: pointer;
-}
-
-.InfoPageOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-}
-
-.InfoPageContainer {
-  position: absolute;
-  bottom: 50px;
-  left: 120px;
-  width: 150px;
-  height: 45px;
-  background-color: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.15);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.tableBodyWrapper {
-  display: flex;
-  align-items: center;
-}
-
-.textField {
-  width: 150px;
-}
-
-input[type="time"]::-webkit-calendar-picker-indicator {
-  display: none;
-}
-
-.textField__space {
-  margin-left: 5px;
-}
-
-.IconPlus {
-  margin-left: 5px;
-  cursor: pointer;
 }
 
 .buttonSection {
