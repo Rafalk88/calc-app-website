@@ -7,34 +7,91 @@ import Typography from "../Typography";
 import Link from "../Link";
 import AppCountingField from "../AppCountingField";
 import Button from "../Button";
+import ProcedureField from "../ProcedureField";
 
 import classes from "./styles.module.css";
 
 export const AppCountingPage = (props) => {
   const { className, database, ...otherProps } = props;
 
+  const [procedureField, setProcedureField] = React.useState([
+    {
+      id: 1,
+      field: (
+        <ProcedureField
+          key={1}
+          className={classes.procedureWrapper}
+          database={database}
+          fieldId={"1"}
+        />
+      ),
+    },
+    {
+      id: 2,
+      field: (
+        <ProcedureField
+          key={2}
+          className={classes.procedureWrapper}
+          database={database}
+          fieldId={"2"}
+        />
+      ),
+    },
+    {
+      id: 3,
+      field: (
+        <ProcedureField
+          key={3}
+          className={classes.procedureWrapper}
+          database={database}
+          fieldId={"3"}
+        />
+      ),
+    },
+  ]);
+
   const [onClickBackToLogin] = useOutletContext();
 
   const methods = useForm();
-  const { handleSubmit, setValue, reset } = methods;
+  const { handleSubmit, setValue, reset, getValues } = methods;
 
   const countData = (data) => {
-    database.map((obj) => {
-      if (obj.id === data.procedureInput) {
-        let now = new Date();
-        now.setHours(data.timeInput.split(":")[0]);
-        now.setMinutes(data.timeInput.split(":")[1]);
-        now.setHours(now.getHours() + parseInt(obj.time.split(":")[0]));
-        now.setMinutes(now.getMinutes() + parseInt(obj.time.split(":")[1]));
-        let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
-        let minutes =
-          now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+    procedureField.map((field, i) => {
+      database.map((obj) => {
+        if (obj.id === eval("data.procedureInput_" + field.id)) {
+          let now = new Date();
 
-        setValue("procedureCode", obj.settlementProduct);
-        setValue("procedureTime", obj.time);
-        setValue("startTime", data.timeInput);
-        setValue("endTime", `${hour}:${minutes}`);
-      }
+          now.setHours(
+            i === 0
+              ? data.timeInput.split(":")[0]
+              : getValues(`endTime_${field.id - 1}`).split(":")[0]
+          );
+
+          now.setMinutes(
+            i === 0
+              ? data.timeInput.split(":")[1]
+              : Number(getValues(`endTime_${field.id - 1}`).split(":")[1]) + 1
+          );
+
+          let hourBefore =
+            now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+          let minutesBefore =
+            now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+
+          now.setHours(now.getHours() + parseInt(obj.time.split(":")[0]));
+          now.setMinutes(now.getMinutes() + parseInt(obj.time.split(":")[1]));
+
+          let hourAfter =
+            now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+          let minutesAfter =
+            now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+
+          setValue(`procedureCode_${field.id}`, obj.settlementProduct);
+          setValue(`procedureTime_${field.id}`, obj.time);
+          setValue(`startTime_${field.id}`, `${hourBefore}:${minutesBefore}`);
+          setValue(`endTime_${field.id}`, `${hourAfter}:${minutesAfter}`);
+        }
+      });
     });
   };
 
@@ -60,7 +117,10 @@ export const AppCountingPage = (props) => {
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(countData)}>
-          <AppCountingField database={database} />
+          <AppCountingField
+            database={database}
+            procedureField={procedureField}
+          />
           <div className={classes.buttonSection}>
             <Link className={classes.link}>
               <Typography variant={"h5-bold"} onClick={clearBtn}>

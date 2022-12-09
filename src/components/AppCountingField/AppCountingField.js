@@ -5,17 +5,14 @@ import { useFormContext } from "react-hook-form";
 import Typography from "../Typography";
 import TextField from "../TextField";
 import IconInfoAppCountingPage from "../Icons/IconInfoAppCountingPage";
-import IconPlusAppCounting from "../Icons/IconPlusAppCounting";
-import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
 import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
 
 import classes from "./styles.module.css";
 
 export const AppCountingField = (props) => {
-  const { className, database, ...otherProps } = props;
+  const { className, database, procedureField, ...otherProps } = props;
 
   const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
-  const [isIconShown, setIconShown] = React.useState("plus");
 
   const {
     register,
@@ -29,24 +26,6 @@ export const AppCountingField = (props) => {
       message: "Field is required.",
     },
   });
-
-  const registerProcedureInput = register("procedureInput", {
-    required: {
-      value: true,
-      message: "Field is required.",
-    },
-    maxLength: {
-      value: 4,
-      message: "You must type max 4 digits.",
-    },
-    validate: (procedureInput) =>
-      database.find((obj) => obj.id === procedureInput) ||
-      "Invalid procedure code.",
-  });
-  const registerProcedureCode = register("procedureCode");
-  const registerProcedureTime = register("procedureTime");
-  const registerStartTime = register("startTime");
-  const registerEndTime = register("endTime");
 
   React.useEffect(() => {
     setFocus("timeInput");
@@ -131,61 +110,16 @@ export const AppCountingField = (props) => {
           ) : null}
         </div>
       </div>
-      <div className={classes.tableBodyWrapper}>
-        <TextField
-          className={classes.textField}
-          inputAditionalClass={classes.inputCenterText}
-          type={"number"}
-          placeholder={"Type 93.00000..."}
-          errorMessage={errors.procedureInput && errors.procedureInput.message}
-          {...registerProcedureInput}
-        />
-        <TextField
-          className={`${classes.textField} ${classes.textField__modified}`}
-          inputAditionalClass={classes.inputCenterText}
-          defaultValue={""}
-          {...registerProcedureCode}
-          disabled={true}
-        />
-        <TextField
-          className={`${classes.textField} ${classes.textField__modified}`}
-          inputAditionalClass={classes.inputCenterText}
-          defaultValue={""}
-          {...registerProcedureTime}
-          disabled={true}
-        />
-        <TextField
-          className={`${classes.textField} ${classes.textField__modified}`}
-          inputAditionalClass={classes.inputCenterText}
-          defaultValue={""}
-          {...registerStartTime}
-          disabled={true}
-        />
-        <TextField
-          className={`${classes.textField} ${classes.textField__modified}`}
-          inputAditionalClass={classes.inputCenterText}
-          defaultValue={""}
-          {...registerEndTime}
-          disabled={true}
-        />
-        {isIconShown === "plus" ? (
-          <IconPlusAppCounting
-            className={classes.Icon}
-            onClick={() => setIconShown("minus")}
-          />
-        ) : isIconShown === "minus" ? (
-          <IconMinusAppCounting
-            className={classes.Icon}
-            onClick={() => setIconShown("plus")}
-          />
-        ) : null}
-      </div>
+      {procedureField.map((component) => {
+        return component.field;
+      })}
     </div>
   );
 };
 
 AppCountingField.propTypes = {
   className: PropTypes.string,
+  procedureField: PropTypes.arrayOf(PropTypes.object),
   database: PropTypes.arrayOf(PropTypes.object),
 };
 

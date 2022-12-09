@@ -3,7 +3,7 @@
 .tableHeaderWrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 }
 
 .textField {
@@ -49,25 +49,10 @@
   align-items: center;
 }
 
-.tableBodyWrapper {
-  display: flex;
-  align-items: center;
-}
-
 input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-.textField__modified {
-  margin-left: 5px;
-}
-
-.inputCenterText {
-  padding-left: 0;
-  text-align: center;
-}
-
-.Icon {
-  margin-left: 5px;
-  cursor: pointer;
+.procedureWrapper {
+  margin-top: 20px;
 }

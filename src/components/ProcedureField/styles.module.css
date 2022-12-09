@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.textField {
+  width: 150px;
+}
+
+.textField__modified {
+  margin-left: 5px;
+}
+
+.inputCenterText {
+  padding-left: 0;
+  text-align: center;
+}
+
+.Icon {
+  margin-left: 5px;
+  cursor: pointer;
+}
