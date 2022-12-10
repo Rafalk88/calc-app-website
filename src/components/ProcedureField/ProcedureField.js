@@ -23,99 +23,110 @@ export const ProcedureField = (props) => {
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
     >
-      <Controller
-        control={control}
-        name={`procedureInput_${fieldId}`}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className={classes.textField}
-            inputAditionalClass={classes.inputCenterText}
-            type={"number"}
-            placeholder={"Type 93.00000..."}
-            errorMessage={
-              errors.procedureInput_1 && errors.procedureInput_1.message
-            }
-          />
-        )}
-        defaultValue=""
-        rules={{
-          required: {
-            value: true,
-            message: "Field is required.",
-          },
-          maxLength: {
-            value: 4,
-            message: "You must type max 4 digits.",
-          },
-          validate: (procedureInput) =>
-            database.find((obj) => obj.id === procedureInput) ||
-            "Invalid procedure code.",
-        }}
-      />
-      <Controller
-        control={control}
-        name={`procedureCode_${fieldId}`}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className={`${classes.textField} ${classes.textField__modified}`}
-            inputAditionalClass={classes.inputCenterText}
-            disabled={true}
-          />
-        )}
-        defaultValue=""
-      />
-      <Controller
-        control={control}
-        name={`procedureTime_${fieldId}`}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className={`${classes.textField} ${classes.textField__modified}`}
-            inputAditionalClass={classes.inputCenterText}
-            disabled={true}
-          />
-        )}
-        defaultValue=""
-      />
-      <Controller
-        control={control}
-        name={`startTime_${fieldId}`}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className={`${classes.textField} ${classes.textField__modified}`}
-            inputAditionalClass={classes.inputCenterText}
-            disabled={true}
-          />
-        )}
-        defaultValue=""
-      />
-      <Controller
-        control={control}
-        name={`endTime_${fieldId}`}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className={`${classes.textField} ${classes.textField__modified}`}
-            inputAditionalClass={classes.inputCenterText}
-            disabled={true}
-          />
-        )}
-        defaultValue=""
-      />
-      {isIconShown === "plus" ? (
-        <IconPlusAppCounting
-          className={classes.Icon}
-          onClick={() => setIconShown("minus")}
+      <div className={classes.fieldWrapper}>
+        <Controller
+          control={control}
+          name={`procedureInput_${fieldId}`}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              className={classes.textField}
+              inputAditionalClass={classes.inputCenterText}
+              type={"number"}
+              placeholder={"Type 93.00000..."}
+              displayErrorText={false}
+              errorMessage={
+                eval("errors.procedureInput_" + fieldId) &&
+                eval("errors.procedureInput_" + fieldId).message
+              }
+            />
+          )}
+          defaultValue=""
+          rules={{
+            required: {
+              value: true,
+              message: "Field is required.",
+            },
+            maxLength: {
+              value: 4,
+              message: "You must type max 4 digits.",
+            },
+            validate: (procedureInput) =>
+              database.find((obj) => obj.id === procedureInput) ||
+              "Invalid procedure code.",
+          }}
         />
-      ) : isIconShown === "minus" ? (
-        <IconMinusAppCounting
-          className={classes.Icon}
-          onClick={() => setIconShown("plus")}
+        <Controller
+          control={control}
+          name={`procedureCode_${fieldId}`}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              className={`${classes.textField} ${classes.textField__modified}`}
+              inputAditionalClass={classes.inputCenterText}
+              disabled={true}
+            />
+          )}
+          defaultValue=""
         />
-      ) : null}
+        <Controller
+          control={control}
+          name={`procedureTime_${fieldId}`}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              className={`${classes.textField} ${classes.textField__modified}`}
+              inputAditionalClass={classes.inputCenterText}
+              disabled={true}
+            />
+          )}
+          defaultValue=""
+        />
+        <Controller
+          control={control}
+          name={`startTime_${fieldId}`}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              className={`${classes.textField} ${classes.textField__modified}`}
+              inputAditionalClass={classes.inputCenterText}
+              disabled={true}
+            />
+          )}
+          defaultValue=""
+        />
+        <Controller
+          control={control}
+          name={`endTime_${fieldId}`}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              className={`${classes.textField} ${classes.textField__modified}`}
+              inputAditionalClass={classes.inputCenterText}
+              disabled={true}
+            />
+          )}
+          defaultValue=""
+        />
+        {isIconShown === "plus" ? (
+          <IconPlusAppCounting
+            className={classes.Icon}
+            onClick={() => setIconShown("minus")}
+          />
+        ) : isIconShown === "minus" ? (
+          <IconMinusAppCounting
+            className={classes.Icon}
+            onClick={() => setIconShown("plus")}
+          />
+        ) : null}
+      </div>
+      {eval("errors.procedureInput_" + fieldId) ? (
+        <div className={classes.errorMessage}>
+          {eval("errors.procedureInput_" + fieldId).message}
+        </div>
+      ) : (
+        <div className={classes.spaceForError}></div>
+      )}
     </div>
   );
 };

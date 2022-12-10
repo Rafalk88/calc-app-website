@@ -11,18 +11,21 @@ import ProcedureField from "../ProcedureField";
 
 import classes from "./styles.module.css";
 
+const ID = 1;
+
 export const AppCountingPage = (props) => {
   const { className, database, ...otherProps } = props;
 
+  const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
   const [procedureField, setProcedureField] = React.useState([
     {
-      id: 1,
+      id: ID,
       field: (
         <ProcedureField
-          key={1}
+          key={ID}
           className={classes.procedureWrapper}
           database={database}
-          fieldId={"1"}
+          fieldId={`${ID}`}
         />
       ),
     },
@@ -53,7 +56,14 @@ export const AppCountingPage = (props) => {
   const [onClickBackToLogin] = useOutletContext();
 
   const methods = useForm();
-  const { handleSubmit, setValue, reset, getValues } = methods;
+  const {
+    handleSubmit,
+    setValue,
+    reset,
+    getValues,
+    formState: { isDirty },
+    setFocus,
+  } = methods;
 
   const countData = (data) => {
     procedureField.map((field, i) => {
@@ -99,6 +109,10 @@ export const AppCountingPage = (props) => {
     reset();
   }, [reset]);
 
+  React.useEffect(() => {
+    !isDirty ? setFocus("timeInput") : null;
+  }, [setFocus, isDirty]);
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -120,6 +134,7 @@ export const AppCountingPage = (props) => {
           <AppCountingField
             database={database}
             procedureField={procedureField}
+            infoShown={[isInfoShown, setInfoShown]}
           />
           <div className={classes.buttonSection}>
             <Link className={classes.link}>

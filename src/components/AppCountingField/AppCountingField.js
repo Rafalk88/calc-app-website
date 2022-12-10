@@ -10,13 +10,11 @@ import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
 import classes from "./styles.module.css";
 
 export const AppCountingField = (props) => {
-  const { className, database, procedureField, ...otherProps } = props;
-
-  const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
+  const { className, procedureField, infoShown, ...otherProps } = props;
+  const [isInfoShown, setInfoShown] = infoShown;
 
   const {
     register,
-    setFocus,
     formState: { errors },
   } = useFormContext();
 
@@ -26,10 +24,6 @@ export const AppCountingField = (props) => {
       message: "Field is required.",
     },
   });
-
-  React.useEffect(() => {
-    setFocus("timeInput");
-  }, [setFocus]);
 
   return (
     <div
@@ -41,6 +35,7 @@ export const AppCountingField = (props) => {
           className={classes.textField}
           inputAditionalClass={classes.inputCenterText}
           type={"time"}
+          displayErrorText={false}
           errorMessage={errors.timeInput && errors.timeInput.message}
           {...registerTimeInput}
         />
@@ -110,6 +105,11 @@ export const AppCountingField = (props) => {
           ) : null}
         </div>
       </div>
+      {errors.timeInput ? (
+        <div className={classes.errorMessage}>{errors.timeInput.message}</div>
+      ) : (
+        <div className={classes.spaceForError}></div>
+      )}
       {procedureField.map((component) => {
         return component.field;
       })}
@@ -119,8 +119,8 @@ export const AppCountingField = (props) => {
 
 AppCountingField.propTypes = {
   className: PropTypes.string,
+  infoShown: PropTypes.array,
   procedureField: PropTypes.arrayOf(PropTypes.object),
-  database: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default AppCountingField;

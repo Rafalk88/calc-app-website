@@ -3,7 +3,7 @@
 .tableHeaderWrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .textField {
@@ -53,6 +53,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-.procedureWrapper {
-  margin-top: 20px;
+.errorMessage {
+  width: 100%;
+  padding-left: 15px;
+  color: rgba(255, 0, 0, 1);
+  font-size: 14px;
+}
+
+.spaceForError {
+  height: 18px;
 }

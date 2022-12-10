@@ -14,6 +14,7 @@ export const TextField = React.forwardRef((props, ref) => {
     errorMessage,
     type,
     passwordShown,
+    displayErrorText = true,
     repeatPasswordShown,
     tooglePassword,
     toogleRepeatPassword,
@@ -62,7 +63,7 @@ export const TextField = React.forwardRef((props, ref) => {
           )
         ) : null}
       </div>
-      {errorMessage ? (
+      {displayErrorText && errorMessage ? (
         <div className={classes.errorMessage}>{errorMessage}</div>
       ) : null}
     </div>
@@ -78,6 +79,7 @@ TextField.propTypes = {
   errorMessage: PropTypes.node,
   type: PropTypes.string,
   passwordShown: PropTypes.bool,
+  displayErrorText: PropTypes.bool,
   repeatPasswordShown: PropTypes.bool,
   tooglePassword: PropTypes.func,
   toogleRepeatPassword: PropTypes.func,

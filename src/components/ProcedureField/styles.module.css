@@ -1,14 +1,14 @@
 .root {
   display: flex;
+  flex-direction: column;
+  }
+  
+  .fieldWrapper {
+    display: flex;
   align-items: center;
 }
-
 .textField {
   width: 150px;
-}
-
-.textField__modified {
-  margin-left: 5px;
 }
 
 .inputCenterText {
@@ -16,7 +16,20 @@
   text-align: center;
 }
 
+.textField__modified {
+  margin-left: 5px;
+}
 .Icon {
   margin-left: 5px;
   cursor: pointer;
+}
+.errorMessage {
+  width: 100%;
+  padding-left: 15px;
+  color: rgba(255, 0, 0, 1);
+  font-size: 14px;
+}
+
+.spaceForError {
+  height: 18px;
 }

@@ -4,6 +4,9 @@
   margin-top: 49px;
 }
 
+.procedureWrapper {
+  margin-top: 7px;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
