@@ -19,10 +19,7 @@
 .textField__modified {
   margin-left: 5px;
 }
-.Icon {
-  margin-left: 5px;
-  cursor: pointer;
-}
+
 .errorMessage {
   width: 100%;
   padding-left: 15px;

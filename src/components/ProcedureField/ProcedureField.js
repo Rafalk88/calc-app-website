@@ -3,15 +3,11 @@ import PropTypes from "prop-types";
 import { useFormContext, Controller } from "react-hook-form";
 
 import TextField from "../TextField";
-import IconPlusAppCounting from "../Icons/IconPlusAppCounting";
-import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
 
 import classes from "./styles.module.css";
 
 export const ProcedureField = (props) => {
-  const { className, database, fieldId, ...otherProps } = props;
-
-  const [isIconShown, setIconShown] = React.useState("plus");
+  const { className, database, fieldId, addField, ...otherProps } = props;
 
   const {
     formState: { errors },
@@ -108,17 +104,6 @@ export const ProcedureField = (props) => {
           )}
           defaultValue=""
         />
-        {isIconShown === "plus" ? (
-          <IconPlusAppCounting
-            className={classes.Icon}
-            onClick={() => setIconShown("minus")}
-          />
-        ) : isIconShown === "minus" ? (
-          <IconMinusAppCounting
-            className={classes.Icon}
-            onClick={() => setIconShown("plus")}
-          />
-        ) : null}
       </div>
       {eval("errors.procedureInput_" + fieldId) ? (
         <div className={classes.errorMessage}>
@@ -134,6 +119,7 @@ export const ProcedureField = (props) => {
 ProcedureField.propTypes = {
   className: PropTypes.string,
   fieldId: PropTypes.string,
+  addField: PropTypes.func,
 };
 
 export default ProcedureField;

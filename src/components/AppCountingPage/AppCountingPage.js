@@ -5,53 +5,48 @@ import { useForm, FormProvider } from "react-hook-form";
 
 import Typography from "../Typography";
 import Link from "../Link";
-import AppCountingField from "../AppCountingField";
+import AppCountingHeader from "../AppCountingHeader";
 import Button from "../Button";
 import ProcedureField from "../ProcedureField";
+import IconPlusAppCounting from "../Icons/IconPlusAppCounting";
+import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
 
 import classes from "./styles.module.css";
 
-const ID = 1;
+let ID = 1;
 
 export const AppCountingPage = (props) => {
   const { className, database, ...otherProps } = props;
 
   const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
-  const [procedureField, setProcedureField] = React.useState([
-    {
-      id: ID,
-      field: (
-        <ProcedureField
-          key={ID}
-          className={classes.procedureWrapper}
-          database={database}
-          fieldId={`${ID}`}
-        />
-      ),
-    },
-    {
-      id: 2,
-      field: (
-        <ProcedureField
-          key={2}
-          className={classes.procedureWrapper}
-          database={database}
-          fieldId={"2"}
-        />
-      ),
-    },
-    {
-      id: 3,
-      field: (
-        <ProcedureField
-          key={3}
-          className={classes.procedureWrapper}
-          database={database}
-          fieldId={"3"}
-        />
-      ),
-    },
+  const [isIconShown, setIconShown] = React.useState([
+    "plus",
+    "plus",
+    "plus",
+    "plus",
+    "minus",
   ]);
+  const [procedureField, setProcedureField] = React.useState([]);
+
+  const firstField = () => {
+    return setProcedureField([
+      {
+        id: ID,
+        field: (
+          <ProcedureField
+            key={ID}
+            className={classes.procedureWrapper}
+            database={database}
+            fieldId={`${ID}`}
+          />
+        ),
+      },
+    ]);
+  };
+
+  React.useEffect(() => {
+    firstField();
+  }, []);
 
   const [onClickBackToLogin] = useOutletContext();
 
@@ -106,12 +101,50 @@ export const AppCountingPage = (props) => {
   };
 
   const clearBtn = React.useCallback(() => {
+    ID = 1;
+    firstField();
+    setIconShown((array) =>
+      array.map((arrayItem, index) => {
+        if (index === 4) return (arrayItem = "minus");
+        if (index !== 4) return (arrayItem = "plus");
+      })
+    );
     reset();
-  }, [reset]);
+  }, [firstField, setIconShown, reset]);
 
   React.useEffect(() => {
     !isDirty ? setFocus("timeInput") : null;
   }, [setFocus, isDirty]);
+
+  const addField = React.useCallback(() => {
+    ID += 1;
+    setProcedureField((oldArray) => {
+      return [
+        ...oldArray,
+        {
+          id: ID,
+          field: (
+            <ProcedureField
+              key={ID}
+              className={classes.procedureWrapper}
+              database={database}
+              fieldId={`${ID}`}
+            />
+          ),
+        },
+      ];
+    });
+  }, [setProcedureField]);
+
+  const removeField = React.useCallback(
+    (id) => {
+      ID -= 1;
+      setProcedureField((oldArray) => {
+        return oldArray.filter((arrayItem) => arrayItem.id !== id);
+      });
+    },
+    [setProcedureField]
+  );
 
   return (
     <div
@@ -131,11 +164,53 @@ export const AppCountingPage = (props) => {
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(countData)}>
-          <AppCountingField
+          <AppCountingHeader
             database={database}
             procedureField={procedureField}
             infoShown={[isInfoShown, setInfoShown]}
           />
+          {procedureField &&
+            procedureField.map((component, i) => {
+              return (
+                <div key={i} className={classes.procedureFieldWrapper}>
+                  {component.field}
+                  {isIconShown[i] === "plus" ? (
+                    <IconPlusAppCounting
+                      className={classes.Icon}
+                      onClick={() => {
+                        setIconShown((array) =>
+                          array.map((arrayItem, index) => {
+                            if (index < i) return arrayItem;
+                            if (index === i) return (arrayItem = "minus");
+                            if (index > i && index < 4)
+                              return (arrayItem = "plus");
+                            if (index === 4) return arrayItem;
+                          })
+                        );
+                        addField();
+                      }}
+                      disabled={!procedureField[i + 1] ? false : true}
+                    />
+                  ) : isIconShown[i] === "minus" ? (
+                    <IconMinusAppCounting
+                      className={classes.Icon}
+                      onClick={() => {
+                        i === 1
+                          ? setIconShown((array) =>
+                              array.map((arrayItem, index) => {
+                                if (index === 4) return (arrayItem = "minus");
+                                if (index !== 4) return (arrayItem = "plus");
+                              })
+                            )
+                          : null;
+                        removeField(i + 1);
+                      }}
+                      disabled={procedureField[i + 1] ? true : false}
+                    />
+                  ) : null}
+                </div>
+              );
+            })}
           <div className={classes.buttonSection}>
             <Link className={classes.link}>
               <Typography variant={"h5-bold"} onClick={clearBtn}>

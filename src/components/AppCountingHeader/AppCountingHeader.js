@@ -9,7 +9,7 @@ import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
 
 import classes from "./styles.module.css";
 
-export const AppCountingField = (props) => {
+export const AppCountingHeader = (props) => {
   const { className, procedureField, infoShown, ...otherProps } = props;
   const [isInfoShown, setInfoShown] = infoShown;
 
@@ -110,17 +110,14 @@ export const AppCountingField = (props) => {
       ) : (
         <div className={classes.spaceForError}></div>
       )}
-      {procedureField.map((component) => {
-        return component.field;
-      })}
     </div>
   );
 };
 
-AppCountingField.propTypes = {
+AppCountingHeader.propTypes = {
   className: PropTypes.string,
   infoShown: PropTypes.array,
   procedureField: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default AppCountingField;
+export default AppCountingHeader;
