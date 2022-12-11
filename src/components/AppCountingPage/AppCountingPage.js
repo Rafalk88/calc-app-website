@@ -146,10 +146,19 @@ export const AppCountingPage = (props) => {
     [setProcedureField]
   );
 
+  const handleKeyDown = (e) => {
+    if (procedureField.length <= 4 && e.key === "n") {
+      addField();
+    }
+    if (procedureField.length > 1 && e.key === "r")
+      removeField(procedureField.length);
+  };
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
+      onKeyDown={handleKeyDown}
     >
       <Typography className={classes.title} variant={"title1"}>
         Counting procedures app
