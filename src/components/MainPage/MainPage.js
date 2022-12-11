@@ -19,14 +19,6 @@ export const MainPage = (props) => {
     navigate("app-page");
   }, [navigate]);
 
-  const onClickDBPage = React.useCallback(() => {
-    navigate("app-page");
-  }, [navigate]);
-
-  const onClickStatisticPage = React.useCallback(() => {
-    navigate("app-page");
-  }, [navigate]);
-
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -48,20 +40,6 @@ export const MainPage = (props) => {
         >
           <CountingAppIcon className={classes.icon} />
           <Typography variant={"h3-bold"}>START COUNTING APP</Typography>
-        </Button>
-        <Button
-          className={classes.mainPageButton}
-          variant={"main_menu"}
-          onClick={onClickDBPage}
-        >
-          EDIT DATABASE
-        </Button>
-        <Button
-          className={classes.mainPageButton}
-          variant={"main_menu"}
-          onClick={onClickStatisticPage}
-        >
-          STATISTICS
         </Button>
       </div>
     </div>
