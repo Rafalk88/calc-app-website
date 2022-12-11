@@ -1,12 +1,16 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
+import classes from "./styles.module.css";
+
 const IconMinusAppCounting = (props) => {
   const { className, onClick, disabled, ...otherProps } = props;
 
   return (
     <button
-      className={`${className ? ` ${className}` : ""}`}
+      className={`${classes.root}${className ? ` ${className}` : ""}${
+        disabled ? ` ${classes.iconDisabled}` : ""
+      }`}
       type={"button"}
       disabled={disabled}
       onClick={onClick}
