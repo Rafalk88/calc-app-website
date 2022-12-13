@@ -1,17 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
+import { GlobalDataContext } from "../../contexts/GlobalDataContext";
 import TextField from "../TextField";
 
 import classes from "./styles.module.css";
 
+const procedureInputOptions = {
+  required: {
+    value: true,
+    message: "Field is required.",
+  },
+  maxLength: {
+    value: 4,
+    message: "You must type max 4 digits.",
+  },
+};
+
+const otherInputsOptions = {
+  disabled: true,
+};
+
 export const ProcedureField = (props) => {
-  const { className, database, fieldId, addField, ...otherProps } = props;
+  const { className, names, ...otherProps } = props;
+
+  const database = React.useContext(GlobalDataContext);
 
   const {
+    register,
     formState: { errors },
-    control,
+    isValid,
   } = useFormContext();
 
   return (
@@ -20,95 +40,49 @@ export const ProcedureField = (props) => {
       {...otherProps}
     >
       <div className={classes.fieldWrapper}>
-        <Controller
-          control={control}
-          name={`procedureInput_${fieldId}`}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className={classes.textField}
-              inputAditionalClass={classes.inputCenterText}
-              type={"number"}
-              placeholder={"Type 93.00000..."}
-              displayErrorText={false}
-              errorMessage={
-                eval("errors.procedureInput_" + fieldId) &&
-                eval("errors.procedureInput_" + fieldId).message
-              }
-            />
-          )}
-          defaultValue=""
-          rules={{
-            required: {
-              value: true,
-              message: "Field is required.",
-            },
-            maxLength: {
-              value: 4,
-              message: "You must type max 4 digits.",
-            },
-            validate: (procedureInput) =>
-              database.find((obj) => obj.id === procedureInput) ||
+        <TextField
+          className={classes.textField}
+          inputAditionalClass={classes.inputCenterText}
+          type={"number"}
+          placeholder={"Type 93.00000..."}
+          displayErrorText={false}
+          {...register(names[0], {
+            ...procedureInputOptions,
+            validate: (inputValue) =>
+              database.find((obj) => obj.id === inputValue) ||
               "Invalid procedure code.",
-          }}
+          })}
+          errorMessage={isValid}
         />
-        <Controller
-          control={control}
-          name={`procedureCode_${fieldId}`}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className={`${classes.textField} ${classes.textField__modified}`}
-              inputAditionalClass={classes.inputCenterText}
-              disabled={true}
-            />
-          )}
-          defaultValue=""
+        <TextField
+          className={`${classes.textField} ${classes.textField__modified}`}
+          inputAditionalClass={classes.inputCenterText}
+          {...register(names[1], otherInputsOptions)}
         />
-        <Controller
-          control={control}
-          name={`procedureTime_${fieldId}`}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className={`${classes.textField} ${classes.textField__modified}`}
-              inputAditionalClass={classes.inputCenterText}
-              disabled={true}
-            />
-          )}
-          defaultValue=""
+        <TextField
+          className={`${classes.textField} ${classes.textField__modified}`}
+          inputAditionalClass={classes.inputCenterText}
+          {...register(names[2], otherInputsOptions)}
         />
-        <Controller
-          control={control}
-          name={`startTime_${fieldId}`}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className={`${classes.textField} ${classes.textField__modified}`}
-              inputAditionalClass={classes.inputCenterText}
-              disabled={true}
-            />
-          )}
-          defaultValue=""
+        <TextField
+          className={`${classes.textField} ${classes.textField__modified}`}
+          inputAditionalClass={classes.inputCenterText}
+          {...register(names[3], otherInputsOptions)}
         />
-        <Controller
-          control={control}
-          name={`endTime_${fieldId}`}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              className={`${classes.textField} ${classes.textField__modified}`}
-              inputAditionalClass={classes.inputCenterText}
-              disabled={true}
-            />
-          )}
-          defaultValue=""
+        <TextField
+          className={`${classes.textField} ${classes.textField__modified}`}
+          inputAditionalClass={classes.inputCenterText}
+          {...register(names[4], otherInputsOptions)}
         />
       </div>
-      {eval("errors.procedureInput_" + fieldId) ? (
-        <div className={classes.errorMessage}>
-          {eval("errors.procedureInput_" + fieldId).message}
-        </div>
+      {isValid ? (
+        <ErrorMessage
+          errors={errors}
+          name={names[0]}
+          render={(message) => (
+            <div className={classes.errorMessage}>{message}</div>
+          )}
+        />
       ) : (
         <div className={classes.spaceForError}></div>
       )}
@@ -118,8 +92,7 @@ export const ProcedureField = (props) => {
 
 ProcedureField.propTypes = {
   className: PropTypes.string,
-  fieldId: PropTypes.string,
-  addField: PropTypes.func,
+  names: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default ProcedureField;

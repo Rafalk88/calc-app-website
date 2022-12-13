@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useOutletContext } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 
+import { GlobalDataContext } from "../../contexts/GlobalDataContext";
 import Typography from "../Typography";
 import Link from "../Link";
 import AppCountingHeader from "../AppCountingHeader";
@@ -13,145 +14,199 @@ import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
 
 import classes from "./styles.module.css";
 
-let ID = 1;
+const infoInitialState = [false, false, false];
+const filedsInitialState = [
+  {
+    id: 0,
+    isDisplayed: true,
+    additionalIcon: "plus",
+    component: (
+      <ProcedureField
+        names={[
+          "procedureInput_0",
+          "procedureCode_0",
+          "procedureTime_0",
+          "startTime_0",
+          "endTime_0",
+        ]}
+      />
+    ),
+  },
+  {
+    id: 1,
+    isDisplayed: false,
+    additionalIcon: "plus",
+    component: (
+      <ProcedureField
+        names={[
+          "procedureInput_1",
+          "procedureCode_1",
+          "procedureTime_1",
+          "startTime_1",
+          "endTime_1",
+        ]}
+      />
+    ),
+  },
+  {
+    id: 2,
+    isDisplayed: false,
+    additionalIcon: "plus",
+    component: (
+      <ProcedureField
+        names={[
+          "procedureInput_2",
+          "procedureCode_2",
+          "procedureTime_2",
+          "startTime_2",
+          "endTime_2",
+        ]}
+      />
+    ),
+  },
+  {
+    id: 3,
+    isDisplayed: false,
+    additionalIcon: "plus",
+    component: (
+      <ProcedureField
+        names={[
+          "procedureInput_3",
+          "procedureCode_3",
+          "procedureTime_3",
+          "startTime_3",
+          "endTime_3",
+        ]}
+      />
+    ),
+  },
+  {
+    id: 4,
+    isDisplayed: false,
+    additionalIcon: "minus",
+    component: (
+      <ProcedureField
+        names={[
+          "procedureInput_4",
+          "procedureCode_4",
+          "procedureTime_4",
+          "startTime_4",
+          "endTime_4",
+        ]}
+      />
+    ),
+  },
+];
+let now = new Date();
 
 export const AppCountingPage = (props) => {
-  const { className, database, ...otherProps } = props;
+  const { className, ...otherProps } = props;
 
-  const [isInfoShown, setInfoShown] = React.useState([false, false, false]);
-  const [isIconShown, setIconShown] = React.useState([
-    "plus",
-    "plus",
-    "plus",
-    "plus",
-    "minus",
-  ]);
-  const [procedureField, setProcedureField] = React.useState([]);
-
-  const firstField = () => {
-    return setProcedureField([
-      {
-        id: ID,
-        field: (
-          <ProcedureField
-            key={ID}
-            className={classes.procedureWrapper}
-            database={database}
-            fieldId={`${ID}`}
-          />
-        ),
-      },
-    ]);
-  };
-
-  React.useEffect(() => {
-    firstField();
-  }, []);
+  const [isInfoShown, setInfoShown] = React.useState(infoInitialState);
+  const [fields, setFields] = React.useState(filedsInitialState);
 
   const [onClickBackToLogin] = useOutletContext();
-
-  const methods = useForm();
+  const database = React.useContext(GlobalDataContext);
+  const methods = useForm({ defaultValues: "" });
   const {
     handleSubmit,
     setValue,
-    reset,
+    setFocus,
     getValues,
     formState: { isDirty },
-    setFocus,
+    reset,
   } = methods;
 
   const countData = (data) => {
-    procedureField.map((field, i) => {
-      database.map((obj) => {
-        if (obj.id === eval("data.procedureInput_" + field.id)) {
-          let now = new Date();
+    fields.map((field, index) => {
+      if (field.isDisplayed === true) {
+        database.map((obj) => {
+          if (obj.id === getValues(`procedureInput_${field.id}`)) {
+            if (index === 0) {
+              now.setHours(data.timeInput.split(":")[0]);
+              now.setMinutes(data.timeInput.split(":")[1]);
+            }
 
-          now.setHours(
-            i === 0
-              ? data.timeInput.split(":")[0]
-              : getValues(`endTime_${field.id - 1}`).split(":")[0]
-          );
+            if (index > 0) {
+              now.setHours(getValues(`endTime_${field.id - 1}`).split(":")[0]);
+              now.setMinutes(
+                Number(getValues(`endTime_${field.id - 1}`).split(":")[1]) + 1
+              );
+            }
 
-          now.setMinutes(
-            i === 0
-              ? data.timeInput.split(":")[1]
-              : Number(getValues(`endTime_${field.id - 1}`).split(":")[1]) + 1
-          );
+            let hourBefore =
+              now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+            let minutesBefore =
+              now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
 
-          let hourBefore =
-            now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
-          let minutesBefore =
-            now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+            now.setHours(now.getHours() + parseInt(obj.time.split(":")[0]));
+            now.setMinutes(now.getMinutes() + parseInt(obj.time.split(":")[1]));
 
-          now.setHours(now.getHours() + parseInt(obj.time.split(":")[0]));
-          now.setMinutes(now.getMinutes() + parseInt(obj.time.split(":")[1]));
+            let hourAfter =
+              now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+            let minutesAfter =
+              now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
 
-          let hourAfter =
-            now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
-          let minutesAfter =
-            now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
-
-          setValue(`procedureCode_${field.id}`, obj.settlementProduct);
-          setValue(`procedureTime_${field.id}`, obj.time);
-          setValue(`startTime_${field.id}`, `${hourBefore}:${minutesBefore}`);
-          setValue(`endTime_${field.id}`, `${hourAfter}:${minutesAfter}`);
-        }
-      });
+            setValue(`procedureCode_${field.id}`, obj.settlementProduct);
+            setValue(`procedureTime_${field.id}`, obj.time);
+            setValue(`startTime_${field.id}`, `${hourBefore}:${minutesBefore}`);
+            setValue(`endTime_${field.id}`, `${hourAfter}:${minutesAfter}`);
+          }
+        });
+      }
     });
   };
 
-  const clearBtn = React.useCallback(() => {
-    ID = 1;
-    firstField();
-    setIconShown((array) =>
-      array.map((arrayItem, index) => {
-        if (index === 4) return (arrayItem = "minus");
-        if (index !== 4) return (arrayItem = "plus");
-      })
-    );
+  const onClickClearBtn = React.useCallback(() => {
+    setFields(filedsInitialState);
     reset();
-  }, [firstField, setIconShown, reset]);
+  }, [isInfoShown, setFields]);
 
   React.useEffect(() => {
     !isDirty ? setFocus("timeInput") : null;
   }, [setFocus, isDirty]);
 
-  const addField = React.useCallback(() => {
-    ID += 1;
-    setProcedureField((oldArray) => {
-      return [
-        ...oldArray,
-        {
-          id: ID,
-          field: (
-            <ProcedureField
-              key={ID}
-              className={classes.procedureWrapper}
-              database={database}
-              fieldId={`${ID}`}
-            />
-          ),
-        },
-      ];
-    });
-  }, [setProcedureField]);
+  const handleSearchIndex = React.useCallback(
+    (fnName, displayValue) => {
+      if (fnName === "findIndex") {
+        const searchIndex = fields.findIndex(
+          (field) => field.isDisplayed === displayValue
+        );
+        return searchIndex;
+      }
+      if (fnName === "findLastIndex") {
+        const searchIndex = fields.findLastIndex(
+          (field) => field.isDisplayed === true
+        );
+        return searchIndex;
+      }
+      return searchIndex;
+    },
+    [fields]
+  );
 
-  const removeField = React.useCallback(
-    (id) => {
-      ID -= 1;
-      setProcedureField((oldArray) => {
-        return oldArray.filter((arrayItem) => arrayItem.id !== id);
+  const toogleProcedureField = React.useCallback(
+    (fnName, displayValue, iconValue) => {
+      let searchIndex = handleSearchIndex(fnName, displayValue);
+      setFields((fields) => {
+        return fields.map((field, index) => {
+          if (index === searchIndex - 1)
+            return { ...field, additionalIcon: iconValue };
+          if (index === searchIndex) {
+            return { ...field, isDisplayed: !displayValue };
+          }
+          return { ...field };
+        });
       });
     },
-    [setProcedureField]
+    [fields, setFields]
   );
 
   const handleKeyDown = (e) => {
-    if (procedureField.length <= 4 && e.key === "n") {
-      addField();
+    if (e.key === "s") {
     }
-    if (procedureField.length > 1 && e.key === "r")
-      removeField(procedureField.length);
+    if (e.key === "w") {
+    }
   };
 
   return (
@@ -170,59 +225,39 @@ export const AppCountingPage = (props) => {
         enter the appropriate procedure code. If you want to add more
         procedures, use the 'plus' at the end of the table. After approval, the
         application will display the times of treatments as well as their hours.
+        It is possible to use keyboard shortcuts. Use the 'n' key to add a
+        field, use the 'r' key to remove it.
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(countData)}>
-          <AppCountingHeader
-            database={database}
-            procedureField={procedureField}
-            infoShown={[isInfoShown, setInfoShown]}
-          />
-          {procedureField &&
-            procedureField.map((component, i) => {
-              return (
-                <div key={i} className={classes.procedureFieldWrapper}>
-                  {component.field}
-                  {isIconShown[i] === "plus" ? (
-                    <IconPlusAppCounting
-                      className={classes.Icon}
-                      onClick={() => {
-                        setIconShown((array) =>
-                          array.map((arrayItem, index) => {
-                            if (index < i) return arrayItem;
-                            if (index === i) return (arrayItem = "minus");
-                            if (index > i && index < 4)
-                              return (arrayItem = "plus");
-                            if (index === 4) return arrayItem;
-                          })
-                        );
-                        addField();
-                      }}
-                      disabled={!procedureField[i + 1] ? false : true}
-                    />
-                  ) : isIconShown[i] === "minus" ? (
-                    <IconMinusAppCounting
-                      className={classes.Icon}
-                      onClick={() => {
-                        i === 1
-                          ? setIconShown((array) =>
-                              array.map((arrayItem, index) => {
-                                if (index === 4) return (arrayItem = "minus");
-                                if (index !== 4) return (arrayItem = "plus");
-                              })
-                            )
-                          : null;
-                        removeField(i + 1);
-                      }}
-                      disabled={procedureField[i + 1] ? true : false}
-                    />
-                  ) : null}
-                </div>
-              );
-            })}
+          <AppCountingHeader infoShown={[isInfoShown, setInfoShown]} />
+          {fields.map((field, index) => {
+            return (
+              <div key={index} className={classes.procedureFieldWrapper}>
+                {field.isDisplayed === true ? field.component : null}
+                {field.isDisplayed === true &&
+                field.additionalIcon === "plus" ? (
+                  <IconPlusAppCounting
+                    className={classes.Icon}
+                    onClick={() =>
+                      toogleProcedureField("findIndex", false, "minus")
+                    }
+                  />
+                ) : field.isDisplayed === true &&
+                  field.additionalIcon === "minus" ? (
+                  <IconMinusAppCounting
+                    className={classes.Icon}
+                    onClick={() =>
+                      toogleProcedureField("findLastIndex", true, "plus")
+                    }
+                  />
+                ) : null}
+              </div>
+            );
+          })}
           <div className={classes.buttonSection}>
             <Link className={classes.link}>
-              <Typography variant={"h5-bold"} onClick={clearBtn}>
+              <Typography variant={"h5-bold"} onClick={onClickClearBtn}>
                 Clear
               </Typography>
             </Link>
@@ -254,7 +289,6 @@ export const AppCountingPage = (props) => {
 
 AppCountingPage.propTypes = {
   className: PropTypes.string,
-  database: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default AppCountingPage;

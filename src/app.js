@@ -30,6 +30,7 @@ import {
 } from "./auth";
 import { handleHTTPErrors } from "./handleHTTPErrors";
 import { getAll as getAllProcedures } from "./components/api/procedures";
+import { GlobalDataContext } from "./contexts/GlobalDataContext";
 
 export const App = () => {
   // global state
@@ -148,19 +149,21 @@ export const App = () => {
   return (
     <>
       {isUserLoged ? (
-        <Routes>
-          <Route
-            path={"/"}
-            element={<PageMainLogged onClickLogOut={onClickLogOut} />}
-          >
-            <Route path={"/"} element={<MainPage />} />
+        <GlobalDataContext.Provider value={procedures}>
+          <Routes>
             <Route
-              path={"app-page"}
-              element={<AppCountingPage database={procedures} />}
+              path={"/"}
+              element={<PageMainLogged onClickLogOut={onClickLogOut} />}
+            >
+              <Route path={"/"} element={<MainPage />} />
+              <Route path={"app-page"} element={<AppCountingPage />} />
+            </Route>
+            <Route
+              path={"*"}
+              element={<FullPage404Error buttonLabel={"OK"} />}
             />
-          </Route>
-          <Route path={"*"} element={<FullPage404Error buttonLabel={"OK"} />} />
-        </Routes>
+          </Routes>
+        </GlobalDataContext.Provider>
       ) : null}
 
       {!isUserLoged ? (

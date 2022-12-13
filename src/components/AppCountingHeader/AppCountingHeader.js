@@ -10,7 +10,7 @@ import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
 import classes from "./styles.module.css";
 
 export const AppCountingHeader = (props) => {
-  const { className, procedureField, infoShown, ...otherProps } = props;
+  const { className, infoShown, ...otherProps } = props;
   const [isInfoShown, setInfoShown] = infoShown;
 
   const {
@@ -117,7 +117,6 @@ export const AppCountingHeader = (props) => {
 AppCountingHeader.propTypes = {
   className: PropTypes.string,
   infoShown: PropTypes.array,
-  procedureField: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default AppCountingHeader;
