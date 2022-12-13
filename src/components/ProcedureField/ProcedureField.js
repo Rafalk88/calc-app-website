@@ -5,17 +5,22 @@ import { ErrorMessage } from "@hookform/error-message";
 
 import { GlobalDataContext } from "../../contexts/GlobalDataContext";
 import TextField from "../TextField";
+import {
+  PROC_INPUT_IS_REQ_ERROR,
+  PROC_INPUT_LENGTH_ERROR,
+  PROC_INPUT_VALIDATION_ERROR,
+} from "../../consts";
 
 import classes from "./styles.module.css";
 
 const procedureInputOptions = {
   required: {
     value: true,
-    message: "Field is required.",
+    message: PROC_INPUT_IS_REQ_ERROR,
   },
   maxLength: {
     value: 4,
-    message: "You must type max 4 digits.",
+    message: PROC_INPUT_LENGTH_ERROR,
   },
 };
 
@@ -29,9 +34,9 @@ export const ProcedureField = (props) => {
   const database = React.useContext(GlobalDataContext);
 
   const {
-    register,
     formState: { errors },
     isValid,
+    register,
   } = useFormContext();
 
   return (
@@ -42,17 +47,17 @@ export const ProcedureField = (props) => {
       <div className={classes.fieldWrapper}>
         <TextField
           className={classes.textField}
-          inputAditionalClass={classes.inputCenterText}
-          type={"number"}
-          placeholder={"Type 93.00000..."}
           displayErrorText={false}
+          errorMessage={isValid}
+          inputAditionalClass={classes.inputCenterText}
+          placeholder={"Type 93.00000..."}
+          type={"number"}
           {...register(names[0], {
             ...procedureInputOptions,
             validate: (inputValue) =>
               database.find((obj) => obj.id === inputValue) ||
-              "Invalid procedure code.",
+              PROC_INPUT_VALIDATION_ERROR,
           })}
-          errorMessage={isValid}
         />
         <TextField
           className={`${classes.textField} ${classes.textField__modified}`}
