@@ -6,7 +6,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { GlobalDataContext } from "../../contexts/GlobalDataContext";
 import TextField from "../TextField";
 import {
-  PROC_INPUT_IS_REQ_ERROR,
+  IS_REQ_ERROR,
   PROC_INPUT_LENGTH_ERROR,
   PROC_INPUT_VALIDATION_ERROR,
 } from "../../consts";
@@ -16,7 +16,7 @@ import classes from "./styles.module.css";
 const procedureInputOptions = {
   required: {
     value: true,
-    message: PROC_INPUT_IS_REQ_ERROR,
+    message: IS_REQ_ERROR,
   },
   maxLength: {
     value: 4,

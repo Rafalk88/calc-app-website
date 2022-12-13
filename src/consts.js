@@ -11,7 +11,7 @@ export const RECOVER_PASSWORD_VALIDATION_ERROR = "Passwords must be the same.";
 export const CREATE_ACCOUNT_SUCCESS_INFO = "User account created.";
 export const RECOVER_PASSWORD_SUCCESS_INFO = "Check Your inbox.";
 
-// ProcedureField
-export const PROC_INPUT_IS_REQ_ERROR = "Field is required."
+export const IS_REQ_ERROR = "Field is required.";
 export const PROC_INPUT_LENGTH_ERROR = "You must type max 4 digits."
 export const PROC_INPUT_VALIDATION_ERROR = "Invalid procedure code."
+
