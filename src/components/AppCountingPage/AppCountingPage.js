@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useOutletContext } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
+import { useList } from "react-use";
 
 import { GlobalDataContext } from "../../contexts/GlobalDataContext";
 import Typography from "../Typography";
@@ -15,7 +16,7 @@ import { APPCOUTINGPAGE } from "../../headers";
 
 import classes from "./styles.module.css";
 
-const infoInitialState = [false, false, false];
+const listInitialState = [false, false, false];
 const filedsInitialState = [
   {
     id: 0,
@@ -103,7 +104,7 @@ let now = new Date();
 export const AppCountingPage = (props) => {
   const { className, ...otherProps } = props;
 
-  const [isInfoShown, setInfoShown] = React.useState(infoInitialState);
+  const [list, { updateAt, reset: resetReactUse }] = useList(listInitialState);
   const [fields, setFields] = React.useState(filedsInitialState);
 
   const [onClickBackToLogin] = useOutletContext();
@@ -161,7 +162,7 @@ export const AppCountingPage = (props) => {
   const onClickClearBtn = React.useCallback(() => {
     setFields(filedsInitialState);
     reset();
-  }, [isInfoShown, setFields]);
+  }, [setFields]);
 
   const handleSearchIndex = React.useCallback(
     (fnName, displayValue) => {
@@ -224,7 +225,11 @@ export const AppCountingPage = (props) => {
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(countData)}>
-          <AppCountingHeader infoShown={[isInfoShown, setInfoShown]} />
+          <AppCountingHeader
+            list={list}
+            updateAt={updateAt}
+            resetReactUse={resetReactUse}
+          />
           {fields.map((field, index) => {
             return (
               <div key={index} className={classes.procedureFieldWrapper}>

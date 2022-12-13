@@ -18,8 +18,7 @@ const options = {
 };
 
 export const AppCountingHeader = (props) => {
-  const { className, infoShown, ...otherProps } = props;
-  const [isInfoShown, setInfoShown] = infoShown;
+  const { className, list, updateAt, resetReactUse, ...otherProps } = props;
 
   const {
     formState: { errors },
@@ -53,13 +52,13 @@ export const AppCountingHeader = (props) => {
           </Typography>
           <IconInfoAppCountingPage
             className={classes.tableHeaderIcon}
-            onClick={() => setInfoShown(() => [true, false, false])}
+            onClick={() => updateAt(0, true)}
           />
-          {isInfoShown[0] ? (
+          {list[0] ? (
             <>
               <div
                 className={classes.InfoPageOverlay}
-                onClick={() => setInfoShown(() => [false, false, false])}
+                onClick={resetReactUse}
               ></div>
               <div className={classes.InfoPageContainer}>
                 <CountingAppPopUpInfoPage />
@@ -73,13 +72,13 @@ export const AppCountingHeader = (props) => {
           </Typography>
           <IconInfoAppCountingPage
             className={classes.tableHeaderIcon}
-            onClick={() => setInfoShown(() => [false, true, false])}
+            onClick={() => updateAt(1, true)}
           />
-          {isInfoShown[1] ? (
+          {list[1] ? (
             <>
               <div
                 className={classes.InfoPageOverlay}
-                onClick={() => setInfoShown(() => [false, false, false])}
+                onClick={resetReactUse}
               ></div>
               <div className={classes.InfoPageContainer}>
                 <CountingAppPopUpInfoPage />
@@ -93,13 +92,13 @@ export const AppCountingHeader = (props) => {
           </Typography>
           <IconInfoAppCountingPage
             className={classes.tableHeaderIcon}
-            onClick={() => setInfoShown(() => [false, false, true])}
+            onClick={() => updateAt(2, true)}
           />
-          {isInfoShown[2] ? (
+          {list[2] ? (
             <>
               <div
                 className={classes.InfoPageOverlay}
-                onClick={() => setInfoShown(() => [false, false, false])}
+                onClick={resetReactUse}
               ></div>
               <div className={classes.InfoPageContainer}>
                 <CountingAppPopUpInfoPage />
@@ -119,7 +118,9 @@ export const AppCountingHeader = (props) => {
 
 AppCountingHeader.propTypes = {
   className: PropTypes.string,
-  infoShown: PropTypes.array,
+  list: PropTypes.array,
+  updateAt: PropTypes.func,
+  resetReactUse: PropTypes.func,
 };
 
 export default AppCountingHeader;
