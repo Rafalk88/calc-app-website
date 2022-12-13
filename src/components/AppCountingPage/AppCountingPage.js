@@ -11,6 +11,7 @@ import Button from "../Button";
 import ProcedureField from "../ProcedureField";
 import IconPlusAppCounting from "../Icons/IconPlusAppCounting";
 import IconMinusAppCounting from "../Icons/IconMinusAppCounting";
+import { APPCOUTINGPAGE } from "../../headers";
 
 import classes from "./styles.module.css";
 
@@ -109,12 +110,12 @@ export const AppCountingPage = (props) => {
   const database = React.useContext(GlobalDataContext);
   const methods = useForm({ defaultValues: "" });
   const {
-    handleSubmit,
-    setValue,
-    setFocus,
-    getValues,
     formState: { isDirty },
+    getValues,
+    handleSubmit,
     reset,
+    setFocus,
+    setValue,
   } = methods;
 
   const countData = (data) => {
@@ -162,10 +163,6 @@ export const AppCountingPage = (props) => {
     reset();
   }, [isInfoShown, setFields]);
 
-  React.useEffect(() => {
-    !isDirty ? setFocus("timeInput") : null;
-  }, [setFocus, isDirty]);
-
   const handleSearchIndex = React.useCallback(
     (fnName, displayValue) => {
       if (fnName === "findIndex") {
@@ -203,11 +200,15 @@ export const AppCountingPage = (props) => {
   );
 
   const handleKeyDown = (e) => {
-    if (e.key === "s") {
-    }
-    if (e.key === "w") {
-    }
+    if (e.key === "w" && fields[1].isDisplayed)
+      toogleProcedureField("findLastIndex", true, "plus");
+    if (e.key === "s") toogleProcedureField("findIndex", false, "minus");
+    if (e.key === "r") onClickClearBtn();
   };
+
+  React.useEffect(() => {
+    !isDirty ? setFocus("timeInput") : null;
+  }, [setFocus, isDirty]);
 
   return (
     <div
@@ -219,14 +220,7 @@ export const AppCountingPage = (props) => {
         Counting procedures app
       </Typography>
       <Typography className={classes.header} variant={"title3"}>
-        The application counts the start and end time of the given treatments
-        after taking into account the time of their initiation. The first step
-        will be to enter the time of their start. Then, in the first field,
-        enter the appropriate procedure code. If you want to add more
-        procedures, use the 'plus' at the end of the table. After approval, the
-        application will display the times of treatments as well as their hours.
-        It is possible to use keyboard shortcuts. Use the 'n' key to add a
-        field, use the 'r' key to remove it.
+        {APPCOUTINGPAGE}
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(countData)}>

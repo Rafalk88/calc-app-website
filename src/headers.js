@@ -1,0 +1,2 @@
+export const APPCOUTINGPAGE =
+  "The application counts the start and end time of the given treatments after taking into account the time of their initiation. The first step will be to enter the time of their start. Then, in the first field, enter the appropriate procedure code. If you want to add more procedures, use the 'plus' at the end of the table. After approval, the application will display the times of treatments as well as their hours. It is possible to use keyboard shortcuts. Use the 's' key to add a field, use the 'w' key to remove it, 'r' key resets the fields.";
