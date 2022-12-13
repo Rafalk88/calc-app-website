@@ -6,24 +6,27 @@ import Typography from "../Typography";
 import TextField from "../TextField";
 import IconInfoAppCountingPage from "../Icons/IconInfoAppCountingPage";
 import CountingAppPopUpInfoPage from "../CountingAppPopUpInfoPage";
+import { IS_REQ_ERROR } from "../../consts";
 
 import classes from "./styles.module.css";
+
+const options = {
+  required: {
+    value: true,
+    message: IS_REQ_ERROR,
+  },
+};
 
 export const AppCountingHeader = (props) => {
   const { className, infoShown, ...otherProps } = props;
   const [isInfoShown, setInfoShown] = infoShown;
 
   const {
-    register,
     formState: { errors },
+    register,
   } = useFormContext();
 
-  const registerTimeInput = register("timeInput", {
-    required: {
-      value: true,
-      message: "Field is required.",
-    },
-  });
+  const registerTimeInput = register("timeInput", options);
 
   return (
     <div
@@ -33,10 +36,10 @@ export const AppCountingHeader = (props) => {
       <div className={classes.tableHeaderWrapper}>
         <TextField
           className={classes.textField}
-          inputAditionalClass={classes.inputCenterText}
-          type={"time"}
           displayErrorText={false}
           errorMessage={errors.timeInput && errors.timeInput.message}
+          inputAditionalClass={classes.inputCenterText}
+          type={"time"}
           {...registerTimeInput}
         />
         <div className={classes.tableHeaderField}>
