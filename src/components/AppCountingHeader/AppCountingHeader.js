@@ -107,11 +107,13 @@ export const AppCountingHeader = (props) => {
           ) : null}
         </div>
       </div>
-      {errors.timeInput ? (
-        <div className={classes.errorMessage}>{errors.timeInput.message}</div>
-      ) : (
-        <div className={classes.spaceForError}></div>
-      )}
+      <div className={`${classes.errorSpace}`}>
+        {errors.timeInput ? (
+          <span className={classes.errorMessage}>
+            {errors.timeInput.message}
+          </span>
+        ) : null}
+      </div>
     </div>
   );
 };
