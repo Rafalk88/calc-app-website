@@ -35,7 +35,6 @@ export const ProcedureField = (props) => {
 
   const {
     formState: { errors },
-    isValid,
     register,
   } = useFormContext();
 
@@ -48,7 +47,9 @@ export const ProcedureField = (props) => {
         <TextField
           className={classes.textField}
           displayErrorText={false}
-          errorMessage={isValid}
+          errorMessage={
+            errors.procedureInput_0 && errors.procedureInput_0.message
+          }
           inputAditionalClass={classes.inputCenterText}
           placeholder={"Type 93.00000..."}
           type={"number"}
@@ -80,17 +81,17 @@ export const ProcedureField = (props) => {
           {...register(names[4], otherInputsOptions)}
         />
       </div>
-      {isValid ? (
-        <ErrorMessage
-          errors={errors}
-          name={names[0]}
-          render={(message) => (
-            <div className={classes.errorMessage}>{message}</div>
-          )}
-        />
-      ) : (
-        <div className={classes.spaceForError}></div>
-      )}
+      <div className={`${classes.errorSpace}`}>
+        {Object.keys(errors).length !== 0 ? (
+          <ErrorMessage
+            errors={errors}
+            name={names[0]}
+            render={({ message }) => (
+              <span className={classes.errorMessage}>{message}</span>
+            )}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };

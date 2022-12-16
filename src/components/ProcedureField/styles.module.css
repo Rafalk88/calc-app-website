@@ -21,12 +21,11 @@
 }
 
 .errorMessage {
-  width: 100%;
   padding-left: 15px;
   color: rgba(255, 0, 0, 1);
   font-size: 14px;
 }
 
-.spaceForError {
-  height: 18px;
+.errorSpace {
+  height: 20px;
 }
