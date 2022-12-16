@@ -51,7 +51,7 @@ export const LoginForm = (props) => {
       <Logo className={classes.logo} />
       <Typography variant={"h4-extraLight"}>Log In !</Typography>
       <TextField
-        className={classes.textField}
+        className={`${classes.textField}`}
         placeholder={"E-mail"}
         errorMessage={errors.email && errors.email.message}
         {...registeredEmailProps}
