@@ -23,6 +23,11 @@ export const PageMainLogged = (props) => {
     navigate("/");
   }, [navigate]);
 
+  const onClickSettings = React.useCallback(() => {
+    setIsUserDropdownOpen(() => false);
+    navigate("settings");
+  }, [navigate]);
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -42,7 +47,7 @@ export const PageMainLogged = (props) => {
                     <ListItem
                       icon={"settings"}
                       text={"Settings"}
-                      disabled={true}
+                      onClick={onClickSettings}
                     />
                     <ListItem
                       icon={"support"}
