@@ -1,18 +1,36 @@
 .root {
   width: 100%;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
+.headerContainer {}
 .settingsPageheader {
-  margin-top: 49px;
   padding-left: 173px;
 }
 
+.contentContainer {
+  margin-top: 34px;
+  display: flex;
+  justify-content: space-between;
+}
 .asideWrapper {
   width: 35%;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .asideAvatar {}
+  
+  .asideMenu {
+    width: 275px;
 }
 
 .inputsFieldWrapper {
   width: 60%;
+  margin-top: 10px;
 }
 
 .inputField {
@@ -44,7 +62,6 @@
 }
 
 .buttonsSection {
-  width: 60%;
   display: flex;
   justify-content: space-between;
 }
