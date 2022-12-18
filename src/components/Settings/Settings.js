@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Typography from "../../components/Typography";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
+import SettingsAvatar from "../Icons/SettingsAvatar";
+import AddIcon from "../Icons/AddIcon";
 
 import classes from "./styles.module.css";
 
@@ -21,21 +23,30 @@ export const Settings = (props) => {
       </div>
       <div className={classes.contentContainer}>
         <div className={classes.asideWrapper}>
-          <div className={classes.asideAvatar}></div>
+          <div className={classes.asideAvatar}>
+            <div className={classes.avatar}>
+              <SettingsAvatar />
+            </div>
+            <Typography variant={"h5-light"} className={classes.addIconBtn}>
+              <AddIcon /> ADD NEW AVATAR
+            </Typography>
+          </div>
           <div className={classes.asideMenu}>
             <div className={`${classes.basicMenuBtn} ${classes.menuBtn}`}>
-              <Typography>Profile</Typography>
+              <Typography variant={"h5-light"}>Profile</Typography>
             </div>
             <div
               className={`${classes.basicMenuBtn} ${classes.menuBtn} ${classes.menuBtn_disabled}`}
             >
-              <Typography disabled={true}>Password</Typography>
+              <Typography variant={"h5-light"} disabled={true}>
+                Password
+              </Typography>
             </div>
             <div className={`${classes.basicMenuBtn} ${classes.deleteBtn}`}>
-              <Typography>Delete Account</Typography>
+              <Typography variant={"h5-light"}>Delete Account</Typography>
             </div>
             <div className={`${classes.basicMenuBtn} ${classes.menuBtn}`}>
-              <Typography>Log Out</Typography>
+              <Typography variant={"h5-light"}>Log Out</Typography>
             </div>
           </div>
         </div>
@@ -70,14 +81,14 @@ export const Settings = (props) => {
               variant={"contained"}
               color={"secondary"}
             >
-              Go back
+              <Typography variant={"h5-bold"}>Go back</Typography>
             </Button>
             <Button
               className={classes.button}
               variant={"contained"}
               color={"primary"}
             >
-              Save changes
+              <Typography variant={"h5-bold"}>Save changes</Typography>
             </Button>
           </div>
         </div>
