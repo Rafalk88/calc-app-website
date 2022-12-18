@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useOutletContext } from "react-router-dom";
 
 import Typography from "../../components/Typography";
 import TextField from "../../components/TextField";
@@ -10,7 +11,10 @@ import AddIcon from "../Icons/AddIcon";
 import classes from "./styles.module.css";
 
 export const Settings = (props) => {
-  const { className, ...otherProps } = props;
+  const { className, onClickLogOut, ...otherProps } = props;
+
+  const [onClickBackToLogin] = useOutletContext();
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -45,7 +49,10 @@ export const Settings = (props) => {
             <div className={`${classes.basicMenuBtn} ${classes.deleteBtn}`}>
               <Typography variant={"h5-light"}>Delete Account</Typography>
             </div>
-            <div className={`${classes.basicMenuBtn} ${classes.menuBtn}`}>
+            <div
+              className={`${classes.basicMenuBtn} ${classes.menuBtn}`}
+              onClick={onClickLogOut}
+            >
               <Typography variant={"h5-light"}>Log Out</Typography>
             </div>
           </div>
@@ -81,7 +88,13 @@ export const Settings = (props) => {
               variant={"contained"}
               color={"secondary"}
             >
-              <Typography variant={"h5-bold"}>Go back</Typography>
+              <Typography
+                variant={"h5-bold"}
+                onClick={onClickBackToLogin}
+                type={"button"}
+              >
+                Go back
+              </Typography>
             </Button>
             <Button
               className={classes.button}
@@ -97,8 +110,9 @@ export const Settings = (props) => {
   );
 };
 
-Settings.propTypes ={
+Settings.propTypes = {
   className: PropTypes.string,
+  onClickLogOut: PropTypes.func.isRequired,
 };
 
 export default Settings;

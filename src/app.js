@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { useAuthUser } from "./contexts/UserContext";
 
@@ -45,6 +45,7 @@ export const App = () => {
   const [repeatPasswordShown, setRepeatPasswordShown] = React.useState(false);
 
   const { isUserLoged, setUser, clearUser } = useAuthUser();
+  const nav = useNavigate();
 
   const fetchProcedures = React.useCallback(async () => {
     const procedures = await getAllProcedures();
@@ -69,6 +70,7 @@ export const App = () => {
   const onClickLogOut = React.useCallback(async () => {
     await logOut();
     clearUser();
+    nav("/");
   }, []);
 
   const handleAsyncAction = React.useCallback(
@@ -156,9 +158,12 @@ export const App = () => {
               path={"/"}
               element={<PageMainLogged onClickLogOut={onClickLogOut} />}
             >
-              <Route path={"lol"} element={<MainPage />} />
+              <Route path={"/"} element={<MainPage />} />
               <Route path={"app-page"} element={<AppCountingPage />} />
-              <Route path={"/"} element={<Settings />} />
+              <Route
+                path={"settings"}
+                element={<Settings onClickLogOut={onClickLogOut} />}
+              />
             </Route>
             <Route
               path={"*"}
