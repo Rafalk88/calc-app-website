@@ -162,7 +162,7 @@ export const AppCountingPage = (props) => {
   const onClickClearBtn = React.useCallback(() => {
     setFields(filedsInitialState);
     reset();
-  }, [setFields]);
+  }, [reset]);
 
   const handleSearchIndex = React.useCallback(
     (fnName, displayValue) => {
@@ -174,7 +174,7 @@ export const AppCountingPage = (props) => {
       }
       if (fnName === "findLastIndex") {
         const searchIndex = fields.findLastIndex(
-          (field) => field.isDisplayed === true
+          (field) => field.isDisplayed === displayValue
         );
         return searchIndex;
       }
@@ -185,9 +185,9 @@ export const AppCountingPage = (props) => {
 
   const toogleProcedureField = React.useCallback(
     (fnName, displayValue, iconValue) => {
-      let searchIndex = handleSearchIndex(fnName, displayValue);
       setFields((fields) => {
         return fields.map((field, index) => {
+          let searchIndex = handleSearchIndex(fnName, displayValue);
           if (index === searchIndex - 1)
             return { ...field, additionalIcon: iconValue };
           if (index === searchIndex) {
@@ -197,25 +197,34 @@ export const AppCountingPage = (props) => {
         });
       });
     },
-    [fields, setFields]
+    [handleSearchIndex]
   );
-
-  const handleKeyDown = (e) => {
-    if (e.key === "w" && fields[1].isDisplayed)
-      toogleProcedureField("findLastIndex", true, "plus");
-    if (e.key === "s") toogleProcedureField("findIndex", false, "minus");
-    if (e.key === "r") onClickClearBtn();
-  };
 
   React.useEffect(() => {
     !isDirty ? setFocus("timeInput") : null;
   }, [setFocus, isDirty]);
 
+  const handleKeyDown = React.useCallback(
+    (e) => {
+      if (e.key === "w" && fields[1].isDisplayed)
+        toogleProcedureField("findLastIndex", true, "plus");
+      if (e.key === "s") toogleProcedureField("findIndex", false, "minus");
+      if (e.key === "r") onClickClearBtn();
+    },
+    [fields, toogleProcedureField, onClickClearBtn]
+  );
+
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
       {...otherProps}
-      onKeyDown={handleKeyDown}
     >
       <Typography className={classes.title} variant={"title1"}>
         Counting procedures app
