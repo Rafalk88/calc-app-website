@@ -14,6 +14,7 @@ import PageRecoverPassword from "./pages/PageRecoverPassword/PageRecoverPassword
 
 import MainPage from "./components/MainPage";
 import AppCountingPage from "./components/AppCountingPage";
+import Settings from "./components/Settings";
 
 import {
   CREATE_ACCOUNT_SUCCESS_INFO,
@@ -155,8 +156,9 @@ export const App = () => {
               path={"/"}
               element={<PageMainLogged onClickLogOut={onClickLogOut} />}
             >
-              <Route path={"/"} element={<MainPage />} />
+              <Route path={"lol"} element={<MainPage />} />
               <Route path={"app-page"} element={<AppCountingPage />} />
+              <Route path={"/"} element={<Settings />} />
             </Route>
             <Route
               path={"*"}

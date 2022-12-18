@@ -1,1 +1,55 @@
-.root {}
+.root {
+  width: 100%;
+}
+
+.settingsPageheader {
+  margin-top: 49px;
+  padding-left: 173px;
+}
+
+.asideWrapper {
+  width: 35%;
+}
+
+.inputsFieldWrapper {
+  width: 60%;
+}
+
+.inputField {
+  margin-top: 4px;
+  margin-bottom: 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.maxWidth {
+  width: 100%;
+}
+
+.userNameField {
+  width: 100%;
+}
+
+.firstnameSpace {
+  padding-right: 4px;
+}
+
+.lastnameSpace {
+  padding-left: 4px;
+}
+
+.usernameWrapper {
+  display: flex;
+  width: 100%;
+}
+
+.buttonsSection {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  width: 275px;
+  height: 45px;
+}
