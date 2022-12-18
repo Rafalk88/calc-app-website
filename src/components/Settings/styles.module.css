@@ -18,14 +18,55 @@
 .asideWrapper {
   width: 35%;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
     align-items: center;
   }
   
-  .asideAvatar {}
+.asideAvatar {}
   
-  .asideMenu {
-    width: 275px;
+.asideMenu {
+  width: 275px;
+  display: flex;
+    flex-direction: column;
+  }
+  
+  .basicMenuBtn {
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    cursor: pointer;
+  }
+  
+  .menuBtn {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .basicMenuBtn:hover {
+    background-color: #8991FA;
+  }
+  
+  .menuBtn:hover {
+    color: rgba(0, 0, 0, 1);
+  }
+  
+  .deleteBtn {
+    color: rgba(255, 51, 102, 0.7);
+  }
+  
+  .deleteBtn:hover {
+    color: rgba(255, 51, 102, 1);
+  }
+  
+  .menuBtn_disabled {
+    cursor: default;
+    color: rgba(0, 0, 0, 0.38);
+  }
+  
+  .menuBtn_disabled:hover {
+    color: rgba(0, 0, 0, 0.38);
+    background-color: #FFFFFF;
 }
 
 .inputsFieldWrapper {

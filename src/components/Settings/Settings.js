@@ -22,7 +22,22 @@ export const Settings = (props) => {
       <div className={classes.contentContainer}>
         <div className={classes.asideWrapper}>
           <div className={classes.asideAvatar}></div>
-          <div className={classes.asideMenu}></div>
+          <div className={classes.asideMenu}>
+            <div className={`${classes.basicMenuBtn} ${classes.menuBtn}`}>
+              <Typography>Profile</Typography>
+            </div>
+            <div
+              className={`${classes.basicMenuBtn} ${classes.menuBtn} ${classes.menuBtn_disabled}`}
+            >
+              <Typography disabled={true}>Password</Typography>
+            </div>
+            <div className={`${classes.basicMenuBtn} ${classes.deleteBtn}`}>
+              <Typography>Delete Account</Typography>
+            </div>
+            <div className={`${classes.basicMenuBtn} ${classes.menuBtn}`}>
+              <Typography>Log Out</Typography>
+            </div>
+          </div>
         </div>
         <div className={classes.inputsFieldWrapper}>
           <Typography variant={"h5-light"}>E-mail</Typography>
