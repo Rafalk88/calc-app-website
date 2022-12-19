@@ -106,6 +106,7 @@ export const App = () => {
         setHasInfo(() => true);
         setInfoMessage(() => CREATE_ACCOUNT_SUCCESS_INFO);
         onUserLogIn();
+        navigate("/");
       });
     },
     [handleAsyncAction, onUserLogIn]
