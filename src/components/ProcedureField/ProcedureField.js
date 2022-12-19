@@ -47,9 +47,7 @@ export const ProcedureField = (props) => {
         <TextField
           className={classes.textField}
           displayErrorText={false}
-          errorMessage={
-            errors.procedureInput_0 && errors.procedureInput_0.message
-          }
+          errorMessage={Object.keys(errors).includes(names[0]) ? true : false}
           inputAditionalClass={classes.inputCenterText}
           placeholder={"Type 93.00000..."}
           type={"number"}
@@ -82,7 +80,7 @@ export const ProcedureField = (props) => {
         />
       </div>
       <div className={`${classes.errorSpace}`}>
-        {Object.keys(errors).length !== 0 ? (
+        {Object.keys(errors).includes(names[0]) ? (
           <ErrorMessage
             errors={errors}
             name={names[0]}
