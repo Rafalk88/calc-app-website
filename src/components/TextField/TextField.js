@@ -76,7 +76,7 @@ TextField.propTypes = {
   name: PropTypes.string,
   className: PropTypes.string,
   inputAditionalClass: PropTypes.string,
-  errorMessage: PropTypes.node,
+  errorMessage: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
   type: PropTypes.string,
   passwordShown: PropTypes.bool,
   displayErrorText: PropTypes.bool,
