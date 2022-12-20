@@ -1,4 +1,6 @@
-.root {}
+.root {
+  width: 100%;
+}
 
 .appBarContainer {
   display: flex;
@@ -9,11 +11,11 @@
 .contentMainWrapper {
   margin-top: 65px;
     position: static;
-      height: calc(100vh - 185px)
 }
 
 @media (max-width: 865px) {
   .contentMainWrapper {
     height: calc(100vh - 65px);
+    width: 100%;
     }
 }

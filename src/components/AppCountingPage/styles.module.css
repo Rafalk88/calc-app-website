@@ -68,7 +68,7 @@ input[type=number] {
 
 @media (max-width: 865px) {
   .root {
-    width: 100vw;
+    width: 100%;
   }
 
   .title {
@@ -80,7 +80,7 @@ input[type=number] {
   .header {
     padding: 0 10px;
     margin-bottom: 25px;
-    width: 100vw;
+    width: 100%;
   }
 
   .form {
