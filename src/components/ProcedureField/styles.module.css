@@ -29,3 +29,39 @@
 .errorSpace {
   height: 20px;
 }
+@media (max-width: 865px) {
+  .root {
+    width: calc(100% - 24px);
+  }
+
+  .fieldWrapper {
+    width: 100%;
+  }
+
+  .textField {
+    width: 20%;
+  }
+}
+
+@media (max-width: 580px) {
+  .root {
+    width: 100%;
+  }
+
+  .fieldWrapper {
+    flex-direction: column;
+  }
+
+  .textField {
+    margin-bottom: 2px;
+    width: 100%;
+  }
+
+  .textField__modified {
+    margin-left: 0;
+  }
+
+  .errorSpace {
+    display: none;
+  }
+}

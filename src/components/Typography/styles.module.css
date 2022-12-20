@@ -1,5 +1,10 @@
 .root {
   --fontSize: 1rem;
+  word-break: break-word;
+    white-space: normal;
+    box-sizing: border-box;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .title1 {
@@ -78,9 +83,4 @@
   font-family: Outfit;
   font-size: calc(var(--fontSize) * 1.5);
   font-weight: 300;
-}
-@media (max-width: 500px) {
-  .root {
-    --fontSize: 0.75rem;
-  }
 }

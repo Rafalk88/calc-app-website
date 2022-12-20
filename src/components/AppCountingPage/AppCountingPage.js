@@ -233,7 +233,7 @@ export const AppCountingPage = (props) => {
         {APPCOUTINGPAGE}
       </Typography>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(countData)}>
+        <form className={classes.form} onSubmit={handleSubmit(countData)}>
           <AppCountingHeader
             list={list}
             updateAt={updateAt}

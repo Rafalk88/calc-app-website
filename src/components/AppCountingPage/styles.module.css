@@ -1,7 +1,6 @@
 .root {
   display: flex;
   flex-direction: column;
-  margin-top: 49px;
 }
 
 input::-webkit-outer-spin-button,
@@ -67,3 +66,67 @@ input[type=number] {
   align-items: center;
 }
 
+@media (max-width: 865px) {
+  .root {
+    width: 100vw;
+  }
+
+  .title {
+    margin: 20px 0;
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  .header {
+    padding: 0 10px;
+    margin-bottom: 25px;
+    width: 100vw;
+  }
+
+  .form {
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  .buttonSection {
+    width: 100%;
+  }
+
+  .button {
+    width: 200px;
+  }
+}
+
+@media (max-width: 580px) {
+
+  .procedureFieldWrapper {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .Icon {
+    background-color: inherit;
+    margin: 10px 0 20px 0;
+  }
+
+  .buttonSection {
+    align-items: center;
+  }
+
+  .link {
+    justify-content: center;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .button {
+    margin: 0 auto 17px auto;
+    width: 100%;
+  }
+}

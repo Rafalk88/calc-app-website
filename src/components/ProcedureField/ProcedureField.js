@@ -38,6 +38,19 @@ export const ProcedureField = (props) => {
     register,
   } = useFormContext();
 
+  const displayErrorMessage = React.useCallback(
+    (className = undefined) => {
+      return (
+        <ErrorMessage
+          errors={errors}
+          name={names[0]}
+          render={({ message }) => <span className={className}>{message}</span>}
+        />
+      );
+    },
+    [errors, names]
+  );
+
   return (
     <div
       className={`${classes.root}${className ? ` ${className}` : ""}`}
@@ -45,9 +58,13 @@ export const ProcedureField = (props) => {
     >
       <div className={classes.fieldWrapper}>
         <TextField
-          className={classes.textField}
-          displayErrorText={false}
-          errorMessage={Object.keys(errors).includes(names[0]) ? true : false}
+          className={`${classes.textField}`}
+          displayErrorText={window.innerWidth <= 580 ? true : false}
+          errorMessage={
+            Object.keys(errors).includes(names[0])
+              ? displayErrorMessage()
+              : false
+          }
           inputAditionalClass={classes.inputCenterText}
           placeholder={"Type 93.00000..."}
           type={"number"}
@@ -80,15 +97,9 @@ export const ProcedureField = (props) => {
         />
       </div>
       <div className={`${classes.errorSpace}`}>
-        {Object.keys(errors).includes(names[0]) ? (
-          <ErrorMessage
-            errors={errors}
-            name={names[0]}
-            render={({ message }) => (
-              <span className={classes.errorMessage}>{message}</span>
-            )}
-          />
-        ) : null}
+        {Object.keys(errors).includes(names[0])
+          ? displayErrorMessage(classes.errorMessage)
+          : null}
       </div>
     </div>
   );

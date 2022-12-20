@@ -35,3 +35,13 @@
   justify-content: flex-start;
   align-items: center;
 }
+@media (max-width: 580px) {
+  .root {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .iconWrapper {
+    padding: 0 10px;
+  }
+}

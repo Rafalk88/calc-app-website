@@ -61,3 +61,31 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .errorSpace {
   height: 20px;
 }
+
+@media (max-width: 865px) {
+  .tableHeaderWrapper {
+    width: calc(100% - 24px);
+  }
+
+  .textField {
+    width: 20%;
+  }
+
+  .tableHeaderField {
+    width: 20%;
+  }
+}
+
+@media(max-width: 580px) {
+  .tableHeaderWrapper {
+    width: 100%;
+  }
+
+  .textField {
+    width: 100vw;
+  }
+
+  .tableHeaderField {
+    display: none;
+  }
+}
