@@ -168,7 +168,7 @@ export const App = () => {
             </Route>
             <Route
               path={"*"}
-              element={<FullPage404Error buttonLabel={"OK"} />}
+              element={<FullPage404Error buttonLabel={"To main"} />}
             />
           </Routes>
         </GlobalDataContext.Provider>

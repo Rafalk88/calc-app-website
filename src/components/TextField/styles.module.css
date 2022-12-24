@@ -30,6 +30,10 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
   -webkit-text-fill-color: rgba(0, 0, 0, 0.7) !important;
 }
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
 .inputDirectWrapper {
   height: 45px;
   display: flex;

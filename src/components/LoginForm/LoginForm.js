@@ -84,6 +84,7 @@ export const LoginForm = (props) => {
       >
         <Typography variant={"h5-bold"}>Create Account</Typography>
       </Button>
+      {/*
       <div className={classes.additionalLogin}>
         <IconLine />
         <Typography className={classes.span} variant={"h4-extraLight"}>
@@ -107,6 +108,7 @@ export const LoginForm = (props) => {
         <IconFacebook className={classes.icon} />
         <Typography variant={"h5-bold"}>Log by Facebook</Typography>
       </Button>
+      */}
     </form>
   );
 };

@@ -21,6 +21,7 @@ input[type=number] {
   width: 735px;
   padding-left: 49px;
   margin-bottom: 56px;
+  text-align: justify;
 }
 
 .procedureFieldWrapper {
