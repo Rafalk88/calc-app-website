@@ -1,3 +1,6 @@
+![Ekran główny](public/assets/Login-screen.png)
+![Główna logika](public/assets/main-logic-screen.png)
+
 # Calculating start and end time of procedures
 
 ## Table of Content
